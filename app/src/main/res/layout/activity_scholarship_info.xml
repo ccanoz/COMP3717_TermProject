@@ -6,4 +6,173 @@
     android:layout_height="match_parent"
     tools:context=".ScholarshipInfoActivity">
 
+    <Button
+        android:id="@+id/button_scholApply"
+        android:layout_width="176dp"
+        android:layout_height="47dp"
+        android:layout_marginBottom="24dp"
+        android:backgroundTint="#6200EE"
+        android:text="Apply"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/recyclerView2"
+        app:layout_constraintStart_toStartOf="@+id/recyclerView2"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerView2"
+        app:layout_constraintVertical_bias="0.311" />
+
+    <TextView
+        android:id="@+id/textView_scholName"
+        android:layout_width="362dp"
+        android:layout_height="57dp"
+        android:gravity="center"
+        android:text="SCHOLARSHIP NAME"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textSize="36sp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.483"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.021" />
+
+    <TextView
+        android:id="@+id/textView_schol_orgName"
+        android:layout_width="169dp"
+        android:layout_height="22dp"
+        android:layout_column="0"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="15dp"
+        android:text="ORGINIZATION NAME"
+        android:textAllCaps="true"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/imageView_logo"
+        app:layout_constraintStart_toStartOf="@+id/textView_scholName"
+        app:layout_constraintTop_toBottomOf="@+id/textView_scholName"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView_schol_amount"
+        android:layout_width="115dp"
+        android:layout_height="20dp"
+        android:layout_column="1"
+        android:layout_marginStart="118dp"
+        android:layout_marginTop="24dp"
+        android:layout_marginBottom="18dp"
+        android:text="$ 100, 000"
+        android:textAlignment="viewEnd"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/imageView_logo"
+        app:layout_constraintEnd_toEndOf="@+id/textView_scholName"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toEndOf="@+id/textView_schol_orgName"
+        app:layout_constraintTop_toBottomOf="@+id/textView_scholName"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/imageView_logo"
+        android:layout_width="364dp"
+        android:layout_height="135dp"
+        android:layout_marginTop="67dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView_scholName"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/textView_scholName"
+        app:layout_constraintTop_toBottomOf="@+id/textView_scholName"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/bcit_logo" />
+
+    <TextView
+        android:id="@+id/textView_scholAbout"
+        android:layout_width="355dp"
+        android:layout_height="26dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="6dp"
+        android:text="About"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/imageView_logo"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/imageView_logo"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_logo" />
+
+    <TextView
+        android:id="@+id/textView_scholAboutTxt"
+        android:layout_width="343dp"
+        android:layout_height="63dp"
+        android:layout_marginTop="12dp"
+        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView_scholAbout"
+        app:layout_constraintHorizontal_bias="0.9"
+        app:layout_constraintStart_toStartOf="@+id/textView_scholAbout"
+        app:layout_constraintTop_toBottomOf="@+id/textView_scholAbout"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <TextView
+        android:id="@+id/textView_scholRequirements"
+        android:layout_width="354dp"
+        android:layout_height="22dp"
+        android:layout_marginTop="8dp"
+        android:text="Requirements"
+        android:textAllCaps="true"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        app:layout_constraintEnd_toEndOf="@+id/imageView_logo"
+        app:layout_constraintHorizontal_bias="0.1"
+        app:layout_constraintStart_toStartOf="@+id/imageView_logo"
+        app:layout_constraintTop_toBottomOf="@+id/textView_scholAboutTxt" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerView2"
+        android:layout_width="342dp"
+        android:layout_height="145dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView_scholRequirements"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/textView_scholRequirements"
+        app:layout_constraintTop_toBottomOf="@+id/textView_scholRequirements"
+        app:layout_constraintVertical_bias="0.071" />
+
+    <ImageView
+        android:id="@+id/imageView_scholAlert"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="6dp"
+        android:layout_marginBottom="3dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView_scholAbout"
+        app:layout_constraintEnd_toEndOf="@+id/imageView_logo"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_logo"
+        app:srcCompat="@drawable/baseline_add_alert_black_18dp" />
+
+    <ImageView
+        android:id="@+id/imageView_scholBookmark"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="1dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="3dp"
+        app:layout_constraintBottom_toTopOf="@+id/textView_scholAbout"
+        app:layout_constraintEnd_toStartOf="@+id/imageView_scholAlert"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="@+id/imageView_logo"
+        app:layout_constraintTop_toBottomOf="@+id/imageView_logo"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@drawable/baseline_bookmark_border_black_18dp" />
+
+    <ImageView
+        android:id="@+id/imageView_scholMenu"
+        android:layout_width="0dp"
+        android:layout_height="102dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/menu_placeholder" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>
