@@ -6,4 +6,6 @@
     <string name="male">Male</string>
     <string name="yearly_income">Yearly income</string>
     <string name="age">Age</string>
+    <string name="tv_feed_user">Welcome, User!</string>
+    <string name="tv_feed_bookmark">Bookmarked:</string>
 </resources>

@@ -29,5 +29,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         //set the spinners adapter to the previously created one.
         dropdown.setAdapter(adapter);
+        getSupportActionBar().hide();
+
     }
 }
