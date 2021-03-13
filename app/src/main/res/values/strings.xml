@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">TermProject</string>
+    <string name="name">Name</string>
+    <string name="female">Female</string>
+    <string name="gender">Gender</string>
+    <string name="male">Male</string>
+    <string name="yearly_income">Yearly income</string>
+    <string name="age">Age</string>
 </resources>
