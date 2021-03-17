@@ -20,6 +20,8 @@ public class RequirementsAdapter extends RecyclerView.Adapter<RequirementsViewHo
     public RequirementsAdapter(HashMap<String, String> requirementsDesc, List<String> requirements) {
         this.requirementsList = requirements;
         this.requirementsDesc = requirementsDesc;
+        Log.d("debug", String.valueOf(requirementsDesc));
+        Log.d("debug2", requirementsDesc.get(requirements.get(0)));
     }
 
     @NonNull
@@ -28,8 +30,7 @@ public class RequirementsAdapter extends RecyclerView.Adapter<RequirementsViewHo
 
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View requirementsView = inflater.inflate(R.layout.requirements_row, parent, false);
-        RequirementsViewHolder viewHolder = new RequirementsViewHolder(requirementsView);
-        return viewHolder;
+        return new RequirementsViewHolder(requirementsView);
     }
 
     @Override
@@ -38,13 +39,12 @@ public class RequirementsAdapter extends RecyclerView.Adapter<RequirementsViewHo
         TextView reqDesc = holder.reqDesc;
 
         String requirement = requirementsList.get(position);
-        Log.d("req", requirement);
         reqTitle.setText(requirement);
         reqDesc.setText(requirementsDesc.get(requirement));
     }
 
     @Override
     public int getItemCount() {
-        return 0;
+        return requirementsList.size();
     }
 }

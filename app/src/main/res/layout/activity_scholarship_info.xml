@@ -14,9 +14,9 @@
         android:backgroundTint="#6200EE"
         android:text="Apply"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/recyclerView2"
-        app:layout_constraintStart_toStartOf="@+id/recyclerView2"
-        app:layout_constraintTop_toBottomOf="@+id/recyclerView2"
+        app:layout_constraintEnd_toEndOf="@+id/rv_requirements"
+        app:layout_constraintStart_toStartOf="@+id/rv_requirements"
+        app:layout_constraintTop_toBottomOf="@+id/rv_requirements"
         app:layout_constraintVertical_bias="0.311" />
 
     <TextView
@@ -126,7 +126,7 @@
         app:layout_constraintTop_toBottomOf="@+id/textView_scholAboutTxt" />
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView2"
+        android:id="@+id/rv_requirements"
         android:layout_width="342dp"
         android:layout_height="145dp"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -162,17 +162,5 @@
         app:layout_constraintTop_toBottomOf="@+id/imageView_logo"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/baseline_bookmark_border_black_18dp" />
-
-    <ImageView
-        android:id="@+id/imageView_scholMenu"
-        android:layout_width="0dp"
-        android:layout_height="102dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
-        app:srcCompat="@drawable/menu_placeholder" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
