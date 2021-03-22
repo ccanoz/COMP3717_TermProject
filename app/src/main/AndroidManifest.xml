@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.bcit.termproject">
+
     <uses-permission android:name="android.permission.INTERNET" />
 
     <application
@@ -10,19 +11,21 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TermProject">
+        <activity android:name=".LoginActivity">
+
+        </activity>
         <activity android:name=".AccountActivity" />
         <activity android:name=".ScholarshipInfoActivity" />
         <activity android:name=".ItemsListingActivity" />
         <activity android:name=".FeedActivity" />
-        <activity android:name=".SignUpActivity" >
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity android:name=".SignUpActivity" />
         <activity android:name=".LandingActivity" />
         <activity android:name=".MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
 
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
         </activity>
     </application>
 
