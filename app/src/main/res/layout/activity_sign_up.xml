@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent">
 
 <LinearLayout
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
@@ -22,7 +22,7 @@
         android:layout_margin="10dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="Name"
+        android:hint="@string/name"
         android:inputType="textPersonName"
         tools:layout_editor_absoluteX="61dp"
         tools:layout_editor_absoluteY="84dp" />
@@ -35,8 +35,8 @@
         android:layout_margin="10dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="Email Address"
-        android:inputType="textPersonName"
+        android:hint="@string/email_address"
+        android:inputType="textEmailAddress"
         tools:layout_editor_absoluteX="61dp"
         tools:layout_editor_absoluteY="84dp" />
 
@@ -47,7 +47,7 @@
         android:layout_margin="10dp"
         android:autofillHints=""
         android:ems="10"
-        android:hint="Date of birth"
+        android:hint="@string/date_of_birth"
         android:inputType="date"
         tools:layout_editor_absoluteX="61dp"
         tools:layout_editor_absoluteY="155dp" />
@@ -82,7 +82,7 @@
             android:id="@+id/othergender_radio_signup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Other" />
+            android:text="@string/other" />
     </RadioGroup>
 
     <EditText
@@ -105,7 +105,7 @@
             android:id="@+id/nationality_TV_signup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Nationality" />
+            android:text="@string/nationality" />
 
         <Spinner
             android:id="@+id/nationality_spinner_signup"
@@ -123,21 +123,22 @@
             android:id="@+id/employment_TV_signup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Employment"
+            android:text="@string/employment"
             android:textSize="18sp" />
 
         <CheckBox
             android:id="@+id/employed_checkBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Employed" />
+            android:text="@string/employed" />
 
         <EditText
             android:id="@+id/password_ET_signup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:autofillHints="@string/password"
             android:ems="10"
-            android:hint="Password"
+            android:hint="@string/password"
             android:inputType="textPassword" />
     </LinearLayout>
 
@@ -154,7 +155,7 @@
             android:background="#47bcca"
             android:backgroundTint="#47bcca"
             android:onClick="signUp"
-            android:text="Sign up!"
+            android:text="@string/sign_up"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold"

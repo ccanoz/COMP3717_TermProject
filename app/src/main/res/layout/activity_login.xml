@@ -26,15 +26,16 @@
             android:layout_margin="10dp"
             android:autofillHints=""
             android:ems="10"
-            android:hint="Email Address"
-            android:inputType="textPersonName" />
+            android:hint="@string/email_address"
+            android:inputType="textEmailAddress" />
 
         <EditText
             android:id="@+id/password_ET_login"
             android:layout_width="372dp"
             android:layout_height="wrap_content"
+            android:autofillHints="@string/password"
             android:ems="10"
-            android:hint="Password"
+            android:hint="@string/password"
             android:inputType="textPassword"
             android:padding="10dp" />
 
@@ -46,7 +47,7 @@
             android:backgroundTint="#47bcca"
             android:onClick="login"
             android:padding="10dp"
-            android:text="Log in"
+            android:text="@string/log_in"
             android:textColor="@color/white"
             android:textSize="18sp"
             android:textStyle="bold" />
