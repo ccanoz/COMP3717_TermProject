@@ -17,16 +17,13 @@
     <string name="invalid_username">Not a valid username</string>
     <string name="invalid_password">Password must be >5 characters</string>
     <string name="login_failed">"Login failed"</string>
-    <string name="email_address">Email Address</string>
     <string name="password">Password</string>
     <string name="log_in">Log in</string>
-    <string name="name">Name</string>
     <string name="email_address">Email Address</string>
     <string name="date_of_birth">Date of birth</string>
     <string name="other">Other</string>
     <string name="nationality">Nationality</string>
     <string name="employment">Employment</string>
     <string name="employed">Employed</string>
-    <string name="password">Password</string>
     <string name="sign_up">Sign up!</string>
 </resources>
