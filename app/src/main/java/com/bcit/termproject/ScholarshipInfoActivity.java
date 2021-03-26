@@ -46,6 +46,11 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
         dbScholarships = FirebaseDatabase.getInstance().getReference("scholarship").child("-MVEqScsp1eOCjqVdpvs");
     }
 
+
+    /**
+     * Populate the activity layout with the scholarship details retrieved from
+     * the database.
+     */
     @Override
     protected void onStart() {
         super.onStart();
@@ -68,6 +73,12 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
         });
     }
 
+    /**
+     * Retrieves a scholarship's name, description, amount, and organization name from a
+     * DataSnapshot. Sets corresponding text fields in the layout to the values retrieved.
+     *
+     * @param snapshot of a Scholarship
+     */
     private void setScholarshipInfo(@NonNull  DataSnapshot snapshot) {
         String name = snapshot.child("name").getValue(String.class);
         String description = snapshot.child("about").getValue(String.class);
@@ -83,9 +94,16 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
         scholOrg.setText(organization);
     }
 
+    /**
+     * Retrieves the requirements for a scholarship from a DataSnapshot and
+     * populates the recyclerView with the requirement title and description.
+     *
+     * @param snapshot of a Scholarship
+     */
     private void setScholarshipRequirements(@NonNull DataSnapshot snapshot) {
         DataSnapshot requirementsSnapshot = snapshot.child("Requirements");
 
+        // Get each requirement and store in an array (titles) and HashMap (titles and description)
         for(DataSnapshot requirement: requirementsSnapshot.getChildren()) {
             String key = requirement.getKey();
             requirementsDesc.put(key, requirement.getValue(String.class));
