@@ -20,8 +20,6 @@ public class RequirementsAdapter extends RecyclerView.Adapter<RequirementsViewHo
     public RequirementsAdapter(HashMap<String, String> requirementsDesc, List<String> requirements) {
         this.requirementsList = requirements;
         this.requirementsDesc = requirementsDesc;
-        Log.d("debug", String.valueOf(requirementsDesc));
-        Log.d("debug2", requirementsDesc.get(requirements.get(0)));
     }
 
     @NonNull
