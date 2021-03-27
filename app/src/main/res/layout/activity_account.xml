@@ -62,7 +62,8 @@
                     android:layout_weight="1"
                     android:text="Edit"
                     android:textColor="#757575"
-                    app:rippleColor="#FFFFFF" />
+                    app:rippleColor="#FFFFFF"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
             </LinearLayout>
 
@@ -74,7 +75,7 @@
                 <TextView
                     android:id="@+id/textView_sex"
                     android:layout_width="200dp"
-                    android:layout_height="76dp"
+                    android:layout_height="match_parent"
                     android:gravity="bottom"
                     android:padding="10dp"
                     android:text="Sex"
@@ -89,7 +90,8 @@
                     android:layout_weight="1"
                     android:text="Edit"
                     android:textColor="#757575"
-                    app:rippleColor="#FFFFFF" />
+                    app:rippleColor="#FFFFFF"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
             </LinearLayout>
 
@@ -101,7 +103,7 @@
                 <TextView
                     android:id="@+id/textView_yearlyIncome"
                     android:layout_width="200dp"
-                    android:layout_height="77dp"
+                    android:layout_height="match_parent"
                     android:gravity="bottom"
                     android:padding="10dp"
                     android:text="Yearly Income"
@@ -116,7 +118,8 @@
                     android:layout_weight="1"
                     android:text="Edit"
                     android:textColor="#757575"
-                    app:rippleColor="#FFFFFF" />
+                    app:rippleColor="#FFFFFF"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"/>
 
             </LinearLayout>
 
@@ -128,7 +131,7 @@
                 <TextView
                     android:id="@+id/textView_nationality"
                     android:layout_width="200dp"
-                    android:layout_height="82dp"
+                    android:layout_height="match_parent"
                     android:gravity="bottom"
                     android:padding="10dp"
                     android:text="Nationality"
@@ -143,7 +146,8 @@
                     android:layout_weight="1"
                     android:text="Edit"
                     android:textColor="#757575"
-                    app:rippleColor="#FFFFFF" />
+                    app:rippleColor="#FFFFFF"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"/>
             </LinearLayout>
 
         </LinearLayout>
