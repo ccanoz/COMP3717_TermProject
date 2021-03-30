@@ -68,7 +68,6 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="1dp"
                 android:orientation="vertical"
-                android:visibility="gone"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/linearLayout"
                 app:layout_constraintStart_toStartOf="@+id/linearLayout"
@@ -80,11 +79,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="40dp"
                     android:ems="10"
-                    android:inputType="number">
+                    android:inputType="number"
+                    app:hintTextColor="#131313">
 
                     <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editText_account"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content" />
+                        android:layout_height="wrap_content"
+                        android:textColor="#000000" />
 
                 </com.google.android.material.textfield.TextInputLayout>
 
