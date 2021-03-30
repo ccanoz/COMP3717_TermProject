@@ -10,7 +10,7 @@
         android:id="@+id/textView_userName_account"
         android:layout_width="382dp"
         android:layout_height="74dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="16dp"
         android:gravity="center"
         android:text="first lastName"
         android:textAllCaps="true"
@@ -22,148 +22,40 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <LinearLayout
-        android:layout_width="294dp"
-        android:layout_height="368dp"
-        android:layout_marginTop="36dp"
-        android:orientation="vertical"
+    <include
+        android:id="@+id/account_detail_age"
+        layout="@layout/account_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="2dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.492"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_userName_account"
-        app:layout_constraintVertical_bias="0.15">
+        app:layout_constraintEnd_toEndOf="@id/textView_userName_account"
+        app:layout_constraintHorizontal_bias="0.504"
+        app:layout_constraintStart_toStartOf="@id/textView_userName_account"
+        app:layout_constraintTop_toBottomOf="@id/textView_userName_account"
+        app:layout_constraintVertical_bias="0.0" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="293dp"
-            android:orientation="vertical">
+    <include
+        android:id="@+id/account_detail_gender"
+        layout="@layout/account_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/account_detail_age"
+        app:layout_constraintHorizontal_bias="0.52"
+        app:layout_constraintStart_toStartOf="@+id/account_detail_age"
+        app:layout_constraintTop_toBottomOf="@+id/account_detail_age"
+        app:layout_constraintVertical_bias="0.029999971" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView_age"
-                    android:layout_width="200dp"
-                    android:layout_height="match_parent"
-                    android:gravity="bottom"
-                    android:padding="10dp"
-                    android:text="Age"
-                    android:textColor="#000000"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/button_editAge"
-                    android:layout_width="49dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Edit"
-                    android:textColor="#757575"
-                    app:rippleColor="#FFFFFF"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView_sex"
-                    android:layout_width="200dp"
-                    android:layout_height="match_parent"
-                    android:gravity="bottom"
-                    android:padding="10dp"
-                    android:text="Sex"
-                    android:textColor="#000000"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/button_editSex"
-                    android:layout_width="49dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Edit"
-                    android:textColor="#757575"
-                    app:rippleColor="#FFFFFF"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView_yearlyIncome"
-                    android:layout_width="200dp"
-                    android:layout_height="match_parent"
-                    android:gravity="bottom"
-                    android:padding="10dp"
-                    android:text="Yearly Income"
-                    android:textColor="#000000"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/button_editIncome"
-                    android:layout_width="49dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Edit"
-                    android:textColor="#757575"
-                    app:rippleColor="#FFFFFF"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"/>
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="70dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView_nationality"
-                    android:layout_width="200dp"
-                    android:layout_height="match_parent"
-                    android:gravity="bottom"
-                    android:padding="10dp"
-                    android:text="Nationality"
-                    android:textColor="#000000"
-                    android:textSize="18sp"
-                    android:textStyle="bold" />
-
-                <Button
-                    android:id="@+id/button_editNationality"
-                    android:layout_width="49dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Edit"
-                    android:textColor="#757575"
-                    app:rippleColor="#FFFFFF"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"/>
-            </LinearLayout>
-
-        </LinearLayout>
-
-        <Switch
-            android:id="@+id/switch_employed"
-            android:layout_width="match_parent"
-            android:layout_height="70dp"
-            android:layout_weight="1"
-            android:gravity="bottom"
-            android:padding="10dp"
-            android:text="Employed"
-            android:textSize="18sp"
-            android:textStyle="bold" />
-
-    </LinearLayout>
-
+    <include
+        android:id="@+id/account_detail_income"
+        layout="@layout/account_detail"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/account_detail_gender"
+        app:layout_constraintStart_toStartOf="@+id/account_detail_gender"
+        app:layout_constraintTop_toBottomOf="@+id/account_detail_gender"
+        app:layout_constraintVertical_bias="0.01999998" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
