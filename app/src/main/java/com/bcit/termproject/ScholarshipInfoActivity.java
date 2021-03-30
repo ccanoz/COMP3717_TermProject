@@ -34,6 +34,7 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scholarship_info);
+        getSupportActionBar().hide();
 
         scholName = findViewById(R.id.textView_scholName);
         scholAbout = findViewById(R.id.textView_scholAboutTxt);

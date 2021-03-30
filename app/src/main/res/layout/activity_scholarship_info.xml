@@ -23,7 +23,7 @@
     <TextView
         android:id="@+id/textView_scholName"
         android:layout_width="359dp"
-        android:layout_height="57dp"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:text="SCHOLARSHIP NAME"
         android:textAllCaps="true"
@@ -40,7 +40,7 @@
     <TextView
         android:id="@+id/textView_schol_orgName"
         android:layout_width="200dp"
-        android:layout_height="21dp"
+        android:layout_height="wrap_content"
         android:layout_column="0"
         android:layout_marginTop="24dp"
         android:layout_marginBottom="15dp"
@@ -102,8 +102,8 @@
 
     <TextView
         android:id="@+id/textView_scholAboutTxt"
-        android:layout_width="330dp"
-        android:layout_height="60dp"
+        android:layout_width="327dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
         android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor."
         app:layout_constraintBottom_toBottomOf="parent"
