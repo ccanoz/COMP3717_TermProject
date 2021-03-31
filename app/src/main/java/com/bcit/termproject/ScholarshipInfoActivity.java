@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.view.View;
 import android.widget.TextView;
 
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -28,6 +30,9 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
     TextView scholAbout;
     TextView scholAmount;
     TextView scholOrg;
+    FloatingActionButton scholBookmark;
+    Boolean isBookmarked;
+
     DatabaseReference dbScholarships;
 
     @Override
@@ -36,14 +41,19 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
         setContentView(R.layout.activity_scholarship_info);
         getSupportActionBar().hide();
 
+        scholBookmark = findViewById(R.id.fab_scholBookmark);
         scholName = findViewById(R.id.textView_scholName);
         scholAbout = findViewById(R.id.textView_scholAboutTxt);
         scholAmount = findViewById(R.id.textView_schol_amount);
         scholOrg = findViewById(R.id.textView_schol_orgName);
 
+
         rvRequirements = findViewById(R.id.rv_requirements);
 
-        // Nt: This should access a specific Scholarship by its id
+        // TODO: remove hardcoding - set boolean depending on if scholarship exists in a user's list of scholarships
+        isBookmarked = false;
+
+        // TODO: remove hardcoding - This should access a specific Scholarship by its id
         dbScholarships = FirebaseDatabase.getInstance().getReference("scholarship").child("-MVEqScsp1eOCjqVdpvs");
     }
 
@@ -114,5 +124,20 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
         RequirementsAdapter adapter = new RequirementsAdapter(requirementsDesc, requirements);
         rvRequirements.setAdapter(adapter);
         rvRequirements.setLayoutManager(new LinearLayoutManager(ScholarshipInfoActivity.this));
+    }
+
+    /**
+     * Toggles between bookmarking/un-bookmarking a scholarship.
+     * @param v
+     */
+    public void bookmarkScholarship(View v) {
+        if (isBookmarked) {
+            scholBookmark.setImageResource(R.drawable.ic_bookmark_add);
+            isBookmarked = false;
+        } else {
+            scholBookmark.setImageResource(R.drawable.ic_bookmark_added);
+            isBookmarked = true;
+        }
+
     }
 }
