@@ -31,6 +31,21 @@ import com.google.firebase.database.ValueEventListener;
  */
 public class AccountFragment extends Fragment {
 
+    View accountDetailAge;
+    View accountDetailGender;
+    View accountDetailIncome;
+    View currToggled;
+
+    TextView ageLabel;
+    TextView genderLabel;
+    TextView incomeLabel;
+
+    Button saveAge;
+    Button saveGender;
+    Button saveIncome;
+
+    DatabaseReference dbUserInfo;
+
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
@@ -91,20 +106,7 @@ public class AccountFragment extends Fragment {
         return view;
     }
 
-    View accountDetailAge;
-    View accountDetailGender;
-    View accountDetailIncome;
-    View currToggled;
 
-    TextView ageLabel;
-    TextView genderLabel;
-    TextView incomeLabel;
-
-    Button saveAge;
-    Button saveGender;
-    Button saveIncome;
-
-    DatabaseReference dbUserInfo;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -122,14 +124,14 @@ public class AccountFragment extends Fragment {
         setValueTask.addOnSuccessListener(new OnSuccessListener() {
             @Override
             public void onSuccess(Object o) {
-//                Toast.makeText(MainActivity., "Updated " + field, Toast.LENGTH_LONG).show();
+                Toast.makeText(getContext(), "Updated " + field, Toast.LENGTH_LONG).show();
             }
         });
 
         setValueTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-//                Toast.makeText(AccountActivity.this, "Something went wrong.", Toast.LENGTH_SHORT).show();
+                Toast.makeText(getContext(), "Something went wrong.", Toast.LENGTH_SHORT).show();
             }
         });
     }
