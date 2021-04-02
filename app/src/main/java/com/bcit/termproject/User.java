@@ -1,7 +1,5 @@
 package com.bcit.termproject;
 
-import java.util.Date;
-
 public class User {
     String name;
     String DOB; //change to Date?
@@ -33,5 +31,3 @@ public class User {
                 "" + yearlyIncome + ", nationality: " + nationality + ", employed: " + employed;
     }
 }
-
-

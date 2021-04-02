@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    tools:context=".AccountFragment">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <TextView
+            android:id="@+id/textView_userName_account"
+            android:layout_width="382dp"
+            android:layout_height="74dp"
+            android:layout_marginTop="16dp"
+            android:gravity="center"
+            android:text="first lastName"
+            android:textAllCaps="true"
+            android:textColor="@color/black"
+            android:textSize="36sp"
+            android:textStyle="bold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.454"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"/>
+
+
+        <include
+            android:id="@+id/account_detail_age"
+            layout="@layout/account_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="2dp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@id/textView_userName_account"
+            app:layout_constraintHorizontal_bias="0.504"
+            app:layout_constraintStart_toStartOf="@id/textView_userName_account"
+            app:layout_constraintTop_toBottomOf="@id/textView_userName_account"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <include
+            android:id="@+id/account_detail_gender"
+            layout="@layout/account_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/account_detail_age"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/account_detail_age"
+            app:layout_constraintTop_toBottomOf="@+id/account_detail_age"
+            app:layout_constraintVertical_bias="0.00999999" />
+
+        <include
+            android:id="@+id/account_detail_income"
+            layout="@layout/account_detail"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/account_detail_gender"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/account_detail_gender"
+            app:layout_constraintTop_toBottomOf="@+id/account_detail_gender"
+            app:layout_constraintVertical_bias="0.01999998" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+
+</FrameLayout>
