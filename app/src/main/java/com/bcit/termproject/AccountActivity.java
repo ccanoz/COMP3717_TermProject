@@ -2,39 +2,37 @@ package com.bcit.termproject;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.LinearLayout;
-import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class AccountActivity extends AppCompatActivity {
 
-    View accountDetailAge;
-    View accountDetailGender;
-    View accountDetailIncome;
-    View currToggled;
+    FirebaseUser currAuthUser;
+    User currUser;
 
-    TextView ageLabel;
-    TextView genderLabel;
-    TextView incomeLabel;
+    RecyclerView rvAccDetails;
 
-    Button saveAge;
-    Button saveGender;
-    Button saveIncome;
+    private HashMap<String, String> accDetailMap = new HashMap<>();
+    private List<String> accDetailList = new ArrayList<>();
 
     DatabaseReference dbUserInfo;
 
@@ -44,23 +42,12 @@ public class AccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_account);
         getSupportActionBar().hide();
 
-        accountDetailAge = findViewById(R.id.account_detail_age);
-        accountDetailGender = findViewById(R.id.account_detail_gender);
-        accountDetailIncome = findViewById(R.id.account_detail_income);
+        rvAccDetails = findViewById(R.id.rv_account_details);
 
-        ageLabel = accountDetailAge.findViewById(R.id.textView_accDetail_value);
-        genderLabel = accountDetailGender.findViewById(R.id.textView_accDetail_value);
-        incomeLabel  = accountDetailIncome.findViewById(R.id.textView_accDetail_value);
+        currAuthUser = FirebaseAuth.getInstance().getCurrentUser();
+        Log.d("current user", currAuthUser.getUid());
 
-        saveAge = accountDetailAge.findViewById(R.id.button_saveAccount);
-        saveGender = accountDetailGender.findViewById(R.id.button_saveAccount);
-        saveIncome = accountDetailIncome.findViewById(R.id.button_saveAccount);
-
-        setListeners();
-        setFormInformation();
-
-        // TestUser TpBUQaOpqiP4wTykld49PrxD1m62
-        dbUserInfo = FirebaseDatabase.getInstance().getReference("user").child("TpBUQaOpqiP4wTykld49PrxD1m62");
+        dbUserInfo = FirebaseDatabase.getInstance().getReference("user");
     }
 
     public void updateUser(String field, String updateValue) {
@@ -95,13 +82,8 @@ public class AccountActivity extends AppCompatActivity {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String age = snapshot.child("dob").getValue(String.class);
-                String gender = snapshot.child("gender").getValue(String.class);
-                String income = snapshot.child("yearlyIncome").getValue(String.class);
-
-                ageLabel.setText(age);
-                genderLabel.setText(gender);
-                incomeLabel.setText(income);
+                currUser = snapshot.child(currAuthUser.getUid()).getValue(User.class);
+                setAccountDetails();
             }
 
 
@@ -112,95 +94,35 @@ public class AccountActivity extends AppCompatActivity {
         });
     }
 
-    public void setFormInformation() {
 
-        TextView tvAge = accountDetailAge.findViewById(R.id.textView_account);
-        tvAge.setText("Age");
+    /**
+     *
+     *
+     */
+    private void setAccountDetails() {
+        accDetailList.clear();
+        accDetailMap.clear();
 
-        TextView tvGender = accountDetailGender.findViewById(R.id.textView_account);
-        tvGender.setText("Gender");
 
-        TextView tvIncome = accountDetailIncome.findViewById(R.id.textView_account);
-        tvIncome.setText("Income");
+        accDetailList.add("name");
+        accDetailList.add("DOB");
+        accDetailList.add("gender");
+        accDetailList.add("income");
+        accDetailList.add("nationality");
+        accDetailList.add("employment status");
+
+        accDetailMap.put("name", currUser.getName());
+        accDetailMap.put("DOB", currUser.getDOB());
+        accDetailMap.put("gender", currUser.getGender());
+        accDetailMap.put("income", currUser.getYearlyIncome());
+        accDetailMap.put("nationality", currUser.getNationality());
+
+        String employStatus = currUser.getEmployed()? "Employed" : "Unemployed";
+        accDetailMap.put("employment status", employStatus);
+
+        AccountAdapter adapter = new AccountAdapter(accDetailMap, accDetailList);
+        rvAccDetails.setAdapter(adapter);
+        rvAccDetails.setLayoutManager(new LinearLayoutManager(AccountActivity.this));
     }
-
-    public void setListeners() {
-
-        Button editAge = accountDetailAge.findViewById(R.id.button_editAccount);
-        editAge.setOnClickListener(onClickEditAge);
-
-        Button editGender = accountDetailGender.findViewById(R.id.button_editAccount);
-        editGender.setOnClickListener(onClickEditGender);
-
-        Button editIncome = accountDetailIncome.findViewById(R.id.button_editAccount);
-        editIncome.setOnClickListener(onClickEditIncome);
-
-        saveAge.setOnClickListener(onEditAge);
-        saveGender.setOnClickListener(onEditGender);
-        saveIncome.setOnClickListener(onEditIncome);
-    }
-
-    public View.OnClickListener onEditAge= new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            EditText editTextAccount = accountDetailAge.findViewById(R.id.editText_account);
-            String updateValue = editTextAccount.getText().toString().trim();
-            updateUser("dob", updateValue);
-        }
-    };
-
-    public View.OnClickListener onEditGender= new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            EditText editTextAccount = accountDetailGender.findViewById(R.id.editText_account);
-            String updateValue = editTextAccount.getText().toString().trim();
-            updateUser("gender", updateValue);
-        }
-    };
-
-    public View.OnClickListener onEditIncome= new View.OnClickListener() {
-
-        @Override
-        public void onClick(View v) {
-            EditText editTextAccount = accountDetailIncome.findViewById(R.id.editText_account);
-            String updateValue = editTextAccount.getText().toString().trim();
-            updateUser("yearlyIncome", updateValue);
-        }
-    };
-
-    public void setVisibility() {
-        LinearLayout linearLayout = currToggled.findViewById(R.id.linearLayout_account);
-        if (linearLayout.getVisibility() == View.GONE) { ;
-            linearLayout.setVisibility(View.VISIBLE);
-        } else {
-            linearLayout.setVisibility(View.GONE);
-        }
-    }
-
-    public View.OnClickListener onClickEditAge = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            currToggled = accountDetailAge;
-            setVisibility();
-        }
-    };
-
-    public View.OnClickListener onClickEditGender = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            currToggled = accountDetailGender;
-            setVisibility();
-        }
-    };
-
-    public View.OnClickListener onClickEditIncome = new View.OnClickListener() {
-        @Override
-        public void onClick(View v){
-            currToggled = accountDetailIncome;
-            setVisibility();
-        }
-    };
 
 }
