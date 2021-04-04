@@ -17,6 +17,12 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
     private HashMap<String, String> accDetailMap;
     private List<String> accDetailList;
 
+    private OnAdapterItemListener onAdapterItemListener;
+
+    public void setOnAdapterItemListener(OnAdapterItemListener onAdapterItemListener) {
+        this.onAdapterItemListener = onAdapterItemListener;
+    }
+
     public AccountAdapter(HashMap<String, String> accDetailMap, List<String> accDetailList) {
         this.accDetailList = accDetailList;
         this.accDetailMap = accDetailMap;
@@ -40,6 +46,13 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
         String label = accDetailList.get(position);
         tvDetailLabel.setText(label);
         tvDetailValue.setText(accDetailMap.get(label));
+        editButton.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View v) {
+                onAdapterItemListener.OnClick(label);
+            }
+        });
 
     }
 
@@ -61,6 +74,10 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
             tvDetailValue = itemView.findViewById(R.id.textView_accDetail_value);
             editButton = itemView.findViewById(R.id.button_editAccount);
         }
+    }
+
+    public interface OnAdapterItemListener {
+        void OnClick(String label);
     }
 }
 

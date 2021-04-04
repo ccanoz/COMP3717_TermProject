@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/account_detail"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:id="@+id/cardView_account"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.065">
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <LinearLayout
+                android:id="@+id/linearLayout"
+                android:layout_width="300dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                app:layout_constraintBottom_toTopOf="@+id/linearLayout_account"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <TextView
+                    android:id="@+id/textView_account"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:padding="10dp"
+                    android:text="@string/age"
+                    android:textColor="#000000"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/textView_accDetail_value"
+                    android:layout_width="169dp"
+                    android:layout_height="wrap_content"
+                    android:gravity="bottom"
+                    android:padding="10dp"
+                    android:text="Value"
+                    android:textSize="18sp" />
+
+                <Button
+                    android:id="@+id/button_cancelEdit"
+                    style="@style/Widget.MaterialComponents.Button.TextButton"
+                    android:layout_width="50dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="cancel"
+                    android:textColor="#757575"
+                    app:rippleColor="#FFFFFF" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/linearLayout_account"
+                android:layout_width="255dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="1dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="@+id/linearLayout"
+                app:layout_constraintStart_toStartOf="@+id/linearLayout"
+                app:layout_constraintTop_toBottomOf="@+id/linearLayout">
+
+                <com.google.android.material.textfield.TextInputLayout
+                    android:id="@+id/outlinedTextField"
+                    style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+                    android:layout_width="match_parent"
+                    android:layout_height="40dp"
+                    android:ems="10"
+                    app:hintTextColor="#131313">
+
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editText_account"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:inputType="text"
+                        app:hintTextColor="#131313" />
+
+                </com.google.android.material.textfield.TextInputLayout>
+
+                <Button
+                    android:id="@+id/button_saveAccount"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="13dp"
+                    android:backgroundTint="@color/purple_500"
+                    android:text="Save changes"
+                    android:textColor="#FFFFFF" />
+
+            </LinearLayout>
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>
