@@ -11,7 +11,7 @@
         android:layout_width="176dp"
         android:layout_height="47dp"
         android:layout_marginBottom="24dp"
-        android:backgroundTint="#6200EE"
+        android:backgroundTint="@color/primary_colour_blue"
         android:text="Apply"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/rv_requirements"
