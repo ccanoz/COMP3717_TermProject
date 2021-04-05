@@ -1,5 +1,6 @@
 package com.bcit.termproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -94,7 +95,7 @@ public class AccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.activity_account, container, false);
+        View view = inflater.inflate(R.layout.fragment_account, container, false);
 
         rvAccDetails = view.findViewById(R.id.rv_account_details);
 
@@ -102,6 +103,9 @@ public class AccountFragment extends Fragment {
         userName = view.findViewById(R.id.textView_userName_account);
 
         dbUserInfo = FirebaseDatabase.getInstance().getReference("user");
+
+
+
 
         return view;
     }
@@ -377,6 +381,13 @@ public class AccountFragment extends Fragment {
 
         datePicker.addOnPositiveButtonClickListener(selection -> updateUser("dob", datePicker.getHeaderText())
         );
+    }
+
+
+
+    public void signOut(View v){
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(getContext(), LandingActivity.class));
     }
 
 
