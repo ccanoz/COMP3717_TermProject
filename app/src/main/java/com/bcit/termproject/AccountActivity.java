@@ -190,6 +190,7 @@ public class AccountActivity extends AppCompatActivity {
         Button saveAccount = dialogView.findViewById(R.id.button_saveAccount);
 
         EditText editTextAccount = dialogView.findViewById(R.id.editText_account);
+        editTextAccount.setText(value);
 
         AlertDialog alertDialog = dialogBuilder.create();
         alertDialog.show();
