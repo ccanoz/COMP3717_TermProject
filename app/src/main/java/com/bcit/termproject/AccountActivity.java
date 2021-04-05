@@ -131,13 +131,14 @@ public class AccountActivity extends AppCompatActivity {
         accDetailList.add("name");
         accDetailList.add("DOB");
         accDetailList.add("gender");
+        accDetailList.add("gpa");
         accDetailList.add("yearlyIncome");
         accDetailList.add("nationality");
         accDetailList.add("employed");
-
         accDetailMap.put("name", currUser.getName());
         accDetailMap.put("DOB", currUser.getDOB());
         accDetailMap.put("gender", currUser.getGender());
+        accDetailMap.put("gpa", currUser.getGPA());
         accDetailMap.put("yearlyIncome", currUser.getYearlyIncome());
         accDetailMap.put("nationality", currUser.getNationality());
 
@@ -160,6 +161,9 @@ public class AccountActivity extends AppCompatActivity {
                         return;
                     case "yearlyIncome":
                         showFormDialog(label, currUser.getYearlyIncome());
+                        return;
+                    case "gpa":
+                        showFormDialog(label, currUser.getGPA());
                         return;
                     case "gender":
                         showSpinnerDialog(label, currUser.getGender());

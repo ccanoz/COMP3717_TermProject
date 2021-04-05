@@ -12,7 +12,7 @@
         android:layout_height="74dp"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="first lastName"
+        android:text="@string/account_details"
         android:textAllCaps="true"
         android:textColor="@color/black"
         android:textSize="36sp"
@@ -24,8 +24,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_account_details"
-        android:layout_width="314dp"
-        android:layout_height="361dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:paddingHorizontal="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/textView_userName_account"

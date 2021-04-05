@@ -8,14 +8,12 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -96,7 +94,7 @@ public class AccountFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        View view = inflater.inflate(R.layout.fragment_account, container, false);
+        View view = inflater.inflate(R.layout.activity_account, container, false);
 
         rvAccDetails = view.findViewById(R.id.rv_account_details);
 
@@ -104,9 +102,6 @@ public class AccountFragment extends Fragment {
         userName = view.findViewById(R.id.textView_userName_account);
 
         dbUserInfo = FirebaseDatabase.getInstance().getReference("user");
-
-        // TestUser TpBUQaOpqiP4wTykld49PrxD1m62
-        dbUserInfo = FirebaseDatabase.getInstance().getReference("user").child("TpBUQaOpqiP4wTykld49PrxD1m62");
 
         return view;
     }
@@ -158,8 +153,7 @@ public class AccountFragment extends Fragment {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 currUser = snapshot.child(currAuthUser.getUid()).getValue(User.class);
-                System.out.println("USER "+currUser);
-                userName.setText(currUser.getName()); // TODO: getting nullpointerexception on curruser
+                userName.setText(currUser.getName());
 
                 setAccountDetails();
             }
@@ -181,13 +175,14 @@ public class AccountFragment extends Fragment {
         accDetailList.add("name");
         accDetailList.add("DOB");
         accDetailList.add("gender");
+        accDetailList.add("gpa");
         accDetailList.add("yearlyIncome");
         accDetailList.add("nationality");
         accDetailList.add("employed");
-
         accDetailMap.put("name", currUser.getName());
         accDetailMap.put("DOB", currUser.getDOB());
         accDetailMap.put("gender", currUser.getGender());
+        accDetailMap.put("gpa", currUser.getGPA());
         accDetailMap.put("yearlyIncome", currUser.getYearlyIncome());
         accDetailMap.put("nationality", currUser.getNationality());
 
@@ -211,6 +206,9 @@ public class AccountFragment extends Fragment {
                     case "yearlyIncome":
                         showFormDialog(label, currUser.getYearlyIncome());
                         return;
+                    case "gpa":
+                        showFormDialog(label, currUser.getGPA());
+                        return;
                     case "gender":
                         showSpinnerDialog(label, currUser.getGender());
                         return;
@@ -228,7 +226,7 @@ public class AccountFragment extends Fragment {
     }
 
     /**
-     * Displays a dialog with an EditText if the user chooses to edit their name or yearly income.
+     * Displays a dialog with an EditText if the user chooses to edit their name, gpa, or yearly income.
      */
     private void showFormDialog(String label, String value) {
 
