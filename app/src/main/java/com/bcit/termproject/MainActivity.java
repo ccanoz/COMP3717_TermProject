@@ -34,9 +34,7 @@ public class MainActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         currAuthUser = FirebaseAuth.getInstance().getCurrentUser();
-
         dbUserInfo = FirebaseDatabase.getInstance().getReference("user");
-
 
         BottomNavigationView bottomNavigation = findViewById(R.id.bottomNavigationView);
         BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
@@ -44,7 +42,7 @@ public class MainActivity extends AppCompatActivity {
                     @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                         switch (item.getItemId()) {
                             case R.id.home:
-                                openFragment(AccountFragment.newInstance("", ""));
+                                openFragment(FeedFragment.newInstance("", ""));
                                 return true;
                             case R.id.search:
                                 openFragment(ItemsListingFragment.newInstance("", ""));
@@ -74,6 +72,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+
+        openFragment(FeedFragment.newInstance("", ""));
     }
 
     public void openFragment(Fragment fragment) {
