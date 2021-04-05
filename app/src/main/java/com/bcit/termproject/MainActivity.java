@@ -8,6 +8,7 @@ import androidx.fragment.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
@@ -71,8 +72,6 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-
-        startActivity(new Intent(MainActivity.this, ScholarshipInfoActivity.class));
     }
 
     public void openFragment(Fragment fragment) {
@@ -80,5 +79,9 @@ public class MainActivity extends AppCompatActivity {
         transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
+    }
+    public void signOut(View v){
+        FirebaseAuth.getInstance().signOut();
+        startActivity(new Intent(this, LandingActivity.class));
     }
 }
