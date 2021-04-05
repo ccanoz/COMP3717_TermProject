@@ -82,7 +82,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="13dp"
-                    android:backgroundTint="@color/purple_500"
+                    android:backgroundTint="@color/primary_colour_blue"
                     android:text="@string/save_changes"
                     android:textColor="#FFFFFF" />
 
@@ -93,7 +93,7 @@
                     android:layout_height="0dp"
                     android:layout_weight="1"
                     android:text="@string/cancel"
-                    android:textColor="#E91E63"
+                    android:textColor="@color/primary_colour_blue"
                     app:rippleColor="#FFFFFF" />
 
             </LinearLayout>
