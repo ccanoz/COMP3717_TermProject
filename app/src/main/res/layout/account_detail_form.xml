@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/account_detail"
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
@@ -44,22 +43,12 @@
 
                 <TextView
                     android:id="@+id/textView_accDetail_value"
-                    android:layout_width="169dp"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="bottom"
                     android:padding="10dp"
-                    android:text="Value"
                     android:textSize="18sp" />
 
-                <Button
-                    android:id="@+id/button_cancelEdit"
-                    style="@style/Widget.MaterialComponents.Button.TextButton"
-                    android:layout_width="50dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="cancel"
-                    android:textColor="#757575"
-                    app:rippleColor="#FFFFFF" />
             </LinearLayout>
 
             <LinearLayout
@@ -96,8 +85,18 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="13dp"
                     android:backgroundTint="@color/purple_500"
-                    android:text="Save changes"
+                    android:text="@string/save_changes"
                     android:textColor="#FFFFFF" />
+
+                <Button
+                    android:id="@+id/button_cancelEdit"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="@string/cancel"
+                    android:textColor="#E91E63"
+                    app:rippleColor="#FFFFFF" />
 
             </LinearLayout>
 
