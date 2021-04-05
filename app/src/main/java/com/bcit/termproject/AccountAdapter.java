@@ -7,7 +7,10 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.widget.AppCompatImageButton;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +44,7 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
     public void onBindViewHolder(@NonNull AccountViewHolder holder, int position) {
         TextView tvDetailLabel = holder.tvDetailLabel;
         TextView tvDetailValue = holder.tvDetailValue;
-        Button editButton = holder.editButton;
+        AppCompatImageButton editButton = holder.editButton;
 
         String label = accDetailList.get(position);
         tvDetailLabel.setText(label);
@@ -65,14 +68,14 @@ public class AccountAdapter extends RecyclerView.Adapter<AccountAdapter.AccountV
 
         public TextView tvDetailLabel;
         public TextView tvDetailValue;
-        public Button editButton;
+        public AppCompatImageButton editButton;
 
         public AccountViewHolder(@NonNull View itemView) {
             super(itemView);
 
             tvDetailLabel = itemView.findViewById(R.id.textView_accDetail_label);
             tvDetailValue = itemView.findViewById(R.id.textView_accDetail_value);
-            editButton = itemView.findViewById(R.id.button_editAccount);
+            editButton = itemView.findViewById(R.id.imgButton_editAccount);
         }
     }
 

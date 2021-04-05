@@ -12,7 +12,7 @@
         android:layout_height="74dp"
         android:layout_marginTop="16dp"
         android:gravity="center"
-        android:text="first lastName"
+        android:text="@string/account_details"
         android:textAllCaps="true"
         android:textColor="@color/black"
         android:textSize="36sp"
