@@ -3,6 +3,7 @@ package com.bcit.termproject;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.gms.tasks.Tasks;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -24,6 +26,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.util.ArrayList;
 import java.util.Objects;
 
 public class SignUpActivity extends AppCompatActivity {
@@ -74,8 +77,8 @@ public class SignUpActivity extends AppCompatActivity {
                             Toast.makeText(SignUpActivity.this, "Authentication failed. " + task.getException(), Toast.LENGTH_SHORT).show();
                         } else {
                             getAdditionalUserInfo();
-//                            SignUpActivity.this.startActivity(new Intent(SignUpActivity.this, FeedActivity.class));
-//                            SignUpActivity.this.finish();
+                            SignUpActivity.this.startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+                            SignUpActivity.this.finish();
                         }
                     }
 
@@ -104,7 +107,7 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
-    private void getAdditionalUserInfo() {
+    private void getAdditionalUserInfo () {
         RadioGroup genderRadioGroup = (RadioGroup) findViewById(R.id.gender_radiogroup_signup);
         int selectedGender = genderRadioGroup.getCheckedRadioButtonId();
 
@@ -112,16 +115,21 @@ public class SignUpActivity extends AppCompatActivity {
         String DOB = ((EditText)findViewById(R.id.DOB_ET_signup)).getText().toString();
         String gender = ((RadioButton)findViewById(selectedGender)).getText().toString();
         String yearlyIncome = ((EditText)findViewById(R.id.yearlyincome_ET_signup)).getText().toString();
+        String gpa = ((EditText)findViewById(R.id.gpa_ET_signup)).getText().toString();
         String nationality= ((TextView)findViewById(R.id.nationality_TV_signup)).getText().toString();
         boolean employed = ((CheckBox)findViewById(R.id.employed_checkBox)).isChecked();
+
+        ArrayList<String> bookmarks = new ArrayList<>();
 
         User user = new User();
         user.setName(name);
         user.setDOB(DOB);
         user.setGender(gender);
         user.setYearlyIncome(yearlyIncome);
+        user.setGPA(gpa);
         user.setNationality(nationality);
         user.setEmployed(employed);
+        user.setBookmarked(bookmarks);
 
         Log.d("REGISTER", user.toString());
 

@@ -8,6 +8,7 @@ public class User {
     String DOB; //change to Date?
     String gender;
     String yearlyIncome;
+    String GPA;
     String nationality;
     boolean employed;
 
@@ -15,13 +16,14 @@ public class User {
         // Default constructor required
     }
 
-    public User(ArrayList<String> bookmarked, String name, String DOB, String gender, String yearlyIncome,
+    public User(ArrayList<String> bookmarked, String name, String DOB, String gender, String yearlyIncome, String GPA,
                 String nationality, boolean employed){
         this.bookmarked = bookmarked;
         this.name = name;
         this.DOB = DOB;
         this.gender = gender;
         this.yearlyIncome = yearlyIncome;
+        this.GPA = GPA;
         this.nationality = nationality;
         this.employed = employed;
     }
@@ -31,6 +33,7 @@ public class User {
     public void setDOB(String DOB){this.DOB = DOB;}
     public void setGender(String gender){this.gender = gender;}
     public void setYearlyIncome(String yearlyIncome){this.yearlyIncome = yearlyIncome;}
+    public void setGPA(String GPA){this.GPA = GPA;}
     public void setNationality(String nationality){this.nationality = nationality;}
     public void setEmployed(boolean employed){this.employed = employed;}
 
@@ -39,6 +42,7 @@ public class User {
     public String getDOB(){ return DOB; }
     public String getGender(){ return gender; }
     public String getYearlyIncome(){ return yearlyIncome; }
+    public String getGPA(){ return GPA; }
     public String getNationality(){ return nationality; }
     public boolean getEmployed(){ return employed; }
 

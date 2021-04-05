@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.TermProject">
-        <activity android:name=".LoginActivity"/>
+        <activity android:name=".LoginActivity">
+
+        </activity>
         <activity android:name=".AccountActivity" >
 
         </activity>
@@ -22,14 +24,18 @@
         <activity android:name=".FeedActivity" >
 
         </activity>
-        <activity android:name=".SignUpActivity" />
-        <activity android:name=".LandingActivity" />
-        <activity android:name=".MainActivity">
+        <activity android:name=".SignUpActivity" >
+
+        </activity>
+        <activity android:name=".LandingActivity" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity android:name=".MainActivity">
+
         </activity>
     </application>
 
