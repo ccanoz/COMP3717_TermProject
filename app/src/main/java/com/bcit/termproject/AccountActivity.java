@@ -1,40 +1,53 @@
 package com.bcit.termproject;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.LinearLayoutManager;
+import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.datepicker.MaterialDatePicker;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+
 public class AccountActivity extends AppCompatActivity {
 
-    View accountDetailAge;
-    View accountDetailGender;
-    View accountDetailIncome;
-    View currToggled;
+    FirebaseUser currAuthUser;
+    User currUser;
+    TextView userName;
+    String employStatus;
 
-    TextView ageLabel;
-    TextView genderLabel;
-    TextView incomeLabel;
+    MaterialDatePicker<?> datePicker;
 
-    Button saveAge;
-    Button saveGender;
-    Button saveIncome;
+    RecyclerView rvAccDetails;
+
+    private HashMap<String, String> accDetailMap = new HashMap<>();
+    private List<String> accDetailList = new ArrayList<>();
 
     DatabaseReference dbUserInfo;
 
@@ -44,30 +57,29 @@ public class AccountActivity extends AppCompatActivity {
         setContentView(R.layout.activity_account);
         getSupportActionBar().hide();
 
-        accountDetailAge = findViewById(R.id.account_detail_age);
-        accountDetailGender = findViewById(R.id.account_detail_gender);
-        accountDetailIncome = findViewById(R.id.account_detail_income);
+        rvAccDetails = findViewById(R.id.rv_account_details);
 
-        ageLabel = accountDetailAge.findViewById(R.id.textView_accDetail_value);
-        genderLabel = accountDetailGender.findViewById(R.id.textView_accDetail_value);
-        incomeLabel  = accountDetailIncome.findViewById(R.id.textView_accDetail_value);
+        currAuthUser = FirebaseAuth.getInstance().getCurrentUser();
+        userName = findViewById(R.id.textView_userName_account);
 
-        saveAge = accountDetailAge.findViewById(R.id.button_saveAccount);
-        saveGender = accountDetailGender.findViewById(R.id.button_saveAccount);
-        saveIncome = accountDetailIncome.findViewById(R.id.button_saveAccount);
-
-        setListeners();
-        setFormInformation();
-
-        // TestUser TpBUQaOpqiP4wTykld49PrxD1m62
-        dbUserInfo = FirebaseDatabase.getInstance().getReference("user").child("TpBUQaOpqiP4wTykld49PrxD1m62");
+        dbUserInfo = FirebaseDatabase.getInstance().getReference("user");
     }
 
+    /**
+     * Update a user detail field for the current user to the value passed in.
+     * @param field: a String, the user field to be updated in the database
+     * @param updateValue: a String, the new value to be set
+     */
     public void updateUser(String field, String updateValue) {
 
-        Log.d("Updating: ", field + " to " + updateValue);
+        Task<Void> setValueTask;
 
-        Task<Void> setValueTask = dbUserInfo.child(field).setValue(updateValue);
+        if (field.equals("employed")) {
+            boolean employment = updateValue.equals("Employed");
+            setValueTask = dbUserInfo.child(currAuthUser.getUid()).child(field).setValue(employment);
+        } else {
+           setValueTask = dbUserInfo.child(currAuthUser.getUid()).child(field).setValue(updateValue);
+        }
 
         setValueTask.addOnSuccessListener(new OnSuccessListener() {
             @Override
@@ -95,15 +107,11 @@ public class AccountActivity extends AppCompatActivity {
 
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                String age = snapshot.child("dob").getValue(String.class);
-                String gender = snapshot.child("gender").getValue(String.class);
-                String income = snapshot.child("yearlyIncome").getValue(String.class);
+                currUser = snapshot.child(currAuthUser.getUid()).getValue(User.class);
+                userName.setText(currUser.getName());
 
-                ageLabel.setText(age);
-                genderLabel.setText(gender);
-                incomeLabel.setText(income);
+                setAccountDetails();
             }
-
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -112,95 +120,214 @@ public class AccountActivity extends AppCompatActivity {
         });
     }
 
-    public void setFormInformation() {
 
-        TextView tvAge = accountDetailAge.findViewById(R.id.textView_account);
-        tvAge.setText("Age");
+    /**
+     *  Set the RecyclerView to display user account details.
+     */
+    private void setAccountDetails() {
+        accDetailList.clear();
+        accDetailMap.clear();
 
-        TextView tvGender = accountDetailGender.findViewById(R.id.textView_account);
-        tvGender.setText("Gender");
+        accDetailList.add("name");
+        accDetailList.add("DOB");
+        accDetailList.add("gender");
+        accDetailList.add("yearlyIncome");
+        accDetailList.add("nationality");
+        accDetailList.add("employed");
 
-        TextView tvIncome = accountDetailIncome.findViewById(R.id.textView_account);
-        tvIncome.setText("Income");
+        accDetailMap.put("name", currUser.getName());
+        accDetailMap.put("DOB", currUser.getDOB());
+        accDetailMap.put("gender", currUser.getGender());
+        accDetailMap.put("yearlyIncome", currUser.getYearlyIncome());
+        accDetailMap.put("nationality", currUser.getNationality());
+
+        employStatus = currUser.getEmployed() ? "Employed" : "Unemployed";
+        accDetailMap.put("employed", employStatus);
+
+        AccountAdapter adapter = new AccountAdapter(accDetailMap, accDetailList);
+
+        adapter.setOnAdapterItemListener(new AccountAdapter.OnAdapterItemListener() {
+            @Override
+            public void OnClick(String label) {
+
+                // Show the corresponding layout for the label passed in
+                switch(label) {
+                    case "DOB":
+                        showDOBDialog();
+                        return;
+                    case "name":
+                        showFormDialog(label, currUser.getName());
+                        return;
+                    case "yearlyIncome":
+                        showFormDialog(label, currUser.getYearlyIncome());
+                        return;
+                    case "gender":
+                        showSpinnerDialog(label, currUser.getGender());
+                        return;
+                    case "nationality":
+                        showSpinnerDialog(label, currUser.getNationality());
+                        return;
+                    default:
+                        showRadioDialog(label, employStatus);
+                }
+            }
+        });
+
+        rvAccDetails.setAdapter(adapter);
+        rvAccDetails.setLayoutManager(new LinearLayoutManager(AccountActivity.this));
     }
 
-    public void setListeners() {
+    /**
+     * Displays a dialog with an EditText if the user chooses to edit their name or yearly income.
+     */
+    private void showFormDialog(String label, String value) {
 
-        Button editAge = accountDetailAge.findViewById(R.id.button_editAccount);
-        editAge.setOnClickListener(onClickEditAge);
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        View dialogView = setDialogView(R.layout.account_detail_form, label, value);
+        dialogBuilder.setView(dialogView);
 
-        Button editGender = accountDetailGender.findViewById(R.id.button_editAccount);
-        editGender.setOnClickListener(onClickEditGender);
+        Button cancel = dialogView.findViewById(R.id.button_cancelEdit);
+        Button saveAccount = dialogView.findViewById(R.id.button_saveAccount);
 
-        Button editIncome = accountDetailIncome.findViewById(R.id.button_editAccount);
-        editIncome.setOnClickListener(onClickEditIncome);
+        EditText editTextAccount = dialogView.findViewById(R.id.editText_account);
+        editTextAccount.setText(value);
 
-        saveAge.setOnClickListener(onEditAge);
-        saveGender.setOnClickListener(onEditGender);
-        saveIncome.setOnClickListener(onEditIncome);
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+
+        saveAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateUser(label, editTextAccount.getText().toString());
+                alertDialog.dismiss();
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
     }
 
-    public View.OnClickListener onEditAge= new View.OnClickListener() {
+    /**
+     * Set the values for the dialogView and Views that will be displayed in the dialogs
+     * for editing account details.
+     *
+     * @param formId: an int, the id of the form layout
+     * @param label: String label for the user field
+     * @param value: String value for the user field
+     * @return dialogView as a DialogView
+     */
+    private View setDialogView(int formId, String label, String value){
+        LayoutInflater inflater = getLayoutInflater();
+        View dialogView = inflater.inflate(formId, null);
 
-        @Override
-        public void onClick(View v) {
-            EditText editTextAccount = accountDetailAge.findViewById(R.id.editText_account);
-            String updateValue = editTextAccount.getText().toString().trim();
-            updateUser("dob", updateValue);
-        }
-    };
+        TextView accDetail = dialogView.findViewById(R.id.textView_account);
+        TextView accValue = dialogView.findViewById(R.id.textView_accDetail_value);
+        accDetail.setText(label);
+        accValue.setText(value);
 
-    public View.OnClickListener onEditGender= new View.OnClickListener() {
+        return dialogView;
+    }
 
-        @Override
-        public void onClick(View v) {
-            EditText editTextAccount = accountDetailGender.findViewById(R.id.editText_account);
-            String updateValue = editTextAccount.getText().toString().trim();
-            updateUser("gender", updateValue);
-        }
-    };
+    /**
+     * Display a spinner dialog if the user chooses to edit nationality or gender.
+     * @param label: String label for the user field
+     * @param value: String value for the user field
+     */
+    private void showSpinnerDialog(String label, String value) {
 
-    public View.OnClickListener onEditIncome= new View.OnClickListener() {
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        View dialogView = setDialogView(R.layout.account_detail_spinner, label, value);
+        dialogBuilder.setView(dialogView);
 
-        @Override
-        public void onClick(View v) {
-            EditText editTextAccount = accountDetailIncome.findViewById(R.id.editText_account);
-            String updateValue = editTextAccount.getText().toString().trim();
-            updateUser("yearlyIncome", updateValue);
-        }
-    };
+        Button cancel = dialogView.findViewById(R.id.button_cancelEdit);
+        Button saveAccount = dialogView.findViewById(R.id.button_saveAccount);
 
-    public void setVisibility() {
-        LinearLayout linearLayout = currToggled.findViewById(R.id.linearLayout_account);
-        if (linearLayout.getVisibility() == View.GONE) { ;
-            linearLayout.setVisibility(View.VISIBLE);
+        Spinner spinnerForm = dialogView.findViewById(R.id.spinner_account);
+        String[] items;
+
+        if (label.equals("gender")) {
+            items = new String[]{"Male", "Female", "Other"};
         } else {
-            linearLayout.setVisibility(View.GONE);
+            items = new String[]{"Canadian", "American", "Other"};
         }
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_spinner_dropdown_item, items);
+        spinnerForm.setAdapter(adapter);
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+
+        saveAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateUser(label, spinnerForm.getSelectedItem().toString());
+                alertDialog.dismiss();
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
     }
 
-    public View.OnClickListener onClickEditAge = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            currToggled = accountDetailAge;
-            setVisibility();
-        }
-    };
 
-    public View.OnClickListener onClickEditGender = new View.OnClickListener() {
-        @Override
-        public void onClick(View v) {
-            currToggled = accountDetailGender;
-            setVisibility();
-        }
-    };
+    /**
+     * Display a dialog with radio buttons if the user chooses to edit their employment status.
+     * @param label: String label for the user field
+     * @param value: String value for the user field
+     */
+    private void showRadioDialog(String label, String value) {
 
-    public View.OnClickListener onClickEditIncome = new View.OnClickListener() {
-        @Override
-        public void onClick(View v){
-            currToggled = accountDetailIncome;
-            setVisibility();
-        }
-    };
+        AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(this);
+        View dialogView = setDialogView(R.layout.account_detail_radio, label, value);
+        dialogBuilder.setView(dialogView);
 
+        Button cancel = dialogView.findViewById(R.id.button_cancelEdit);
+        Button saveAccount = dialogView.findViewById(R.id.button_saveAccount);
+
+        RadioGroup radioGroup = dialogView.findViewById(R.id.radioGroup_employment);
+        int currChecked = currUser.getEmployed()? R.id.radioButton_employed: R.id.radioButton_unemployed;
+        radioGroup.check(currChecked);
+
+        AlertDialog alertDialog = dialogBuilder.create();
+        alertDialog.show();
+
+        saveAccount.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RadioButton selectedButton = dialogView.findViewById(radioGroup.getCheckedRadioButtonId());
+                updateUser(label, selectedButton.getText().toString());
+                alertDialog.dismiss();
+            }
+        });
+
+        cancel.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                alertDialog.dismiss();
+            }
+        });
+    }
+
+    /**
+     * Display a MaterialDatePicker for selecting Date of Birth.
+     */
+    private void showDOBDialog() {
+        datePicker = MaterialDatePicker.Builder.datePicker()
+                        .setInputMode(MaterialDatePicker.INPUT_MODE_TEXT)
+                        .setTitleText("Date of Birth: " + currUser.getDOB())
+                        .build();
+
+        datePicker.show(getSupportFragmentManager(), "tag");
+
+        datePicker.addOnPositiveButtonClickListener(selection -> updateUser("dob", datePicker.getHeaderText())
+        );
+    }
 }
