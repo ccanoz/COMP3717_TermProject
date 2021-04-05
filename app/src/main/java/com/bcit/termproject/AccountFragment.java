@@ -105,12 +105,6 @@ public class AccountFragment extends Fragment {
 
         dbUserInfo = MainActivity.dbUserInfo;
 
-
-
-
-
-
-
         return view;
     }
 
@@ -119,7 +113,6 @@ public class AccountFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
 
     }
 
