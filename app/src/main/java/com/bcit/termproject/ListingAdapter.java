@@ -3,6 +3,7 @@ package com.bcit.termproject;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -42,6 +43,9 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingViewHolder> {
 
         TextView textViewListingTag2 = holder.tag2TextView;
         textViewListingTag2.setText(listing.getTag2());
+
+//        ImageView bookmark = holder.image;
+//        bookmark.setImageResource(R.drawable.ic_bookmark_add);
     }
 
     @Override

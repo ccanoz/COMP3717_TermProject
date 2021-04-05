@@ -1,21 +1,21 @@
 package com.bcit.termproject;
 
 public class Listing {
-    private String scholName;
-    private String description;
+    private String name;
+    private String about;
     private String tag1;
     private String tag2;
 
-    public Listing(String scholName, String description, String tag1, String tag2) {
-        this.scholName = scholName;
-        this.description = description;
+    public Listing(String name, String about, String tag1, String tag2) {
+        this.name = name;
+        this.about = about;
         this.tag1 = tag1;
         this.tag2 = tag2;
     }
 
-    public String getScholarshipName() {return scholName;}
+    public String getScholarshipName() {return name;}
 
-    public String getDescription() {return description;}
+    public String getDescription() {return about;}
 
     public String getTag1() {return tag1;}
 
