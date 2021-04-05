@@ -28,8 +28,8 @@ public class LandingActivity extends AppCompatActivity {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
         currentUser = mAuth.getCurrentUser();
-        if (currentUser == null) {
-//            currentUser.reload();
+        if (currentUser != null) {
+            currentUser.reload();
         } else{
             startActivity(new Intent(this, MainActivity.class));
         }

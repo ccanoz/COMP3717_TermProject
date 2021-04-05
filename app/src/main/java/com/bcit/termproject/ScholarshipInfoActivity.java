@@ -61,10 +61,10 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
         scholOrg = findViewById(R.id.textView_schol_orgName);
 
         rvRequirements = findViewById(R.id.rv_requirements);
-        currAuthUser = FirebaseAuth.getInstance().getCurrentUser();
+        currAuthUser = MainActivity.currAuthUser;
 
         dbScholarships = FirebaseDatabase.getInstance().getReference("scholarship").child(scholId);
-        dbUserInfo = FirebaseDatabase.getInstance().getReference("user");
+        dbUserInfo = MainActivity.dbUserInfo;
     }
 
 
@@ -98,7 +98,7 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
         dbUserInfo.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                currUser = snapshot.child(currAuthUser.getUid()).getValue(User.class);
+                currUser = MainActivity.currUser;
                 isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
                 setBookmarkIcon();
             }

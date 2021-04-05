@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -99,10 +100,13 @@ public class AccountFragment extends Fragment {
 
         rvAccDetails = view.findViewById(R.id.rv_account_details);
 
-        currAuthUser = FirebaseAuth.getInstance().getCurrentUser();
+        currAuthUser = MainActivity.currAuthUser;
         userName = view.findViewById(R.id.textView_userName_account);
 
-        dbUserInfo = FirebaseDatabase.getInstance().getReference("user");
+        dbUserInfo = MainActivity.dbUserInfo;
+
+
+
 
 
 
@@ -153,12 +157,10 @@ public class AccountFragment extends Fragment {
     public void onStart() {
         super.onStart();
         dbUserInfo.addValueEventListener(new ValueEventListener() {
-
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                currUser = snapshot.child(currAuthUser.getUid()).getValue(User.class);
+                currUser = MainActivity.currUser;
                 userName.setText(currUser.getName());
-
                 setAccountDetails();
             }
 
