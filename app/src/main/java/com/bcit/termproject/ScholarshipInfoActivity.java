@@ -6,10 +6,16 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -23,7 +29,7 @@ import java.util.List;
 
 public class ScholarshipInfoActivity extends AppCompatActivity {
 
-    HashMap<String, String>  requirementsDesc = new HashMap<String, String>();
+    HashMap<String, String> requirementsDesc = new HashMap<String, String>();
     List<String> requirements = new ArrayList<String>();
     RecyclerView rvRequirements;
     TextView scholName;
@@ -33,6 +39,13 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
     FloatingActionButton scholBookmark;
     Boolean isBookmarked;
 
+    // TODO: remove hardcoding - This should access a specific Scholarship by its id
+    String scholId = "-MVEqScsp1eOCjqVdpvs";
+
+    FirebaseUser currAuthUser;
+    User currUser;
+
+    DatabaseReference dbUserInfo;
     DatabaseReference dbScholarships;
 
     @Override
@@ -47,26 +60,25 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
         scholAmount = findViewById(R.id.textView_schol_amount);
         scholOrg = findViewById(R.id.textView_schol_orgName);
 
-
         rvRequirements = findViewById(R.id.rv_requirements);
+        currAuthUser = FirebaseAuth.getInstance().getCurrentUser();
 
-        // TODO: remove hardcoding - set boolean depending on if scholarship exists in a user's list of scholarships
-        isBookmarked = false;
-
-        // TODO: remove hardcoding - This should access a specific Scholarship by its id
-        dbScholarships = FirebaseDatabase.getInstance().getReference("scholarship").child("-MVEqScsp1eOCjqVdpvs");
+        dbScholarships = FirebaseDatabase.getInstance().getReference("scholarship").child(scholId);
+        dbUserInfo = FirebaseDatabase.getInstance().getReference("user");
     }
 
 
     /**
      * Populate the activity layout with the scholarship details retrieved from
-     * the database.
+     * the database. Listen on changes to bookmark status for the scholarship being
+     * viewed, for the current logged in user.
      */
     @Override
     protected void onStart() {
         super.onStart();
-        dbScholarships.addValueEventListener(new ValueEventListener() {
 
+        // Listen to changes to the scholarship information
+        dbScholarships.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 requirementsDesc.clear();
@@ -76,6 +88,20 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
                 setScholarshipRequirements(snapshot);
             }
 
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        // Listen to changes to the bookmark status
+        dbUserInfo.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                currUser = snapshot.child(currAuthUser.getUid()).getValue(User.class);
+                isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
+                setBookmarkIcon();
+            }
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
@@ -90,11 +116,11 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
      *
      * @param snapshot of a Scholarship
      */
-    private void setScholarshipInfo(@NonNull  DataSnapshot snapshot) {
+    private void setScholarshipInfo(@NonNull DataSnapshot snapshot) {
         String name = snapshot.child("name").getValue(String.class);
         String description = snapshot.child("about").getValue(String.class);
         Long amount = snapshot.child("amount").getValue(Long.class);
-        String organization  =snapshot.child("organization").getValue(String.class);
+        String organization = snapshot.child("organization").getValue(String.class);
 
         // Format with commas
         String amountString = "$ " + NumberFormat.getInstance().format(amount);
@@ -115,7 +141,7 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
         DataSnapshot requirementsSnapshot = snapshot.child("Requirements");
 
         // Get each requirement and store in an array (titles) and HashMap (titles and description)
-        for(DataSnapshot requirement: requirementsSnapshot.getChildren()) {
+        for (DataSnapshot requirement : requirementsSnapshot.getChildren()) {
             String key = requirement.getKey();
             requirementsDesc.put(key, requirement.getValue(String.class));
             requirements.add(key);
@@ -127,17 +153,45 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
     }
 
     /**
+     * Update the current user's bookmark list to reflect whether the current scholarship is bookmarked or not.
+     */
+    public void updateBookmarks() {
+        Task<Void> setValueTask = dbUserInfo.child(currAuthUser.getUid()).child("bookmarked").setValue(currUser.getBookmarked());
+        setValueTask.addOnSuccessListener(new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                if (isBookmarked) {
+                    Toast.makeText(ScholarshipInfoActivity.this, "Scholarship bookmarked.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(ScholarshipInfoActivity.this, "Scholarship removed from bookmarks.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    /**
+     * Sets the bookmark icon depending on if the current scholarship
+     * is bookmarked or not.
+     */
+    public void setBookmarkIcon() {
+        int iconId = isBookmarked? R.drawable.ic_bookmark_added: R.drawable.ic_bookmark_add;
+        scholBookmark.setImageResource(iconId);
+    }
+
+    /**
      * Toggles between bookmarking/un-bookmarking a scholarship.
+     *
      * @param v
      */
     public void bookmarkScholarship(View v) {
         if (isBookmarked) {
-            scholBookmark.setImageResource(R.drawable.ic_bookmark_add);
+            currUser.unBookmark(scholId);
             isBookmarked = false;
         } else {
-            scholBookmark.setImageResource(R.drawable.ic_bookmark_added);
+            currUser.addToBookmarked(scholId);
             isBookmarked = true;
         }
-
+        setBookmarkIcon();
+        updateBookmarks();
     }
 }

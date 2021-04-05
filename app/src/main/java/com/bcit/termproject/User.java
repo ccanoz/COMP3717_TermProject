@@ -3,7 +3,7 @@ package com.bcit.termproject;
 import java.util.ArrayList;
 
 public class User {
-    ArrayList<String> bookmarked;
+    ArrayList<String> bookmarked = new ArrayList<>();
     String name;
     String DOB; //change to Date?
     String gender;
@@ -41,6 +41,14 @@ public class User {
     public String getYearlyIncome(){ return yearlyIncome; }
     public String getNationality(){ return nationality; }
     public boolean getEmployed(){ return employed; }
+
+    /**
+     * Checks if the scholarship passed in exists in the user's bookmarks.
+     * @param scholId
+     */
+    public boolean checkScholBookmarked(String scholId) {
+        return this.bookmarked.contains(scholId);
+    }
 
     /**
      * Add a scholarship to a User's bookmarked list.
