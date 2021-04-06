@@ -68,7 +68,7 @@ public class SignUpActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            currentUser.reload();
+//            currentUser.reload();
         }
     }
 
@@ -94,9 +94,8 @@ public class SignUpActivity extends AppCompatActivity {
                         if (!task.isSuccessful()) {
                             Toast.makeText(SignUpActivity.this, "Authentication failed. " + task.getException(), Toast.LENGTH_SHORT).show();
                         } else {
+                            currentUser = mAuth.getCurrentUser();
                             getAdditionalUserInfo();
-                            SignUpActivity.this.startActivity(new Intent(SignUpActivity.this, MainActivity.class));
-                            SignUpActivity.this.finish();
                         }
                     }
 
@@ -122,6 +121,7 @@ public class SignUpActivity extends AppCompatActivity {
         String emailStr = email.getText().toString();
         String passwordStr = password.getText().toString();
         createAccount(emailStr, passwordStr);
+
 
     }
 
@@ -163,15 +163,21 @@ public class SignUpActivity extends AppCompatActivity {
 
         Log.d("REGISTER", user.toString());
 
+        Log.d("REGISTER", currentUser.getUid());
         DatabaseReference ref = database.getReference().child("user").child(currentUser.getUid());
         ref.setValue(user, new DatabaseReference.CompletionListener() {
             @Override
             public void onComplete(DatabaseError databaseError, DatabaseReference reference) {
                 if (databaseError != null) {
                     Log.d("REGISTER", "Failed to write message", databaseError.toException());
+                } else{
+
                 }
             }
+
         });
+        SignUpActivity.this.startActivity(new Intent(SignUpActivity.this, MainActivity.class));
+
 
     }
 
