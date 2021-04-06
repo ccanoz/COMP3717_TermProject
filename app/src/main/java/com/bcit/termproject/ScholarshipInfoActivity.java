@@ -5,9 +5,14 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.Drawable;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -22,6 +27,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
+import java.io.InputStream;
+import java.lang.ref.WeakReference;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -116,11 +127,12 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
      *
      * @param snapshot of a Scholarship
      */
-    private void setScholarshipInfo(@NonNull DataSnapshot snapshot) {
+    private void setScholarshipInfo(@NonNull DataSnapshot snapshot){
         String name = snapshot.child("name").getValue(String.class);
         String description = snapshot.child("about").getValue(String.class);
         Long amount = snapshot.child("amount").getValue(Long.class);
         String organization = snapshot.child("organization").getValue(String.class);
+        String logoUrl = snapshot.child("logo").getValue(String.class);
 
         // Format with commas
         String amountString = "$ " + NumberFormat.getInstance().format(amount);
@@ -129,6 +141,10 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
         scholAbout.setText(description);
         scholAmount.setText(amountString);
         scholOrg.setText(organization);
+
+        ImageView logoImage = findViewById(R.id.imageView_logo);
+
+        new ImageDownloaderTask(logoImage).execute(logoUrl);
     }
 
     /**
