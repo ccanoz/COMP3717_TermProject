@@ -19,6 +19,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -29,6 +30,8 @@ import com.google.firebase.database.FirebaseDatabase;
 import java.util.ArrayList;
 import java.util.Objects;
 
+import static com.bcit.termproject.MainActivity.currUser;
+
 public class SignUpActivity extends AppCompatActivity {
 
     Spinner dropdown;
@@ -38,6 +41,8 @@ public class SignUpActivity extends AppCompatActivity {
     private FirebaseUser currentUser;
     FirebaseDatabase database;
     DatabaseReference ref;
+    MaterialDatePicker<?> datePicker;
+    EditText dobET;
 
 
     @Override
@@ -51,8 +56,10 @@ public class SignUpActivity extends AppCompatActivity {
         password = findViewById(R.id.password_ET_signup);
         database = FirebaseDatabase.getInstance();
 
-
+        setupDatePicker();
         setupSpinner();
+
+
     }
 
     @Override
@@ -63,6 +70,17 @@ public class SignUpActivity extends AppCompatActivity {
         if (currentUser != null) {
             currentUser.reload();
         }
+    }
+
+    private void setupDatePicker(){
+        dobET = (EditText)findViewById(R.id.DOB_ET_signup);
+        dobET.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showDOBDialogInActivity();
+
+            }
+        });
     }
 
     private void createAccount(String email, String password) {
@@ -107,12 +125,24 @@ public class SignUpActivity extends AppCompatActivity {
 
     }
 
+    private void showDOBDialogInActivity(){
+        datePicker = MaterialDatePicker.Builder.datePicker()
+                .setInputMode(MaterialDatePicker.INPUT_MODE_TEXT)
+                .setTitleText("Date of Birth")
+                .build();
+
+        datePicker.show(getSupportFragmentManager(), "tag");
+
+        datePicker.addOnPositiveButtonClickListener(selection -> dobET.setText(datePicker.getHeaderText()));
+    }
+
+
     private void getAdditionalUserInfo () {
         RadioGroup genderRadioGroup = (RadioGroup) findViewById(R.id.gender_radiogroup_signup);
         int selectedGender = genderRadioGroup.getCheckedRadioButtonId();
 
         String name = ((EditText)findViewById(R.id.name_ET_signup)).getText().toString();
-        String DOB = ((EditText)findViewById(R.id.DOB_ET_signup)).getText().toString();
+        String DOB = (dobET).getText().toString();
         String gender = ((RadioButton)findViewById(selectedGender)).getText().toString();
         String yearlyIncome = ((EditText)findViewById(R.id.yearlyincome_ET_signup)).getText().toString();
         String gpa = ((EditText)findViewById(R.id.gpa_ET_signup)).getText().toString();

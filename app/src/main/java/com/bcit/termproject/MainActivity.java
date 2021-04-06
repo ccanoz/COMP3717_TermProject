@@ -64,7 +64,11 @@ public class MainActivity extends AppCompatActivity {
         dbUserInfo.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                currUser = snapshot.child(currAuthUser.getUid()).getValue(User.class);
+                try {
+                    currUser = snapshot.child(currAuthUser.getUid()).getValue(User.class);
+                }catch (NullPointerException e){
+                    startActivity(new Intent(MainActivity.this, LandingActivity.class));
+                }
             }
 
             @Override
