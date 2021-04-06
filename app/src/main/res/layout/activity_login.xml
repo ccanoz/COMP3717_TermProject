@@ -18,31 +18,39 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <EditText
-
-            android:id="@+id/email_ET_login"
+        <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/email_address"
-            android:inputType="textEmailAddress" />
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-        <EditText
-            android:id="@+id/password_ET_login"
-            android:layout_width="372dp"
-            android:layout_height="wrap_content"
-            android:autofillHints="@string/password"
-            android:ems="10"
-            android:hint="@string/password"
-            android:inputType="textPassword"
-            android:padding="10dp" />
+            <EditText
+
+                android:id="@+id/email_ET_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:hint="@string/email_address"
+                android:inputType="textEmailAddress" />
+
+            <EditText
+                android:id="@+id/password_ET_login"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:autofillHints="@string/password"
+                android:ems="10"
+                android:hint="@string/password"
+                android:inputType="textPassword"
+                android:padding="10dp" />
+        </LinearLayout>
 
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/button_login"
             android:layout_width="225dp"
             android:layout_height="65dp"
+            android:layout_margin="10dp"
             android:background="#47bcca"
             android:backgroundTint="#47bcca"
             android:onClick="login"

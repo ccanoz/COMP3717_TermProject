@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <style name="AuthButtonsTheme" parent="Theme.AppCompat.Light">
-        <item name="color">@color/primary_colour_blue</item>
-        <item name="backgroundTint">@color/white</item>
+        <item name="backgroundTint">@color/primary_colour_blue</item>
+        <item name="color">@color/white</item>
     </style>
 </resources>
