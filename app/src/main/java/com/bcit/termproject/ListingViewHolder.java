@@ -1,6 +1,7 @@
 package com.bcit.termproject;
 
 import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -12,6 +13,7 @@ public class ListingViewHolder extends RecyclerView.ViewHolder {
     public TextView descTextView;
     public TextView tag1TextView;
     public TextView tag2TextView;
+    public ImageView imageBookmark;
 
     public ListingViewHolder(@NonNull View itemView) {
         super(itemView);
@@ -20,5 +22,7 @@ public class ListingViewHolder extends RecyclerView.ViewHolder {
         descTextView = itemView.findViewById(R.id.textView_listing_description);
         tag1TextView = itemView.findViewById(R.id.textView_listing_tag1);
         tag2TextView = itemView.findViewById(R.id.textView_listing_tag2);
+        imageBookmark = itemView.findViewById(R.id.imageView_scholBookmark2);
+
     }
 }

@@ -9,6 +9,7 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
 import android.os.AsyncTask;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -51,7 +52,7 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
     Boolean isBookmarked;
 
     // TODO: remove hardcoding - This should access a specific Scholarship by its id
-    String scholId = "-MVEqScsp1eOCjqVdpvs";
+    String scholId;
 
     FirebaseUser currAuthUser;
     User currUser;
@@ -64,6 +65,10 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scholarship_info);
         getSupportActionBar().hide();
+
+        Intent intent = getIntent();
+        scholId = intent.getStringExtra("SCHOLARSHIP_ITEM");
+        Log.v("key2", scholId);
 
         scholBookmark = findViewById(R.id.fab_scholBookmark);
         scholName = findViewById(R.id.textView_scholName);

@@ -89,13 +89,13 @@ public class ItemsListingFragment extends Fragment {
         ArrayList<Listing> listings = new ArrayList<Listing>();
 
         listings.add(new Listing("First Scholarship", "A cool scholarship",
-                "Under 20,000", "Recently graduated"));
+                "Under 20,000", "Recently graduated", "hi"));
         listings.add(new Listing("Second Scholarship", "A cool scholarship",
-                "Under 20,000", "Recently graduated"));
+                "Under 20,000", "Recently graduated", "hi"));
         listings.add(new Listing("Third Scholarship", "A cool scholarship",
-                "Under 20,000", "Recently graduated"));
+                "Under 20,000", "Recently graduated", "hi"));
         listings.add(new Listing("Fourth Scholarship", "A cool scholarship",
-                "Under 20,000", "Recently graduated"));
+                "Under 20,000", "Recently graduated", "hi"));
 
         return listings;
     }

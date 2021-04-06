@@ -30,22 +30,15 @@ public class FeedActivity extends AppCompatActivity {
     ArrayList<Listing> listings;
     RecyclerView rvListings;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_feed);
         getSupportActionBar().hide();
 
-        currUserName = findViewById(R.id.textView_feed_user);
-        currAuthUser = FirebaseAuth.getInstance().getCurrentUser();
-
         rvListings = findViewById(R.id.rvListings);
         listings = new ArrayList<Listing>();
-
-
         databaseSchol = FirebaseDatabase.getInstance().getReference("scholarship");
-        dbUserInfo = FirebaseDatabase.getInstance().getReference("user");
     }
 
     @Override
@@ -58,12 +51,13 @@ public class FeedActivity extends AppCompatActivity {
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot snapshot) {
 //                for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
+//        String key = scholSnapshot.getKey();
 //                    String name = scholSnapshot.child("name").getValue(String.class);
 //                    String desc = scholSnapshot.child("about").getValue(String.class);
 //                    String tag1 = scholSnapshot.child("tags").child("0").getValue(String.class);
 //                    String tag2 = scholSnapshot.child("tags").child("1").getValue(String.class);
 //
-//                    listings.add(new Listing("test", desc, tag1, tag2));
+//                    listings.add(new Listing("test", desc, tag1, tag2, key));
 //                }
 //                ListingAdapter adapter = new ListingAdapter(listings);
 //                rvListings.setAdapter(adapter);
@@ -93,18 +87,4 @@ public class FeedActivity extends AppCompatActivity {
         });
     }
 
-//    private ArrayList<Listing> testListingList() {
-//        ArrayList<Listing> listings = new ArrayList<Listing>();
-//
-//        listings.add(new Listing("First Scholarship", "A cool scholarship",
-//                "Under 20,000", "Recently graduated"));
-//        listings.add(new Listing("Second Scholarship", "A cool scholarship",
-//                "Under 20,000", "Recently graduated"));
-//        listings.add(new Listing("Third Scholarship", "A cool scholarship",
-//                "Under 20,000", "Recently graduated"));
-//        listings.add(new Listing("Fourth Scholarship", "A cool scholarship",
-//                "Under 20,000", "Recently graduated"));
-//
-//        return listings;
-//    }
 }
