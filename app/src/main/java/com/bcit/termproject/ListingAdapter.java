@@ -14,6 +14,12 @@ import java.util.List;
 public class ListingAdapter extends RecyclerView.Adapter<ListingViewHolder> {
     private List<Listing> listings;
 
+    private OnAdapterItemListener onAdapterItemListener;
+    public void setOnAdapterItemListener(OnAdapterItemListener onAdapterItemListener) {
+        this.onAdapterItemListener = onAdapterItemListener;
+    }
+
+
     public ListingAdapter(List<Listing> listings) {
         this.listings = listings;
     }
@@ -23,7 +29,6 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingViewHolder> {
     public ListingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         LayoutInflater inflater = LayoutInflater.from(parent.getContext());
         View listingView = inflater.inflate(R.layout.item_listing, parent, false);
-
         ListingViewHolder viewHolder = new ListingViewHolder(listingView);
         return viewHolder;
     }
@@ -44,12 +49,35 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingViewHolder> {
         TextView textViewListingTag2 = holder.tag2TextView;
         textViewListingTag2.setText(listing.getTag2());
 
-//        ImageView bookmark = holder.image;
-//        bookmark.setImageResource(R.drawable.ic_bookmark_add);
+        ImageView imageBookmarkView = holder.imageBookmark;
+        imageBookmarkView.setImageResource(R.drawable.ic_bookmark_add);
+
+        textViewScholarshipName.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                onAdapterItemListener.OnLongClick(listing);
+                return false;
+            }
+        });
+        textViewListingDesc.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                onAdapterItemListener.OnLongClick(listing);
+                return false;
+            }
+        });
+        imageBookmarkView.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                onAdapterItemListener.OnMarkClick(listing);
+                return false;
+            }
+        });
     }
 
     @Override
     public int getItemCount() {
         return listings.size();
     }
+
 }

@@ -100,12 +100,13 @@ public class FeedFragment extends Fragment {
 //            @Override
 //            public void onDataChange(@NonNull DataSnapshot snapshot) {
 //                for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
+//                    String key = scholSnapshot.getKey();
 //                    String name = scholSnapshot.child("name").getValue(String.class);
 //                    String desc = scholSnapshot.child("about").getValue(String.class);
 //                    String tag1 = scholSnapshot.child("tags").child("0").getValue(String.class);
 //                    String tag2 = scholSnapshot.child("tags").child("1").getValue(String.class);
 //
-//                    listings.add(new Listing("test", desc, tag1, tag2));
+//                    listings.add(new Listing("test", desc, tag1, tag2, key));
 //                }
 //                ListingAdapter adapter = new ListingAdapter(listings);
 //                rvListings.setAdapter(adapter);
