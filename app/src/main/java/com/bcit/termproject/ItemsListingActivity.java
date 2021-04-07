@@ -42,14 +42,19 @@ public class ItemsListingActivity extends AppCompatActivity {
         databaseSchol.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                listings.clear();
+
                 for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
+                    ArrayList<String> tags = new ArrayList<>();
                     String key = scholSnapshot.getKey();
                     String name = scholSnapshot.child("name").getValue(String.class);
                     String desc = scholSnapshot.child("about").getValue(String.class);
-                    String tag1 = scholSnapshot.child("tags").child("0").getValue(String.class);
-                    String tag2 = scholSnapshot.child("tags").child("1").getValue(String.class);
 
-                    listings.add(new Listing(name, desc, tag1, tag2, key));
+                    for (DataSnapshot tagSnap : scholSnapshot.child("tags").getChildren()) {
+                        tags.add(tagSnap.getValue(String.class));
+                    }
+
+                    listings.add(new Listing(name, desc, key, tags));
                 }
                 ListingAdapter adapter = new ListingAdapter(listings);
 

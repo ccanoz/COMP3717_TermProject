@@ -16,73 +16,62 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ImageView
-        android:id="@+id/imageView3"
-        android:layout_width="269dp"
-        android:layout_height="177dp"
-        android:textSize="14sp"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/textView_feed_user"
-        tools:srcCompat="@tools:sample/backgrounds/scenic" />
-
     <TextView
         android:id="@+id/textView_feed_bookmark"
         android:layout_width="127dp"
         android:layout_height="30dp"
-        android:layout_marginStart="44dp"
+        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         android:text="@string/tv_feed_bookmark"
         android:textSize="18sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/linearLayout_feed_buttons"
+        app:layout_constraintHorizontal_bias="0.153"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageView3" />
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout_feed_buttons"
+        app:layout_constraintVertical_bias="0.0" />
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_bookmarks"
-        android:layout_width="411dp"
-        android:layout_height="295dp"
+        android:layout_width="0dp"
+        android:layout_height="221dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_feed_bookmark"
-        app:layout_constraintVertical_bias="0.632" />
-        app:layout_constraintVertical_bias="0.169" />
+        app:layout_constraintVertical_bias="0.23">
 
+    </androidx.recyclerview.widget.RecyclerView>
 
-    <Button
-        android:id="@+id/button_women"
+    <LinearLayout
+        android:id="@+id/linearLayout_feed_buttons"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Women"
+        android:orientation="vertical"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.164"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.641" />
+        app:layout_constraintTop_toBottomOf="@+id/textView_feed_user"
+        app:layout_constraintVertical_bias="0.050000012">
 
-    <Button
-        android:id="@+id/button_lowIncome"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Low Income"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.202"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/button_women"
-        app:layout_constraintVertical_bias="0.054" />
+        <Button
+            android:id="@+id/button_women"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Women" />
 
-    <Button
-        android:id="@+id/button_canadians"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Canadians"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="@+id/button_lowIncome"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="@+id/button_lowIncome"
-        app:layout_constraintTop_toBottomOf="@+id/button_lowIncome"
-        app:layout_constraintVertical_bias="0.14" />
+        <Button
+            android:id="@+id/button_lowIncome"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Low Income" />
+
+        <Button
+            android:id="@+id/button_canadians"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Canadians" />
+    </LinearLayout>
+
 </androidx.constraintlayout.widget.ConstraintLayout>
