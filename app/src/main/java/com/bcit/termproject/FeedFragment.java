@@ -1,11 +1,14 @@
 package com.bcit.termproject;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -106,11 +109,26 @@ public class FeedFragment extends Fragment {
 //                    String tag1 = scholSnapshot.child("tags").child("0").getValue(String.class);
 //                    String tag2 = scholSnapshot.child("tags").child("1").getValue(String.class);
 //
-//                    listings.add(new Listing("test", desc, tag1, tag2, key));
+//                    listings.add(new Listing(name, desc, tag1, tag2, key));
 //                }
 //                ListingAdapter adapter = new ListingAdapter(listings);
+//
+//                adapter.setOnAdapterItemListener(new OnAdapterItemListener() {
+//                    @Override
+//                    public void OnLongClick(Listing listing) {
+//                        Log.v("key", listing.getKey());
+//                        Intent intent = new Intent(getContext(), ScholarshipInfoActivity.class);
+//                        intent.putExtra("SCHOLARSHIP_ITEM", listing.getKey());
+//                        startActivity(intent);
+//                    }
+//                    @Override
+//                    public void OnMarkClick(Listing listing) {
+//                        Log.v("mark", "Bookmark clicked");
+//                    }
+//                });
+//
 //                rvListings.setAdapter(adapter);
-//                rvListings.setLayoutManager(new LinearLayoutManager(FeedActivity.this));
+//                rvListings.setLayoutManager(new LinearLayoutManager(getContext()));
 //            }
 //
 //            @Override

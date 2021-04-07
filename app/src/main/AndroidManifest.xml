@@ -20,7 +20,6 @@
         <activity android:name=".ScholarshipInfoActivity" />
         <activity android:name=".ItemsListingActivity" >
 
-
         </activity>
         <activity android:name=".FeedActivity" >
 
@@ -29,7 +28,6 @@
 
         </activity>
         <activity android:name=".LandingActivity" >
-
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
