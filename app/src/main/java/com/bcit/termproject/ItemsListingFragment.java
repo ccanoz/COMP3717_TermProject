@@ -127,7 +127,9 @@ public class ItemsListingFragment extends Fragment {
                         tags.add(tagSnap.getValue(String.class));
                     }
 
-                    listings.add(new Listing(name, desc, key, tags));
+                    String img_url = scholSnapshot.child("logo").getValue(String.class);
+
+                    listings.add(new Listing(name, desc, key, tags, img_url));
                 }
 //                rvListings = view.findViewById(R.id.rvListings);
                 ListingAdapter adapter = new ListingAdapter(listings);

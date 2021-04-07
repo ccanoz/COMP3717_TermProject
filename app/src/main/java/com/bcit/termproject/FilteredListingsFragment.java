@@ -130,8 +130,9 @@ public class FilteredListingsFragment extends Fragment {
                         for (DataSnapshot tagSnap : scholSnapshot.child("tags").getChildren()) {
                             tags.add(tagSnap.getValue(String.class));
                         }
+                        String img_url = scholSnapshot.child("logo").getValue(String.class);
 
-                        listings.add(new Listing(name, desc, key, tags));
+                        listings.add(new Listing(name, desc, key, tags, img_url));
                     }
                 }
 

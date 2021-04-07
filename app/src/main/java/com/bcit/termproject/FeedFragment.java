@@ -1,6 +1,7 @@
 package com.bcit.termproject;
 
 import android.content.Intent;
+import android.icu.util.TimeUnit;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,6 +10,7 @@ import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.renderscript.Sampler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -149,62 +151,83 @@ public class FeedFragment extends Fragment {
         @Override
         public void onStart() {
             super.onStart();
-
-            databaseSchol.addValueEventListener(new ValueEventListener() {
+//            try
+//            {
+//                Thread.sleep(2000);
+//            }
+//            catch(InterruptedException ex)
+//            {
+//                Thread.currentThread().interrupt();
+//            }
+            dbUserInfo.addValueEventListener(new ValueEventListener() {
                 @Override
                 public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    listings.clear();
-                    for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
-                        Log.v("snapshot", scholSnapshot.getKey());
-                        ArrayList<String> tags = new ArrayList<>();
-                        String key = scholSnapshot.getKey();
-                        String name = scholSnapshot.child("name").getValue(String.class);
-                        String desc = scholSnapshot.child("about").getValue(String.class);
+                    databaseSchol.addValueEventListener(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            listings.clear();
+                            for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
+                                Log.v("snapshot", scholSnapshot.getKey());
+                                ArrayList<String> tags = new ArrayList<>();
+                                if (currUser.getBookmarked().contains(scholSnapshot.getKey())) {
+                                    String key = scholSnapshot.getKey();
+                                    String name = scholSnapshot.child("name").getValue(String.class);
+                                    String desc = scholSnapshot.child("about").getValue(String.class);
 
-                        for (DataSnapshot tagSnap : scholSnapshot.child("tags").getChildren()) {
-                            tags.add(tagSnap.getValue(String.class));
-                        }
+                                    for (DataSnapshot tagSnap : scholSnapshot.child("tags").getChildren()) {
+                                        tags.add(tagSnap.getValue(String.class));
+                                    }
+                                    String img_url = scholSnapshot.child("logo").getValue(String.class);
 
-                        listings.add(new Listing(name, desc, key, tags));
-                    }
+                                    listings.add(new Listing(name, desc, key, tags, img_url));
+                                }
+                            }
 //                rvListings = view.findViewById(R.id.rvListings);
-                    ListingAdapter adapter = new ListingAdapter(listings);
+                            ListingAdapter adapter = new ListingAdapter(listings);
 
-                    adapter.setOnAdapterItemListener(new OnAdapterItemListener() {
-                        @Override
-                        public void OnLongClick(Listing listing) {
-                            Log.v("key", listing.getKey());
-                            Intent intent = new Intent(getContext(), ScholarshipInfoActivity.class);
-                            intent.putExtra("SCHOLARSHIP_ITEM", listing.getKey());
-                            startActivity(intent);
+                            adapter.setOnAdapterItemListener(new OnAdapterItemListener() {
+                                @Override
+                                public void OnLongClick(Listing listing) {
+                                    Log.v("key", listing.getKey());
+                                    Intent intent = new Intent(getContext(), ScholarshipInfoActivity.class);
+                                    intent.putExtra("SCHOLARSHIP_ITEM", listing.getKey());
+                                    startActivity(intent);
+                                }
+                                @Override
+                                public void OnMarkClick(Listing listing) {
+                                    Log.v("mark", "Bookmark clicked");
+                                    scholId = listing.getKey();
+                                    currUser = MainActivity.currUser;
+                                    isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
+                                    bookmarkScholarship();
+                                }
+                            });
+
+                            rvListings.setAdapter(adapter);
+                            rvListings.setLayoutManager(new LinearLayoutManager(getContext()));
                         }
+
                         @Override
-                        public void OnMarkClick(Listing listing) {
-                            Log.v("mark", "Bookmark clicked");
-                            scholId = listing.getKey();
-                            currUser = MainActivity.currUser;
-                            isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
-                            bookmarkScholarship();
+                        public void onCancelled(@NonNull DatabaseError error) {
+
                         }
                     });
 
-                    rvListings.setAdapter(adapter);
-                    rvListings.setLayoutManager(new LinearLayoutManager(getContext()));
-                }
+                    dbUserInfo.addValueEventListener(new ValueEventListener() {
 
-                @Override
-                public void onCancelled(@NonNull DatabaseError error) {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            currUser = MainActivity.currUser;
+                            String userNameString = getString(R.string.welcome, currUser.getName());
+                            currUserName.setText(userNameString);
+                        }
 
-                }
-            });
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
 
-            dbUserInfo.addValueEventListener(new ValueEventListener() {
+                        }
+                    });
 
-                @Override
-                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                    currUser = MainActivity.currUser;
-                    String userNameString = getString(R.string.welcome, currUser.getName());
-                    currUserName.setText(userNameString);
                 }
 
                 @Override

@@ -45,6 +45,11 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingViewHolder> {
     public void onBindViewHolder(@NonNull ListingViewHolder holder, int position) {
         Listing listing = listings.get(position);
 
+        ImageView imgPicture = holder.imgPicture;
+        if (listing.getPictureUrl() != null) {
+            new ImageDownloaderTask(imgPicture).execute(listing.getPictureUrl());
+        }
+
         TextView textViewScholarshipName = holder.nameTextView;
         textViewScholarshipName.setText(listing.getScholarshipName());
 
