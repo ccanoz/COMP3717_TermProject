@@ -30,9 +30,7 @@ public class ItemsListingActivity extends AppCompatActivity {
         getSupportActionBar().hide();
 
         rvListings = findViewById(R.id.rvListings);
-
         listings = new ArrayList<Listing>();
-
         databaseSchol = FirebaseDatabase.getInstance().getReference("scholarship");
 
     }

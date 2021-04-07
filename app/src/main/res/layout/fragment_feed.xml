@@ -20,12 +20,10 @@
         android:id="@+id/imageView3"
         android:layout_width="269dp"
         android:layout_height="177dp"
-        android:layout_marginTop="20dp"
         android:textSize="14sp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.507"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView_feed_user"
+        app:layout_constraintTop_toTopOf="@+id/textView_feed_user"
         tools:srcCompat="@tools:sample/backgrounds/scenic" />
 
     <TextView
@@ -33,7 +31,7 @@
         android:layout_width="127dp"
         android:layout_height="30dp"
         android:layout_marginStart="44dp"
-        android:layout_marginTop="32dp"
+        android:layout_marginTop="8dp"
         android:text="@string/tv_feed_bookmark"
         android:textSize="18sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -41,13 +39,14 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_bookmarks"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="411dp"
+        android:layout_height="295dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.46"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_feed_bookmark"
+        app:layout_constraintVertical_bias="0.632" />
         app:layout_constraintVertical_bias="0.169" />
 
 
