@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:background="@color/primary_colour_blue"
+    android:background="@color/white"
     android:paddingVertical="10dp">
 
     <LinearLayout
@@ -13,32 +13,44 @@
         android:orientation="vertical"
         tools:context=".SignUpActivity">
 
-
-        <EditText
-
-            android:id="@+id/name_ET_signup"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_name"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/name"
-            android:inputType="textPersonName"
-            tools:layout_editor_absoluteX="61dp"
-            tools:layout_editor_absoluteY="84dp" />
+            android:hint="@string/name">
 
-        <EditText
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/name_ET_signup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:inputType="textPersonName"
+                tools:layout_editor_absoluteX="61dp"
+                tools:layout_editor_absoluteY="84dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
-            android:id="@+id/email_ET_signup"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_email"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/email_address"
-            android:inputType="textEmailAddress"
-            tools:layout_editor_absoluteX="61dp"
-            tools:layout_editor_absoluteY="84dp" />
+            android:hint="@string/email_address">
+
+            <com.google.android.material.textfield.TextInputEditText
+
+                android:id="@+id/email_ET_signup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:inputType="textEmailAddress"
+                tools:layout_editor_absoluteX="61dp"
+                tools:layout_editor_absoluteY="84dp" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <TextView
             android:id="@+id/DOB_TV_title"
@@ -111,25 +123,39 @@
                 android:text="@string/other" />
         </RadioGroup>
 
-        <EditText
-            android:id="@+id/yearlyincome_ET_signup"
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_yearlyincome"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_margin="10dp"
-            android:autofillHints=""
-            android:ems="10"
-            android:hint="@string/yearly_income"
-            android:inputType="number" />
+            android:hint="@string/yearly_income">
 
-        <EditText
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/yearlyincome_ET_signup"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="10dp"
+                android:autofillHints=""
+                android:ems="10"
+                android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/outlinedTextField_gpa"
+            style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="@string/yearly_income">
+
+        <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/gpa_ET_signup"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_margin="10dp"
             android:autofillHints=""
             android:ems="10"
-            android:hint="@string/gpa"
             android:inputType="number" />
+        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -168,14 +194,21 @@
                 android:layout_height="wrap_content"
                 android:text="@string/employed" />
 
-            <EditText
-                android:id="@+id/password_ET_signup"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/outlinedTextField_password"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:autofillHints="@string/password"
-                android:ems="10"
-                android:hint="@string/password"
-                android:inputType="textPassword" />
+                android:hint="@string/prompt_password">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password_ET_signup"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:autofillHints="@string/password"
+                    android:ems="10"
+                    android:inputType="textPassword" />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
         <LinearLayout
@@ -184,15 +217,14 @@
             android:gravity="center"
             android:orientation="vertical">
 
-            <androidx.appcompat.widget.AppCompatButton
+            <Button
                 android:id="@+id/button_signup"
                 android:layout_width="225dp"
                 android:layout_height="65dp"
-                android:background="@color/white"
-                android:backgroundTint="@color/white"
                 android:onClick="signUp"
                 android:text="@string/sign_up"
-                android:textColor="@color/primary_colour_blue"
+                android:backgroundTint="#47bcca"
+                android:textColor="@color/white"
                 android:textSize="18sp"
                 android:textStyle="bold"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -200,7 +232,8 @@
                 app:layout_constraintHorizontal_bias="0.498"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageView2"
-                app:layout_constraintVertical_bias="0.0" />
+                app:layout_constraintVertical_bias="0.0"
+                android:theme="@style/AuthButtonsTheme"/>
         </LinearLayout>
 
     </LinearLayout>

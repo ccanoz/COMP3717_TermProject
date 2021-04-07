@@ -23,42 +23,56 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <EditText
-
-                android:id="@+id/email_ET_login"
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/outlinedTextField_email_login"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:autofillHints=""
-                android:ems="10"
-                android:hint="@string/email_address"
-                android:inputType="textEmailAddress" />
+                android:hint="@string/email_address">
 
-            <EditText
-                android:id="@+id/password_ET_login"
+                <com.google.android.material.textfield.TextInputEditText
+
+                    android:id="@+id/email_ET_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:inputType="textEmailAddress" />
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:id="@+id/outlinedTextField_password_login"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:autofillHints="@string/password"
-                android:ems="10"
-                android:hint="@string/password"
-                android:inputType="textPassword"
-                android:padding="10dp" />
+                android:hint="@string/password">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/password_ET_login"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="10dp"
+                    android:autofillHints=""
+                    android:ems="10"
+                    android:inputType="textPassword"
+                    />
+            </com.google.android.material.textfield.TextInputLayout>
         </LinearLayout>
 
-        <androidx.appcompat.widget.AppCompatButton
+        <Button
             android:id="@+id/button_login"
             android:layout_width="225dp"
             android:layout_height="65dp"
             android:layout_margin="10dp"
-            android:background="#47bcca"
             android:backgroundTint="#47bcca"
             android:onClick="login"
             android:padding="10dp"
             android:text="@string/log_in"
             android:textColor="@color/white"
             android:textSize="18sp"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:theme="@style/AuthButtonsTheme"/>
     </LinearLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
