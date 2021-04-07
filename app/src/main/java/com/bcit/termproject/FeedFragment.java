@@ -198,22 +198,6 @@ public class FeedFragment extends Fragment {
         });
     }
 
-    //    private ArrayList<Listing> testListingList() {
-//        ArrayList<Listing> listings = new ArrayList<Listing>();
-//
-//        listings.add(new Listing("First Scholarship", "A cool scholarship",
-//                "Under 20,000", "Recently graduated"));
-//        listings.add(new Listing("Second Scholarship", "A cool scholarship",
-//                "Under 20,000", "Recently graduated"));
-//        listings.add(new Listing("Third Scholarship", "A cool scholarship",
-//                "Under 20,000", "Recently graduated"));
-//        listings.add(new Listing("Fourth Scholarship", "A cool scholarship",
-//                "Under 20,000", "Recently graduated"));
-//
-//        return listings;
-//    }
-
-
     public void openFragment(Fragment fragment) {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
