@@ -8,8 +8,10 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.ImageButton;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
@@ -18,7 +20,6 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
-import com.google.android.gms.tasks.Tasks;
 import com.google.android.material.datepicker.MaterialDatePicker;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,10 +28,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import org.w3c.dom.Text;
+
 import java.util.ArrayList;
 import java.util.Objects;
-
-import static com.bcit.termproject.MainActivity.currUser;
 
 public class SignUpActivity extends AppCompatActivity {
 
@@ -42,7 +43,8 @@ public class SignUpActivity extends AppCompatActivity {
     FirebaseDatabase database;
     DatabaseReference ref;
     MaterialDatePicker<?> datePicker;
-    EditText dobET;
+    TextView dobTV;
+    ImageButton dobButton;
 
 
     @Override
@@ -55,6 +57,7 @@ public class SignUpActivity extends AppCompatActivity {
         email = findViewById(R.id.email_ET_signup);
         password = findViewById(R.id.password_ET_signup);
         database = FirebaseDatabase.getInstance();
+        dobTV = (TextView)findViewById(R.id.DOB_TV_signup);
 
         setupDatePicker();
         setupSpinner();
@@ -73,8 +76,8 @@ public class SignUpActivity extends AppCompatActivity {
     }
 
     private void setupDatePicker(){
-        dobET = (EditText)findViewById(R.id.DOB_ET_signup);
-        dobET.setOnClickListener(new View.OnClickListener() {
+        dobButton = findViewById(R.id.dob_button);
+        dobButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDOBDialogInActivity();
@@ -133,7 +136,7 @@ public class SignUpActivity extends AppCompatActivity {
 
         datePicker.show(getSupportFragmentManager(), "tag");
 
-        datePicker.addOnPositiveButtonClickListener(selection -> dobET.setText(datePicker.getHeaderText()));
+        datePicker.addOnPositiveButtonClickListener(selection -> dobTV.setText(datePicker.getHeaderText()));
     }
 
 
@@ -142,7 +145,7 @@ public class SignUpActivity extends AppCompatActivity {
         int selectedGender = genderRadioGroup.getCheckedRadioButtonId();
 
         String name = ((EditText)findViewById(R.id.name_ET_signup)).getText().toString();
-        String DOB = (dobET).getText().toString();
+        String DOB = (dobTV).getText().toString();
         String gender = ((RadioButton)findViewById(selectedGender)).getText().toString();
         String yearlyIncome = ((EditText)findViewById(R.id.yearlyincome_ET_signup)).getText().toString();
         String gpa = ((EditText)findViewById(R.id.gpa_ET_signup)).getText().toString();
