@@ -15,7 +15,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
@@ -36,6 +39,8 @@ public class FeedFragment extends Fragment {
     FirebaseUser currAuthUser;
     User currUser;
     TextView currUserName;
+    Boolean isBookmarked;
+    String scholId;
 
     DatabaseReference databaseSchol;
     DatabaseReference dbUserInfo;
@@ -134,68 +139,120 @@ public class FeedFragment extends Fragment {
         }
     }
 
-    @Override
-    public void onStart() {
-        super.onStart();
+//    @Override
+//    public void onStart() {
+//        super.onStart();
+//
+//        //dbUserInfo.child("bookmarked")
+////        Log.v("bookmark", dbUserInfo.child("bookmarked").getValue(String.class));
+////        dbUserInfo.child(currAuthUser.getUid()).child("bookmarked").addValueEventListener(new ValueEventListener() {
+        @Override
+        public void onStart() {
+            super.onStart();
 
-        databaseSchol.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listings.clear();
-                for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
-                    Log.v("snapshot", scholSnapshot.getKey());
-                    ArrayList<String> tags = new ArrayList<>();
-                    String key = scholSnapshot.getKey();
-                    String name = scholSnapshot.child("name").getValue(String.class);
-                    String desc = scholSnapshot.child("about").getValue(String.class);
+            databaseSchol.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    listings.clear();
+                    for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
+                        Log.v("snapshot", scholSnapshot.getKey());
+                        ArrayList<String> tags = new ArrayList<>();
+                        String key = scholSnapshot.getKey();
+                        String name = scholSnapshot.child("name").getValue(String.class);
+                        String desc = scholSnapshot.child("about").getValue(String.class);
 
-                    for (DataSnapshot tagSnap : scholSnapshot.child("tags").getChildren()) {
-                        tags.add(tagSnap.getValue(String.class));
+                        for (DataSnapshot tagSnap : scholSnapshot.child("tags").getChildren()) {
+                            tags.add(tagSnap.getValue(String.class));
+                        }
+
+                        listings.add(new Listing(name, desc, key, tags));
                     }
-
-                    listings.add(new Listing(name, desc, key, tags));
-                }
 //                rvListings = view.findViewById(R.id.rvListings);
-                ListingAdapter adapter = new ListingAdapter(listings);
+                    ListingAdapter adapter = new ListingAdapter(listings);
 
-                adapter.setOnAdapterItemListener(new OnAdapterItemListener() {
-                    @Override
-                    public void OnLongClick(Listing listing) {
-                        Log.v("key", listing.getKey());
-                        Intent intent = new Intent(getContext(), ScholarshipInfoActivity.class);
-                        intent.putExtra("SCHOLARSHIP_ITEM", listing.getKey());
-                        startActivity(intent);
-                    }
-                    @Override
-                    public void OnMarkClick(Listing listing) {
-                        Log.v("mark", "Bookmark clicked");
-                    }
-                });
+                    adapter.setOnAdapterItemListener(new OnAdapterItemListener() {
+                        @Override
+                        public void OnLongClick(Listing listing) {
+                            Log.v("key", listing.getKey());
+                            Intent intent = new Intent(getContext(), ScholarshipInfoActivity.class);
+                            intent.putExtra("SCHOLARSHIP_ITEM", listing.getKey());
+                            startActivity(intent);
+                        }
+                        @Override
+                        public void OnMarkClick(Listing listing) {
+                            Log.v("mark", "Bookmark clicked");
+                            scholId = listing.getKey();
+                            currUser = MainActivity.currUser;
+                            isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
+                            bookmarkScholarship();
+                        }
+                    });
 
-                rvListings.setAdapter(adapter);
-                rvListings.setLayoutManager(new LinearLayoutManager(getContext()));
-            }
+                    rvListings.setAdapter(adapter);
+                    rvListings.setLayoutManager(new LinearLayoutManager(getContext()));
+                }
 
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+
+            dbUserInfo.addValueEventListener(new ValueEventListener() {
+
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    currUser = MainActivity.currUser;
+                    String userNameString = getString(R.string.welcome, currUser.getName());
+                    currUserName.setText(userNameString);
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+
+    /**
+     * Update the current user's bookmark list to reflect whether the current scholarship is bookmarked or not.
+     */
+    public void updateBookmarks() {
+        Task<Void> setValueTask = dbUserInfo.child(currAuthUser.getUid()).child("bookmarked").setValue(currUser.getBookmarked());
+        setValueTask.addOnSuccessListener(new OnSuccessListener() {
             @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
+            public void onSuccess(Object o) {
+                if (isBookmarked) {
+                    Toast.makeText(getContext(), "Scholarship bookmarked.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Scholarship removed from bookmarks.", Toast.LENGTH_SHORT).show();
+                }
             }
         });
+    }
 
-        dbUserInfo.addValueEventListener(new ValueEventListener() {
+    /**
+     * Sets the bookmark icon depending on if the current scholarship
+     * is bookmarked or not.
+     */
+    public void setBookmarkIcon() {
+        int iconId = isBookmarked? R.drawable.ic_bookmark_added: R.drawable.ic_bookmark_add;
+//        scholBookmark.setImageResource(iconId);
+    }
 
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                currUser = MainActivity.currUser;
-                String userNameString = getString(R.string.welcome, currUser.getName());
-                currUserName.setText(userNameString);
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+    /**
+     * Toggles between bookmarking/un-bookmarking a scholarship.
+     */
+    public void bookmarkScholarship() {
+        if (isBookmarked) {
+            currUser.unBookmark(scholId);
+            isBookmarked = false;
+        } else {
+            currUser.addToBookmarked(scholId);
+            isBookmarked = true;
+        }
+        setBookmarkIcon();
+        updateBookmarks();
     }
 
     public void openFragment(Fragment fragment) {

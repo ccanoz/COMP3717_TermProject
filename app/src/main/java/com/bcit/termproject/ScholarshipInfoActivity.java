@@ -51,7 +51,6 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
     FloatingActionButton scholBookmark;
     Boolean isBookmarked;
 
-    // TODO: remove hardcoding - This should access a specific Scholarship by its id
     String scholId;
 
     FirebaseUser currAuthUser;
