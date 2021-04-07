@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -12,6 +13,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -39,6 +41,10 @@ public class FeedFragment extends Fragment {
     DatabaseReference dbUserInfo;
     ArrayList<Listing> listings;
     RecyclerView rvListings;
+
+    Button btnWomen;
+    Button btnLowIncome;
+    Button btnCanadians;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -88,9 +94,44 @@ public class FeedFragment extends Fragment {
         rvListings = view.findViewById(R.id.rv_bookmarks);
         listings = new ArrayList<Listing>();
 
+        btnWomen = view.findViewById(R.id.button_women);
+        btnWomen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterScholarships(v);
+            }
+        });
+        btnLowIncome = view.findViewById(R.id.button_lowIncome);
+        btnLowIncome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterScholarships(v);
+            }
+        });
+        btnCanadians = view.findViewById(R.id.button_canadians);
+        btnCanadians.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterScholarships(v);
+            }
+        });
         databaseSchol = FirebaseDatabase.getInstance().getReference("scholarship");
         dbUserInfo = MainActivity.dbUserInfo;
         return view;
+    }
+
+    public void filterScholarships(View v) {
+        switch (v.getId()) {
+            case R.id.button_women:
+                openFragment(FilteredListingsFragment.newInstance("women", ""));
+                return;
+            case R.id.button_canadians:
+                openFragment(FilteredListingsFragment.newInstance("canadians", ""));
+                return;
+            default:
+                openFragment(FilteredListingsFragment.newInstance("lowIncome", ""));
+                return;
+        }
     }
 
     @Override
@@ -100,15 +141,19 @@ public class FeedFragment extends Fragment {
         databaseSchol.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                listings.clear();
                 for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
                     Log.v("snapshot", scholSnapshot.getKey());
+                    ArrayList<String> tags = new ArrayList<>();
                     String key = scholSnapshot.getKey();
                     String name = scholSnapshot.child("name").getValue(String.class);
                     String desc = scholSnapshot.child("about").getValue(String.class);
-                    String tag1 = scholSnapshot.child("tags").child("0").getValue(String.class);
-                    String tag2 = scholSnapshot.child("tags").child("1").getValue(String.class);
 
-                    listings.add(new Listing(name, desc, tag1, tag2, key));
+                    for (DataSnapshot tagSnap : scholSnapshot.child("tags").getChildren()) {
+                        tags.add(tagSnap.getValue(String.class));
+                    }
+
+                    listings.add(new Listing(name, desc, key, tags));
                 }
 //                rvListings = view.findViewById(R.id.rvListings);
                 ListingAdapter adapter = new ListingAdapter(listings);
@@ -151,6 +196,13 @@ public class FeedFragment extends Fragment {
 
             }
         });
+    }
+
+    public void openFragment(Fragment fragment) {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 
 }
