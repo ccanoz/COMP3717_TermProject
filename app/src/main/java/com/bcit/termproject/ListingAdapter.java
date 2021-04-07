@@ -67,25 +67,22 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingViewHolder> {
             tagChipGroup.addView(tagChip);
         }
 
-        textViewScholarshipName.setOnLongClickListener(new View.OnLongClickListener() {
+        textViewScholarshipName.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 onAdapterItemListener.OnLongClick(listing);
-                return false;
             }
         });
-        textViewListingDesc.setOnLongClickListener(new View.OnLongClickListener() {
+        textViewListingDesc.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 onAdapterItemListener.OnLongClick(listing);
-                return false;
             }
         });
-        imageBookmarkView.setOnLongClickListener(new View.OnLongClickListener() {
+        imageBookmarkView.setOnClickListener(new View.OnClickListener() {
             @Override
-            public boolean onLongClick(View v) {
+            public void onClick(View v) {
                 onAdapterItemListener.OnMarkClick(listing);
-                return false;
             }
         });
     }
