@@ -85,7 +85,7 @@ public class FeedFragment extends Fragment {
         currUserName = view.findViewById(R.id.textView_feed_user);
         currAuthUser = MainActivity.currAuthUser;
 
-        rvListings = view.findViewById(R.id.rvListings);
+        rvListings = view.findViewById(R.id.rv_bookmarks);
         listings = new ArrayList<Listing>();
 
         databaseSchol = FirebaseDatabase.getInstance().getReference("scholarship");
@@ -97,45 +97,45 @@ public class FeedFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
-        // TODO: Fix lines below - Commenting this out because its crashing the app
+        databaseSchol.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
+                    Log.v("snapshot", scholSnapshot.getKey());
+                    String key = scholSnapshot.getKey();
+                    String name = scholSnapshot.child("name").getValue(String.class);
+                    String desc = scholSnapshot.child("about").getValue(String.class);
+                    String tag1 = scholSnapshot.child("tags").child("0").getValue(String.class);
+                    String tag2 = scholSnapshot.child("tags").child("1").getValue(String.class);
 
-//        databaseSchol.addValueEventListener(new ValueEventListener() {
-//            @Override
-//            public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
-//                    String key = scholSnapshot.getKey();
-//                    String name = scholSnapshot.child("name").getValue(String.class);
-//                    String desc = scholSnapshot.child("about").getValue(String.class);
-//                    String tag1 = scholSnapshot.child("tags").child("0").getValue(String.class);
-//                    String tag2 = scholSnapshot.child("tags").child("1").getValue(String.class);
-//
-//                    listings.add(new Listing(name, desc, tag1, tag2, key));
-//                }
-//                ListingAdapter adapter = new ListingAdapter(listings);
-//
-//                adapter.setOnAdapterItemListener(new OnAdapterItemListener() {
-//                    @Override
-//                    public void OnLongClick(Listing listing) {
-//                        Log.v("key", listing.getKey());
-//                        Intent intent = new Intent(getContext(), ScholarshipInfoActivity.class);
-//                        intent.putExtra("SCHOLARSHIP_ITEM", listing.getKey());
-//                        startActivity(intent);
-//                    }
-//                    @Override
-//                    public void OnMarkClick(Listing listing) {
-//                        Log.v("mark", "Bookmark clicked");
-//                    }
-//                });
-//
-//                rvListings.setAdapter(adapter);
-//                rvListings.setLayoutManager(new LinearLayoutManager(getContext()));
-//            }
-//
-//            @Override
-//            public void onCancelled(@NonNull DatabaseError error) {
-//
-//            }
-//        });
+                    listings.add(new Listing(name, desc, tag1, tag2, key));
+                }
+//                rvListings = view.findViewById(R.id.rvListings);
+                ListingAdapter adapter = new ListingAdapter(listings);
+
+                adapter.setOnAdapterItemListener(new OnAdapterItemListener() {
+                    @Override
+                    public void OnLongClick(Listing listing) {
+                        Log.v("key", listing.getKey());
+                        Intent intent = new Intent(getContext(), ScholarshipInfoActivity.class);
+                        intent.putExtra("SCHOLARSHIP_ITEM", listing.getKey());
+                        startActivity(intent);
+                    }
+                    @Override
+                    public void OnMarkClick(Listing listing) {
+                        Log.v("mark", "Bookmark clicked");
+                    }
+                });
+
+                rvListings.setAdapter(adapter);
+                rvListings.setLayoutManager(new LinearLayoutManager(getContext()));
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
 
         dbUserInfo.addValueEventListener(new ValueEventListener() {
 
@@ -152,20 +152,5 @@ public class FeedFragment extends Fragment {
             }
         });
     }
-
-    //    private ArrayList<Listing> testListingList() {
-//        ArrayList<Listing> listings = new ArrayList<Listing>();
-//
-//        listings.add(new Listing("First Scholarship", "A cool scholarship",
-//                "Under 20,000", "Recently graduated"));
-//        listings.add(new Listing("Second Scholarship", "A cool scholarship",
-//                "Under 20,000", "Recently graduated"));
-//        listings.add(new Listing("Third Scholarship", "A cool scholarship",
-//                "Under 20,000", "Recently graduated"));
-//        listings.add(new Listing("Fourth Scholarship", "A cool scholarship",
-//                "Under 20,000", "Recently graduated"));
-//
-//        return listings;
-//    }
 
 }
