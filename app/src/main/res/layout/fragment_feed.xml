@@ -49,4 +49,41 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView_feed_bookmark"
         app:layout_constraintVertical_bias="0.169" />
+
+
+    <Button
+        android:id="@+id/button_women"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Women"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.164"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.641" />
+
+    <Button
+        android:id="@+id/button_lowIncome"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Low Income"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.202"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_women"
+        app:layout_constraintVertical_bias="0.054" />
+
+    <Button
+        android:id="@+id/button_canadians"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Canadians"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/button_lowIncome"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="@+id/button_lowIncome"
+        app:layout_constraintTop_toBottomOf="@+id/button_lowIncome"
+        app:layout_constraintVertical_bias="0.14" />
 </androidx.constraintlayout.widget.ConstraintLayout>

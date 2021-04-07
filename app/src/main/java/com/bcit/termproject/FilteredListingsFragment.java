@@ -1,6 +1,5 @@
 package com.bcit.termproject;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -30,10 +29,11 @@ public class FilteredListingsFragment extends Fragment {
 
     DatabaseReference dbRefTags;
     DatabaseReference dbRefScholarship;
+    FirebaseDatabase dbRef;
+
     ArrayList<Listing> listings;
     ArrayList<String> scholIds;
     RecyclerView rvListings;
-    String tag;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -41,7 +41,7 @@ public class FilteredListingsFragment extends Fragment {
     private static final String ARG_PARAM2 = "param2";
 
     // TODO: Rename and change types of parameters
-    private String mParam1;
+    private String tagName;
     private String mParam2;
 
     public FilteredListingsFragment() {
@@ -70,7 +70,7 @@ public class FilteredListingsFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
+            tagName = getArguments().getString(ARG_PARAM1);
             mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
@@ -78,7 +78,6 @@ public class FilteredListingsFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        // Inflate the layout for this
         View view = inflater.inflate(R.layout.fragment_filtered_listings, container, false);
 
         rvListings = view.findViewById(R.id.rvListings);
@@ -86,8 +85,11 @@ public class FilteredListingsFragment extends Fragment {
         listings = new ArrayList<Listing>();
         scholIds = new ArrayList<>();
 
-        dbRefTags = FirebaseDatabase.getInstance().getReference("tags").child("women");
+        dbRefTags = FirebaseDatabase.getInstance().getReference("tags").child(tagName);
         dbRefScholarship = FirebaseDatabase.getInstance().getReference("scholarship");
+        dbRef = FirebaseDatabase.getInstance();
+
+        Log.d("tag", tagName);
 
         return view;
     }
@@ -100,6 +102,7 @@ public class FilteredListingsFragment extends Fragment {
         dbRefTags.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                scholIds.clear();
                 for(DataSnapshot dataSnapshot: snapshot.getChildren()) {
                     String scholId = dataSnapshot.getValue(String.class);
                     scholIds.add(scholId);
@@ -115,17 +118,23 @@ public class FilteredListingsFragment extends Fragment {
         dbRefScholarship.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                listings.clear();
+
                 for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
+                    ArrayList<String> tags = new ArrayList<>();
                     if (scholIds.contains(scholSnapshot.getKey())) {
                         String key = scholSnapshot.getKey();
                         String name = scholSnapshot.child("name").getValue(String.class);
                         String desc = scholSnapshot.child("about").getValue(String.class);
-                        String tag1 = scholSnapshot.child("tags").child("0").getValue(String.class);
-                        String tag2 = scholSnapshot.child("tags").child("1").getValue(String.class);
 
-                        listings.add(new Listing(name, desc, tag1, tag2, key));
+                        for (DataSnapshot tagSnap : scholSnapshot.child("tags").getChildren()) {
+                            tags.add(tagSnap.getValue(String.class));
+                        }
+
+                        listings.add(new Listing(name, desc, key, tags));
                     }
                 }
+
                 ListingAdapter adapter = new ListingAdapter(listings);
 
                 adapter.setOnAdapterItemListener(new OnAdapterItemListener() {
