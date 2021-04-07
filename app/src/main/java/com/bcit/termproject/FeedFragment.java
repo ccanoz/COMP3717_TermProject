@@ -156,6 +156,7 @@ public class FeedFragment extends Fragment {
 
                         adapter.setOnAdapterItemListener(new OnAdapterItemListener() {
                             @Override
+                            //Not actually a long click
                             public void OnLongClick(Listing listing) {
                                 Log.v("key", listing.getKey());
                                 Intent intent = new Intent(getContext(), ScholarshipInfoActivity.class);
@@ -204,7 +205,6 @@ public class FeedFragment extends Fragment {
 
             }
         });
-
 
         return view;
     }

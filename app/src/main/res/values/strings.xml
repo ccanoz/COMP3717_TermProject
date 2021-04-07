@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">TermProject</string>
+    <string name="app_name">ScholarMate</string>
     <string name="name">Name</string>
     <string name="female">Female</string>
     <string name="gender">Gender</string>
