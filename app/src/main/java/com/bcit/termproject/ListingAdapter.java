@@ -1,5 +1,6 @@
 package com.bcit.termproject;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -9,9 +10,15 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.android.material.chip.Chip;
+import com.google.android.material.chip.ChipGroup;
+
 import java.util.List;
 
 public class ListingAdapter extends RecyclerView.Adapter<ListingViewHolder> {
+
+    Context parentContext;
+
     private List<Listing> listings;
 
     private OnAdapterItemListener onAdapterItemListener;
@@ -27,7 +34,8 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingViewHolder> {
     @NonNull
     @Override
     public ListingViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        LayoutInflater inflater = LayoutInflater.from(parent.getContext());
+        parentContext = parent.getContext();
+        LayoutInflater inflater = LayoutInflater.from(parentContext);
         View listingView = inflater.inflate(R.layout.item_listing, parent, false);
         ListingViewHolder viewHolder = new ListingViewHolder(listingView);
         return viewHolder;
@@ -43,14 +51,16 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingViewHolder> {
         TextView textViewListingDesc = holder.descTextView;
         textViewListingDesc.setText(listing.getDescription());
 
-        TextView textViewListingTag1 = holder.tag1TextView;
-        textViewListingTag1.setText(listing.getTag1());
-
-        TextView textViewListingTag2 = holder.tag2TextView;
-        textViewListingTag2.setText(listing.getTag2());
+        ChipGroup tagChipGroup = holder.tagChipGroup;
 
         ImageView imageBookmarkView = holder.imageBookmark;
         imageBookmarkView.setImageResource(R.drawable.ic_bookmark_add);
+
+        for (String tag: listing.getTags()) {
+            Chip tagChip = new Chip(parentContext);
+            tagChip.setText(tag);
+            tagChipGroup.addView(tagChip);
+        }
 
         textViewScholarshipName.setOnLongClickListener(new View.OnLongClickListener() {
             @Override

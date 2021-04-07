@@ -13,7 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -33,6 +36,8 @@ public class ItemsListingFragment extends Fragment {
     FirebaseUser currAuthUser;
     User currUser;
     TextView currUserName;
+    Boolean isBookmarked;
+    String scholId;
 
     DatabaseReference databaseSchol;
     DatabaseReference dbUserInfo;
@@ -110,15 +115,19 @@ public class ItemsListingFragment extends Fragment {
         databaseSchol.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                listings.clear();
                 for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
                     Log.v("snapshot", scholSnapshot.getKey());
+                    ArrayList<String> tags = new ArrayList<>();
                     String key = scholSnapshot.getKey();
                     String name = scholSnapshot.child("name").getValue(String.class);
                     String desc = scholSnapshot.child("about").getValue(String.class);
-                    String tag1 = scholSnapshot.child("tags").child("0").getValue(String.class);
-                    String tag2 = scholSnapshot.child("tags").child("1").getValue(String.class);
 
-                    listings.add(new Listing(name, desc, tag1, tag2, key));
+                    for (DataSnapshot tagSnap : scholSnapshot.child("tags").getChildren()) {
+                        tags.add(tagSnap.getValue(String.class));
+                    }
+
+                    listings.add(new Listing(name, desc, key, tags));
                 }
 //                rvListings = view.findViewById(R.id.rvListings);
                 ListingAdapter adapter = new ListingAdapter(listings);
@@ -135,6 +144,10 @@ public class ItemsListingFragment extends Fragment {
                     @Override
                     public void OnMarkClick(Listing listing) {
                         Log.v("mark", "Bookmark clicked");
+                        scholId = listing.getKey();
+                        currUser = MainActivity.currUser;
+                        isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
+                        bookmarkScholarship();
                     }
                 });
 
@@ -147,6 +160,48 @@ public class ItemsListingFragment extends Fragment {
 
             }
         });
+    }
+
+
+    /**
+     * Update the current user's bookmark list to reflect whether the current scholarship is bookmarked or not.
+     */
+    public void updateBookmarks() {
+        Task<Void> setValueTask = dbUserInfo.child(currAuthUser.getUid()).child("bookmarked").setValue(currUser.getBookmarked());
+        setValueTask.addOnSuccessListener(new OnSuccessListener() {
+            @Override
+            public void onSuccess(Object o) {
+                if (isBookmarked) {
+                    Toast.makeText(getContext(), "Scholarship bookmarked.", Toast.LENGTH_SHORT).show();
+                } else {
+                    Toast.makeText(getContext(), "Scholarship removed from bookmarks.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        });
+    }
+
+    /**
+     * Sets the bookmark icon depending on if the current scholarship
+     * is bookmarked or not.
+     */
+    public void setBookmarkIcon() {
+        int iconId = isBookmarked? R.drawable.ic_bookmark_added: R.drawable.ic_bookmark_add;
+//        scholBookmark.setImageResource(iconId);
+    }
+
+    /**
+     * Toggles between bookmarking/un-bookmarking a scholarship.
+     */
+    public void bookmarkScholarship() {
+        if (isBookmarked) {
+            currUser.unBookmark(scholId);
+            isBookmarked = false;
+        } else {
+            currUser.addToBookmarked(scholId);
+            isBookmarked = true;
+        }
+        setBookmarkIcon();
+        updateBookmarks();
     }
 
 //    private ArrayList<Listing> testListingList() {
