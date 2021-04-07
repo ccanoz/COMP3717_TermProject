@@ -35,6 +35,7 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
+
         currAuthUser = FirebaseAuth.getInstance().getCurrentUser();
         dbUserInfo = FirebaseDatabase.getInstance().getReference("user");
 
