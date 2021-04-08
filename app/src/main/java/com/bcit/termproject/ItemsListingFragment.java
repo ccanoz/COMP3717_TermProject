@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.chip.Chip;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,6 +40,9 @@ public class ItemsListingFragment extends Fragment {
     TextView currUserName;
     Boolean isBookmarked;
     String scholId;
+    Chip chipWomen;
+    Chip chipCanadians;
+    Chip chipLowIncome;
 
     DatabaseReference databaseSchol;
     DatabaseReference dbUserInfo;
@@ -91,13 +96,15 @@ public class ItemsListingFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_items_listing, container, false);
         currUserName = view.findViewById(R.id.textView_feed_user);
         super.onCreate(savedInstanceState);
 
+        setFilterChips(view);
+
         currAuthUser = MainActivity.currAuthUser;
+        currUser = MainActivity.currUser;
 
         rvListings = view.findViewById(R.id.rvListings);
         listings = new ArrayList<Listing>();
@@ -105,6 +112,37 @@ public class ItemsListingFragment extends Fragment {
         databaseSchol = FirebaseDatabase.getInstance().getReference("scholarship");
         dbUserInfo = MainActivity.dbUserInfo;
         return view;
+    }
+
+    /**
+     * Set up the filter chips and onClick handlers for the different tag types.
+     * @param view
+     */
+    public void setFilterChips(View view){
+        chipWomen = view.findViewById(R.id.chip_women);
+        chipCanadians = view.findViewById(R.id.chip_canadians);
+        chipLowIncome = view.findViewById(R.id.chip_lowIncome);
+
+        chipWomen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterScholarships(v);
+            }
+        });
+
+        chipCanadians.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterScholarships(v);
+            }
+        });
+
+        chipLowIncome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterScholarships(v);
+            }
+        });
     }
 
 
@@ -129,9 +167,15 @@ public class ItemsListingFragment extends Fragment {
 
                     String img_url = scholSnapshot.child("logo").getValue(String.class);
 
-                    listings.add(new Listing(name, desc, key, tags, img_url));
+                    Listing newListing = new Listing(name, desc, key, tags, img_url);
+
+                    if (currUser.checkScholBookmarked(newListing.getKey())){
+                        newListing.setIsBookmarked(true);
+                    }
+
+                    listings.add(newListing);
                 }
-//                rvListings = view.findViewById(R.id.rvListings);
+
                 ListingAdapter adapter = new ListingAdapter(listings);
 
                 adapter.setOnAdapterItemListener(new OnAdapterItemListener() {
@@ -147,9 +191,9 @@ public class ItemsListingFragment extends Fragment {
                     public void OnMarkClick(Listing listing) {
                         Log.v("mark", "Bookmark clicked");
                         scholId = listing.getKey();
-                        currUser = MainActivity.currUser;
                         isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
-                        bookmarkScholarship();
+                        listing.setIsBookmarked(isBookmarked);
+                        bookmarkScholarship(listing);
                     }
                 });
 
@@ -168,12 +212,12 @@ public class ItemsListingFragment extends Fragment {
     /**
      * Update the current user's bookmark list to reflect whether the current scholarship is bookmarked or not.
      */
-    public void updateBookmarks() {
+    public void updateBookmarks(Listing listing) {
         Task<Void> setValueTask = dbUserInfo.child(currAuthUser.getUid()).child("bookmarked").setValue(currUser.getBookmarked());
         setValueTask.addOnSuccessListener(new OnSuccessListener() {
             @Override
             public void onSuccess(Object o) {
-                if (isBookmarked) {
+                if (listing.getIsBookmarked()) {
                     Toast.makeText(getContext(), "Scholarship bookmarked.", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), "Scholarship removed from bookmarks.", Toast.LENGTH_SHORT).show();
@@ -182,43 +226,40 @@ public class ItemsListingFragment extends Fragment {
         });
     }
 
-    /**
-     * Sets the bookmark icon depending on if the current scholarship
-     * is bookmarked or not.
-     */
-    public void setBookmarkIcon() {
-        int iconId = isBookmarked? R.drawable.ic_bookmark_added: R.drawable.ic_bookmark_add;
-//        scholBookmark.setImageResource(iconId);
-    }
 
     /**
      * Toggles between bookmarking/un-bookmarking a scholarship.
      */
-    public void bookmarkScholarship() {
-        if (isBookmarked) {
+    public void bookmarkScholarship(Listing listing) {
+        if (listing.getIsBookmarked()) {
             currUser.unBookmark(scholId);
-            isBookmarked = false;
+            listing.setIsBookmarked(false);
         } else {
             currUser.addToBookmarked(scholId);
-            isBookmarked = true;
+            listing.setIsBookmarked(true);
         }
-        setBookmarkIcon();
-        updateBookmarks();
+        updateBookmarks(listing);
     }
 
-//    private ArrayList<Listing> testListingList() {
-//        ArrayList<Listing> listings = new ArrayList<Listing>();
-//
-//        listings.add(new Listing("First Scholarship", "A cool scholarship",
-//                "Under 20,000", "Recently graduated", "hi"));
-//        listings.add(new Listing("Second Scholarship", "A cool scholarship",
-//                "Under 20,000", "Recently graduated", "hi"));
-//        listings.add(new Listing("Third Scholarship", "A cool scholarship",
-//                "Under 20,000", "Recently graduated", "hi"));
-//        listings.add(new Listing("Fourth Scholarship", "A cool scholarship",
-//                "Under 20,000", "Recently graduated", "hi"));
-//
-//        return listings;
-//    }
+    public void openFragment(Fragment fragment) {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    public void filterScholarships(View v) {
+        switch (v.getId()) {
+            case R.id.chip_women:
+                openFragment(FilteredListingsFragment.newInstance("women", ""));
+                break;
+            case R.id.chip_canadians:
+                openFragment(FilteredListingsFragment.newInstance("canadians", ""));
+                break;
+            default:
+                openFragment(FilteredListingsFragment.newInstance("lowIncome", ""));
+                break;
+        }
+    }
 
 }

@@ -12,5 +12,44 @@
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rvListings"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="462dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0">
+
+    </androidx.recyclerview.widget.RecyclerView>
+
+    <com.google.android.material.chip.ChipGroup
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/rvListings"
+        app:layout_constraintTop_toBottomOf="@+id/rvListings"
+        app:layout_constraintVertical_bias="0.0"
+        app:singleLine="true">
+
+        <TextView
+            android:id="@+id/textView_tags"
+            android:gravity="center"
+            android:layout_width="wrap_content"
+            android:layout_height="50dp"
+            android:text="@string/filter_by" />
+
+        <com.google.android.material.chip.Chip
+            android:id="@+id/chip_tag"
+            style="@style/Widget.MaterialComponents.Chip.Choice"
+            app:chipIconEnabled="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:checked="true"
+            app:chipIconVisible="true"
+            app:chipIcon="@drawable/ic_remove"
+            android:text="" />
+
+
+    </com.google.android.material.chip.ChipGroup>
+
 </LinearLayout>

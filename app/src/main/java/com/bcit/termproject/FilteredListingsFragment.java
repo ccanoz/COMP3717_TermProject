@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +18,8 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.android.material.chip.Chip;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -34,15 +37,19 @@ public class FilteredListingsFragment extends Fragment {
 
     DatabaseReference dbRefTags;
     DatabaseReference dbRefScholarship;
+    DatabaseReference dbUserInfo;
+
     FirebaseDatabase dbRef;
+    FirebaseUser currAuthUser;
+
+    User currUser;
 
     ArrayList<Listing> listings;
     ArrayList<String> scholIds;
     String scholId;
     RecyclerView rvListings;
     Boolean isBookmarked = false;
-
-    User currUser;
+    Chip chipTag;
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -92,18 +99,23 @@ public class FilteredListingsFragment extends Fragment {
         currUser = MainActivity.currUser;
 
         rvListings = view.findViewById(R.id.rvListings);
+        chipTag = view.findViewById(R.id.chip_tag);
+        chipTag.setText(tagName);
+        chipTag.setOnClickListener(v -> {
+            openFragment(ItemsListingFragment.newInstance("", ""));
+        });
 
         listings = new ArrayList<Listing>();
 
         scholIds = new ArrayList<>();
 
+        dbUserInfo = MainActivity.dbUserInfo;
         dbRefTags = FirebaseDatabase.getInstance().getReference("tags").child(tagName);
         dbRefScholarship = FirebaseDatabase.getInstance().getReference("scholarship");
         dbRef = FirebaseDatabase.getInstance();
 
-        Log.d("tag", tagName);
-
-
+        currAuthUser = MainActivity.currAuthUser;
+        currUser = MainActivity.currUser;
 
         dbRefTags.addValueEventListener(new ValueEventListener() {
             @Override
@@ -119,10 +131,8 @@ public class FilteredListingsFragment extends Fragment {
                         new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                Log.d("FILTERED", "in onDataChange of scholarship");
                                 listings.clear();
 
-                                Log.d("FILTERED", snapshot.getChildren().toString());
                                 for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
                                     ArrayList<String> tags = new ArrayList<>();
                                     if (scholIds.contains(scholSnapshot.getKey())) {
@@ -135,22 +145,22 @@ public class FilteredListingsFragment extends Fragment {
                                         }
                                         String img_url = scholSnapshot.child("logo").getValue(String.class);
 
-                                        listings.add(new Listing(name, desc, key, tags, img_url));
-                                        Log.d("FILTERED", listings.toString());
+                                        Listing newListing = new Listing(name, desc, key, tags, img_url);
+
+                                        if (currUser.checkScholBookmarked(newListing.getKey())){
+                                            newListing.setIsBookmarked(true);
+                                        }
+
+                                        listings.add(newListing);
+
                                     }
                                 }
 
                                 ListingAdapter adapter = new ListingAdapter(listings);
 
-
-
-
-
-
                                 adapter.setOnAdapterItemListener(new OnAdapterItemListener() {
                                     @Override
                                     public void OnLongClick(Listing listing) {
-                                        Log.v("key", listing.getKey());
                                         Intent intent = new Intent(getContext(), ScholarshipInfoActivity.class);
                                         intent.putExtra("SCHOLARSHIP_ITEM", listing.getKey());
                                         startActivity(intent);
@@ -158,11 +168,11 @@ public class FilteredListingsFragment extends Fragment {
 
                                     @Override
                                     public void OnMarkClick(Listing listing) {
-                                        Log.v("mark", "Bookmark clicked");
                                         scholId = listing.getKey();
                                         currUser = MainActivity.currUser;
                                         isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
-                                        bookmarkScholarship();
+                                        listing.setIsBookmarked(isBookmarked);
+                                        bookmarkScholarship(listing);
                                     }
                                 });
 
@@ -188,9 +198,6 @@ public class FilteredListingsFragment extends Fragment {
 
         });
 
-//        dbRefScholarship.addValueEventListener();
-
-
         return view;
     }
 
@@ -208,12 +215,12 @@ public class FilteredListingsFragment extends Fragment {
     /**
      * Update the current user's bookmark list to reflect whether the current scholarship is bookmarked or not.
      */
-    public void updateBookmarks() {
-        Task<Void> setValueTask = MainActivity.dbUserInfo.child(MainActivity.currAuthUser.getUid()).child("bookmarked").setValue(currUser.getBookmarked());
+    public void updateBookmarks(Listing listing) {
+        Task<Void> setValueTask = dbUserInfo.child(currAuthUser.getUid()).child("bookmarked").setValue(currUser.getBookmarked());
         setValueTask.addOnSuccessListener(new OnSuccessListener() {
             @Override
             public void onSuccess(Object o) {
-                if (isBookmarked) {
+                if (listing.getIsBookmarked()) {
                     Toast.makeText(getContext(), "Scholarship bookmarked.", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), "Scholarship removed from bookmarks.", Toast.LENGTH_SHORT).show();
@@ -234,15 +241,21 @@ public class FilteredListingsFragment extends Fragment {
     /**
      * Toggles between bookmarking/un-bookmarking a scholarship.
      */
-    public void bookmarkScholarship() {
-        if (isBookmarked) {
+    public void bookmarkScholarship(Listing listing) {
+        if (listing.getIsBookmarked()) {
             currUser.unBookmark(scholId);
-            isBookmarked = false;
+            listing.setIsBookmarked(false);
         } else {
             currUser.addToBookmarked(scholId);
-            isBookmarked = true;
+            listing.setIsBookmarked(true);
         }
-        setBookmarkIcon();
-        updateBookmarks();
+        updateBookmarks(listing);
+    }
+
+    public void openFragment(Fragment fragment) {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }

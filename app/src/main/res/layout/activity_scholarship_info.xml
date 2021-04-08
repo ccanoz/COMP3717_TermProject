@@ -15,10 +15,10 @@
         android:text="Apply"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/rv_requirements"
-        app:layout_constraintHorizontal_bias="0.49"
+        app:layout_constraintHorizontal_bias="0.493"
         app:layout_constraintStart_toStartOf="@+id/rv_requirements"
         app:layout_constraintTop_toBottomOf="@+id/rv_requirements"
-        app:layout_constraintVertical_bias="0.0" />
+        app:layout_constraintVertical_bias="0.28" />
 
     <TextView
         android:id="@+id/textView_scholName"
@@ -88,14 +88,14 @@
         android:id="@+id/textView_scholAbout"
         android:layout_width="330dp"
         android:layout_height="26dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="48dp"
         android:layout_marginEnd="6dp"
         android:text="About"
         android:textAllCaps="true"
         android:textColor="@color/black"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="@+id/imageView_logo"
-        app:layout_constraintHorizontal_bias="0.363"
+        app:layout_constraintHorizontal_bias="0.324"
         app:layout_constraintStart_toStartOf="@+id/imageView_logo"
         app:layout_constraintTop_toBottomOf="@+id/imageView_logo" />
 
@@ -115,7 +115,7 @@
         android:id="@+id/textView_scholRequirements"
         android:layout_width="325dp"
         android:layout_height="19dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="20dp"
         android:text="Requirements"
         android:textAllCaps="true"
         android:textColor="@color/black"
@@ -126,8 +126,8 @@
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/rv_requirements"
-        android:layout_width="324dp"
-        android:layout_height="106dp"
+        android:layout_width="329dp"
+        android:layout_height="136dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="@+id/textView_scholRequirements"
         app:layout_constraintHorizontal_bias="0.0"
@@ -135,16 +135,20 @@
         app:layout_constraintTop_toBottomOf="@+id/textView_scholRequirements"
         app:layout_constraintVertical_bias="0.0" />
 
-    <ImageView
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
         android:id="@+id/imageView_scholAlert"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="1dp"
         android:layout_marginEnd="8dp"
+        android:backgroundTint="@color/white"
+        android:clickable="true"
+        android:onClick="addAlarm"
+        app:backgroundTint="@color/white"
+        app:fabSize="mini"
         app:layout_constraintBottom_toTopOf="@+id/textView_scholAbout"
         app:layout_constraintEnd_toEndOf="@+id/imageView_logo"
         app:layout_constraintTop_toBottomOf="@+id/imageView_logo"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.100000024"
         app:srcCompat="@drawable/baseline_add_alert_black_18dp" />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -162,7 +166,7 @@
         app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageView_logo"
-        app:layout_constraintVertical_bias="0.0"
+        app:layout_constraintVertical_bias="1.0"
         app:srcCompat="@drawable/ic_bookmark_add" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

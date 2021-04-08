@@ -223,7 +223,7 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
     /**
      * Toggles between bookmarking/un-bookmarking a scholarship.
      *
-     * @param v
+     * @param v View
      */
     public void bookmarkScholarship(View v) {
         if (isBookmarked) {
@@ -235,5 +235,14 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
         }
         setBookmarkIcon();
         updateBookmarks();
+    }
+
+    /**
+     * Set an alarm for this scholarship to notify the user of any news regarding it.
+     *
+     * @param v View
+     */
+    public void addAlarm(View v) {
+        Toast.makeText(ScholarshipInfoActivity.this, "Alarm: Not Yet Implemented.", Toast.LENGTH_SHORT).show();
     }
 }

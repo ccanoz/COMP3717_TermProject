@@ -37,4 +37,5 @@
     <string name="login">Login</string>
     <string name="_01_01_2000">01/01/2000</string>
     <string name="calendar_image">calendar image</string>
+    <string name="filter_by">Filter By:</string>
 </resources>

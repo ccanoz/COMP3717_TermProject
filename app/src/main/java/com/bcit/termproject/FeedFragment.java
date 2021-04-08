@@ -105,27 +105,6 @@ public class FeedFragment extends Fragment {
         listings = new ArrayList<Listing>();
         emptyText = view.findViewById(R.id.tv_no_data);
 
-        btnWomen = view.findViewById(R.id.button_women);
-        btnWomen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                filterScholarships(v);
-            }
-        });
-        btnLowIncome = view.findViewById(R.id.button_lowIncome);
-        btnLowIncome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                filterScholarships(v);
-            }
-        });
-        btnCanadians = view.findViewById(R.id.button_canadians);
-        btnCanadians.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                filterScholarships(v);
-            }
-        });
         databaseSchol = FirebaseDatabase.getInstance().getReference("scholarship");
         dbUserInfo = MainActivity.dbUserInfo;
 
@@ -139,8 +118,8 @@ public class FeedFragment extends Fragment {
                         for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
                             Log.v("snapshot", scholSnapshot.getKey());
                             ArrayList<String> tags = new ArrayList<>();
-                            //                                if (currUser != null && currUser.getBookmarked().contains(scholSnapshot.getKey())) {
-                            if (currUser != null && currUser.getBookmarked().contains(scholSnapshot.getKey())) {
+
+                            if (currUser != null && currUser.checkScholBookmarked(scholSnapshot.getKey())) {
                                 String key = scholSnapshot.getKey();
                                 String name = scholSnapshot.child("name").getValue(String.class);
                                 String desc = scholSnapshot.child("about").getValue(String.class);
@@ -150,18 +129,18 @@ public class FeedFragment extends Fragment {
                                 }
                                 String img_url = scholSnapshot.child("logo").getValue(String.class);
 
-                                listings.add(new Listing(name, desc, key, tags, img_url));
+                                Listing newListing = new Listing(name, desc, key, tags, img_url);
+                                newListing.setIsBookmarked(true);
+                                listings.add(newListing);
                             }
                         }
 
                         if (!listings.isEmpty()) {
                             //if data is available, don't show the empty text
-//                            emptyText.setVisibility(View.INVISIBLE);
                             emptyText.setVisibility(View.GONE);
                         } else
                             emptyText.setVisibility(View.VISIBLE);
 
-//                rvListings = view.findViewById(R.id.rvListings);
                         ListingAdapter adapter = new ListingAdapter(listings);
                         adapter.notifyDataSetChanged();
 
@@ -180,7 +159,8 @@ public class FeedFragment extends Fragment {
                                 scholId = listing.getKey();
                                 currUser = MainActivity.currUser;
                                 isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
-                                bookmarkScholarship();
+                                listing.setIsBookmarked(isBookmarked);
+                                bookmarkScholarship(listing);
                             }
                         });
 
@@ -220,19 +200,6 @@ public class FeedFragment extends Fragment {
         return view;
     }
 
-    public void filterScholarships(View v) {
-        switch (v.getId()) {
-            case R.id.button_women:
-                openFragment(FilteredListingsFragment.newInstance("women", ""));
-                return;
-            case R.id.button_canadians:
-                openFragment(FilteredListingsFragment.newInstance("canadians", ""));
-                return;
-            default:
-                openFragment(FilteredListingsFragment.newInstance("lowIncome", ""));
-                return;
-        }
-    }
 
     @Override
     public void onStart() {
@@ -243,12 +210,12 @@ public class FeedFragment extends Fragment {
     /**
      * Update the current user's bookmark list to reflect whether the current scholarship is bookmarked or not.
      */
-    public void updateBookmarks() {
+    public void updateBookmarks(Listing listing) {
         Task<Void> setValueTask = dbUserInfo.child(currAuthUser.getUid()).child("bookmarked").setValue(currUser.getBookmarked());
         setValueTask.addOnSuccessListener(new OnSuccessListener() {
             @Override
             public void onSuccess(Object o) {
-                if (isBookmarked) {
+                if (listing.getIsBookmarked()) {
                     Toast.makeText(getContext(), "Scholarship bookmarked.", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), "Scholarship removed from bookmarks.", Toast.LENGTH_SHORT).show();
@@ -258,27 +225,17 @@ public class FeedFragment extends Fragment {
     }
 
     /**
-     * Sets the bookmark icon depending on if the current scholarship
-     * is bookmarked or not.
-     */
-    public void setBookmarkIcon() {
-        int iconId = isBookmarked? R.drawable.ic_bookmark_added: R.drawable.ic_bookmark_add;
-//        scholBookmark.setImageResource(iconId);
-    }
-
-    /**
      * Toggles between bookmarking/un-bookmarking a scholarship.
      */
-    public void bookmarkScholarship() {
-        if (isBookmarked) {
+    public void bookmarkScholarship(Listing listing) {
+        if (listing.getIsBookmarked()) {
             currUser.unBookmark(scholId);
-            isBookmarked = false;
+            listing.setIsBookmarked(false);
         } else {
             currUser.addToBookmarked(scholId);
-            isBookmarked = true;
+            listing.setIsBookmarked(true);
         }
-        setBookmarkIcon();
-        updateBookmarks();
+        updateBookmarks(listing);
     }
 
     public void openFragment(Fragment fragment) {
