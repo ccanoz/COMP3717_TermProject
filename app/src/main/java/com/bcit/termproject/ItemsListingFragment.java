@@ -101,27 +101,7 @@ public class ItemsListingFragment extends Fragment {
         currUserName = view.findViewById(R.id.textView_feed_user);
         super.onCreate(savedInstanceState);
 
-        chipWomen = view.findViewById(R.id.chip_women);
-        chipWomen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                filterScholarships(v);
-            }
-        });
-        chipCanadians = view.findViewById(R.id.chip_canadians);
-        chipCanadians.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                filterScholarships(v);
-            }
-        });
-        chipLowIncome = view.findViewById(R.id.chip_lowIncome);
-        chipLowIncome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                filterScholarships(v);
-            }
-        });
+        setFilterChips(view);
 
         currAuthUser = MainActivity.currAuthUser;
         currUser = MainActivity.currUser;
@@ -132,6 +112,37 @@ public class ItemsListingFragment extends Fragment {
         databaseSchol = FirebaseDatabase.getInstance().getReference("scholarship");
         dbUserInfo = MainActivity.dbUserInfo;
         return view;
+    }
+
+    /**
+     * Set up the filter chips and onClick handlers for the different tag types.
+     * @param view
+     */
+    public void setFilterChips(View view){
+        chipWomen = view.findViewById(R.id.chip_women);
+        chipCanadians = view.findViewById(R.id.chip_canadians);
+        chipLowIncome = view.findViewById(R.id.chip_lowIncome);
+
+        chipWomen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterScholarships(v);
+            }
+        });
+
+        chipCanadians.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterScholarships(v);
+            }
+        });
+
+        chipLowIncome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterScholarships(v);
+            }
+        });
     }
 
 
@@ -158,9 +169,9 @@ public class ItemsListingFragment extends Fragment {
 
                     Listing newListing = new Listing(name, desc, key, tags, img_url);
 
-                    if (currUser.getBookmarked().contains(newListing.getKey())){
+                    if (currUser.checkScholBookmarked(newListing.getKey())){
                         newListing.setIsBookmarked(true);
-                    };
+                    }
 
                     listings.add(newListing);
                 }
@@ -201,12 +212,12 @@ public class ItemsListingFragment extends Fragment {
     /**
      * Update the current user's bookmark list to reflect whether the current scholarship is bookmarked or not.
      */
-    public void updateBookmarks() {
+    public void updateBookmarks(Listing listing) {
         Task<Void> setValueTask = dbUserInfo.child(currAuthUser.getUid()).child("bookmarked").setValue(currUser.getBookmarked());
         setValueTask.addOnSuccessListener(new OnSuccessListener() {
             @Override
             public void onSuccess(Object o) {
-                if (isBookmarked) {
+                if (listing.getIsBookmarked()) {
                     Toast.makeText(getContext(), "Scholarship bookmarked.", Toast.LENGTH_SHORT).show();
                 } else {
                     Toast.makeText(getContext(), "Scholarship removed from bookmarks.", Toast.LENGTH_SHORT).show();
@@ -215,14 +226,6 @@ public class ItemsListingFragment extends Fragment {
         });
     }
 
-    /**
-     * Sets the bookmark icon depending on if the current scholarship
-     * is bookmarked or not.
-     */
-    public void setBookmarkIcon() {
-        int iconId = isBookmarked? R.drawable.ic_bookmark_added: R.drawable.ic_bookmark_add;
-//        scholBookmark.setImageResource(iconId);
-    }
 
     /**
      * Toggles between bookmarking/un-bookmarking a scholarship.
@@ -235,7 +238,7 @@ public class ItemsListingFragment extends Fragment {
             currUser.addToBookmarked(scholId);
             listing.setIsBookmarked(true);
         }
-        updateBookmarks();
+        updateBookmarks(listing);
     }
 
     public void openFragment(Fragment fragment) {
@@ -249,13 +252,13 @@ public class ItemsListingFragment extends Fragment {
         switch (v.getId()) {
             case R.id.chip_women:
                 openFragment(FilteredListingsFragment.newInstance("women", ""));
-                return;
+                break;
             case R.id.chip_canadians:
                 openFragment(FilteredListingsFragment.newInstance("canadians", ""));
-                return;
+                break;
             default:
                 openFragment(FilteredListingsFragment.newInstance("lowIncome", ""));
-                return;
+                break;
         }
     }
 
