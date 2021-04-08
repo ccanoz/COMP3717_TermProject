@@ -150,7 +150,9 @@ public class FeedFragment extends Fragment {
                                 }
                                 String img_url = scholSnapshot.child("logo").getValue(String.class);
 
-                                listings.add(new Listing(name, desc, key, tags, img_url));
+                                Listing newListing = new Listing(name, desc, key, tags, img_url);
+                                newListing.setIsBookmarked(true);
+                                listings.add(newListing);
                             }
                         }
 
@@ -180,7 +182,8 @@ public class FeedFragment extends Fragment {
                                 scholId = listing.getKey();
                                 currUser = MainActivity.currUser;
                                 isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
-                                bookmarkScholarship();
+                                listing.setIsBookmarked(isBookmarked);
+                                bookmarkScholarship(listing);
                             }
                         });
 
@@ -258,26 +261,16 @@ public class FeedFragment extends Fragment {
     }
 
     /**
-     * Sets the bookmark icon depending on if the current scholarship
-     * is bookmarked or not.
-     */
-    public void setBookmarkIcon() {
-        int iconId = isBookmarked? R.drawable.ic_bookmark_added: R.drawable.ic_bookmark_add;
-//        scholBookmark.setImageResource(iconId);
-    }
-
-    /**
      * Toggles between bookmarking/un-bookmarking a scholarship.
      */
-    public void bookmarkScholarship() {
-        if (isBookmarked) {
+    public void bookmarkScholarship(Listing listing) {
+        if (listing.getIsBookmarked()) {
             currUser.unBookmark(scholId);
-            isBookmarked = false;
+            listing.setIsBookmarked(false);
         } else {
             currUser.addToBookmarked(scholId);
-            isBookmarked = true;
+            listing.setIsBookmarked(true);
         }
-        setBookmarkIcon();
         updateBookmarks();
     }
 

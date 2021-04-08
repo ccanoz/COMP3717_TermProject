@@ -61,6 +61,8 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingViewHolder> {
         ImageView imageBookmarkView = holder.imageBookmark;
         imageBookmarkView.setImageResource(R.drawable.ic_bookmark_add);
 
+        setBookmarkIcon(imageBookmarkView, listing);
+
         for (String tag: listing.getTags()) {
             Chip tagChip = new Chip(parentContext);
             tagChip.setText(tag);
@@ -73,18 +75,26 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingViewHolder> {
                 onAdapterItemListener.OnLongClick(listing);
             }
         });
+
         textViewListingDesc.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onAdapterItemListener.OnLongClick(listing);
             }
         });
+
         imageBookmarkView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 onAdapterItemListener.OnMarkClick(listing);
+                setBookmarkIcon(imageBookmarkView, listing);
             }
         });
+    }
+
+    public void setBookmarkIcon(ImageView bookmarkIcon, Listing listing) {
+        int iconId = listing.getIsBookmarked()? R.drawable.ic_bookmark_added: R.drawable.ic_bookmark_add;
+        bookmarkIcon.setImageResource(iconId);
     }
 
     @Override

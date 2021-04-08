@@ -124,6 +124,7 @@ public class ItemsListingFragment extends Fragment {
         });
 
         currAuthUser = MainActivity.currAuthUser;
+        currUser = MainActivity.currUser;
 
         rvListings = view.findViewById(R.id.rvListings);
         listings = new ArrayList<Listing>();
@@ -155,9 +156,15 @@ public class ItemsListingFragment extends Fragment {
 
                     String img_url = scholSnapshot.child("logo").getValue(String.class);
 
-                    listings.add(new Listing(name, desc, key, tags, img_url));
+                    Listing newListing = new Listing(name, desc, key, tags, img_url);
+
+                    if (currUser.getBookmarked().contains(newListing.getKey())){
+                        newListing.setIsBookmarked(true);
+                    };
+
+                    listings.add(newListing);
                 }
-//                rvListings = view.findViewById(R.id.rvListings);
+
                 ListingAdapter adapter = new ListingAdapter(listings);
 
                 adapter.setOnAdapterItemListener(new OnAdapterItemListener() {
@@ -173,9 +180,9 @@ public class ItemsListingFragment extends Fragment {
                     public void OnMarkClick(Listing listing) {
                         Log.v("mark", "Bookmark clicked");
                         scholId = listing.getKey();
-                        currUser = MainActivity.currUser;
                         isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
-                        bookmarkScholarship();
+                        listing.setIsBookmarked(isBookmarked);
+                        bookmarkScholarship(listing);
                     }
                 });
 
@@ -220,32 +227,16 @@ public class ItemsListingFragment extends Fragment {
     /**
      * Toggles between bookmarking/un-bookmarking a scholarship.
      */
-    public void bookmarkScholarship() {
-        if (isBookmarked) {
+    public void bookmarkScholarship(Listing listing) {
+        if (listing.getIsBookmarked()) {
             currUser.unBookmark(scholId);
-            isBookmarked = false;
+            listing.setIsBookmarked(false);
         } else {
             currUser.addToBookmarked(scholId);
-            isBookmarked = true;
+            listing.setIsBookmarked(true);
         }
-        setBookmarkIcon();
         updateBookmarks();
     }
-
-//    private ArrayList<Listing> testListingList() {
-//        ArrayList<Listing> listings = new ArrayList<Listing>();
-//
-//        listings.add(new Listing("First Scholarship", "A cool scholarship",
-//                "Under 20,000", "Recently graduated", "hi"));
-//        listings.add(new Listing("Second Scholarship", "A cool scholarship",
-//                "Under 20,000", "Recently graduated", "hi"));
-//        listings.add(new Listing("Third Scholarship", "A cool scholarship",
-//                "Under 20,000", "Recently graduated", "hi"));
-//        listings.add(new Listing("Fourth Scholarship", "A cool scholarship",
-//                "Under 20,000", "Recently graduated", "hi"));
-//
-//        return listings;
-//    }
 
     public void openFragment(Fragment fragment) {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
