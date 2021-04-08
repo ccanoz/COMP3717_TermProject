@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +18,7 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.chip.Chip;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -38,6 +40,9 @@ public class ItemsListingFragment extends Fragment {
     TextView currUserName;
     Boolean isBookmarked;
     String scholId;
+    Chip chipWomen;
+    Chip chipCanadians;
+    Chip chipLowIncome;
 
     DatabaseReference databaseSchol;
     DatabaseReference dbUserInfo;
@@ -91,11 +96,32 @@ public class ItemsListingFragment extends Fragment {
                              Bundle savedInstanceState) {
 
 
-
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_items_listing, container, false);
         currUserName = view.findViewById(R.id.textView_feed_user);
         super.onCreate(savedInstanceState);
+
+        chipWomen = view.findViewById(R.id.chip_women);
+        chipWomen.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterScholarships(v);
+            }
+        });
+        chipCanadians = view.findViewById(R.id.chip_canadians);
+        chipCanadians.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterScholarships(v);
+            }
+        });
+        chipLowIncome = view.findViewById(R.id.chip_lowIncome);
+        chipLowIncome.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                filterScholarships(v);
+            }
+        });
 
         currAuthUser = MainActivity.currAuthUser;
 
@@ -220,5 +246,26 @@ public class ItemsListingFragment extends Fragment {
 //
 //        return listings;
 //    }
+
+    public void openFragment(Fragment fragment) {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
+    }
+
+    public void filterScholarships(View v) {
+        switch (v.getId()) {
+            case R.id.chip_women:
+                openFragment(FilteredListingsFragment.newInstance("women", ""));
+                return;
+            case R.id.chip_canadians:
+                openFragment(FilteredListingsFragment.newInstance("canadians", ""));
+                return;
+            default:
+                openFragment(FilteredListingsFragment.newInstance("lowIncome", ""));
+                return;
+        }
+    }
 
 }
