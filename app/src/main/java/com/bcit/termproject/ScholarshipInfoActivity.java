@@ -8,11 +8,13 @@ import androidx.recyclerview.widget.RecyclerView;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.AsyncTask;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -50,6 +52,7 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
     TextView scholOrg;
     FloatingActionButton scholBookmark;
     Boolean isBookmarked;
+    Button applyButton;
 
     String scholId;
 
@@ -74,6 +77,7 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
         scholAbout = findViewById(R.id.textView_scholAboutTxt);
         scholAmount = findViewById(R.id.textView_schol_amount);
         scholOrg = findViewById(R.id.textView_schol_orgName);
+        applyButton = findViewById(R.id.button_scholApply);
 
         rvRequirements = findViewById(R.id.rv_requirements);
         currAuthUser = MainActivity.currAuthUser;
@@ -137,6 +141,7 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
         Long amount = snapshot.child("amount").getValue(Long.class);
         String organization = snapshot.child("organization").getValue(String.class);
         String logoUrl = snapshot.child("logo").getValue(String.class);
+        String url = snapshot.child("apply").getValue(String.class);
 
         // Format with commas
         String amountString = "$ " + NumberFormat.getInstance().format(amount);
@@ -145,10 +150,27 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
         scholAbout.setText(description);
         scholAmount.setText(amountString);
         scholOrg.setText(organization);
+        setApplyButton(url);
 
         ImageView logoImage = findViewById(R.id.imageView_logo);
 
         new ImageDownloaderTask(logoImage).execute(logoUrl);
+    }
+
+    /**
+     * Sets the click listener to the apply button. The click listener redirects the user to the
+     * scholarship url.
+     * @param url the url of the scholarship application page
+     */
+    private void setApplyButton(String url){
+        applyButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Intent.ACTION_VIEW);
+                i.setData(Uri.parse(url));
+                startActivity(i);
+            }
+        });
     }
 
     /**

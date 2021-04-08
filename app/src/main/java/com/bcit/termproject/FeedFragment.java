@@ -158,9 +158,6 @@ public class FeedFragment extends Fragment {
                             //if data is available, don't show the empty text
 //                            emptyText.setVisibility(View.INVISIBLE);
                             emptyText.setVisibility(View.GONE);
-
-
-
                         } else
                             emptyText.setVisibility(View.VISIBLE);
 
