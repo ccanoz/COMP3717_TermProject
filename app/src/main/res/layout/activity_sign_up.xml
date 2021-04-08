@@ -55,14 +55,15 @@
         <TextView
             android:id="@+id/DOB_TV_title"
             android:layout_width="115dp"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_margin="10dp"
             android:layout_weight="1"
             android:autofillHints=""
             android:ems="10"
             android:inputType="date"
-            android:text="Date of birth"
-            android:textSize="18sp" />
+            android:text="@string/date_of_birth"
+            android:textSize="18sp"
+            tools:ignore="TextViewEdits" />
 
         <LinearLayout
             android:layout_width="wrap_content"
@@ -78,16 +79,18 @@
                 android:autofillHints=""
                 android:ems="10"
                 android:inputType="date"
-                android:text="01/01/2000"
-                android:textSize="18sp" />
+                android:text="@string/_01_01_2000"
+                android:textSize="18sp"
+                tools:ignore="TextViewEdits" />
 
             <ImageButton
                 android:id="@+id/dob_button"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
-                app:srcCompat="@drawable/ic_baseline_calendar_today_24" />
+                app:srcCompat="@drawable/ic_baseline_calendar_today_24"
+                android:contentDescription="@string/calendar_image" />
         </LinearLayout>
 
         <RadioGroup

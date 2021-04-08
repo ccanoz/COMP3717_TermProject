@@ -1,22 +1,18 @@
 package com.bcit.termproject;
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
-
-import android.content.ClipData;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
+
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -35,27 +31,24 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         getSupportActionBar().hide();
 
-
         currAuthUser = FirebaseAuth.getInstance().getCurrentUser();
         dbUserInfo = FirebaseDatabase.getInstance().getReference("user");
 
         BottomNavigationView bottomNavigation = findViewById(R.id.bottomNavigationView);
         BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
-                new BottomNavigationView.OnNavigationItemSelectedListener() {
-                    @Override public boolean onNavigationItemSelected(@NonNull MenuItem item) {
-                        switch (item.getItemId()) {
-                            case R.id.home:
-                                openFragment(FeedFragment.newInstance("", ""));
-                                return true;
-                            case R.id.search:
-                                openFragment(ItemsListingFragment.newInstance("", ""));
-                                return true;
-                            case R.id.account:
-                                openFragment(AccountFragment.newInstance("", ""));
-                                return true;
-                        }
-                        return false;
+                item -> {
+                    switch (item.getItemId()) {
+                        case R.id.home:
+                            openFragment(FeedFragment.newInstance("", ""));
+                            return true;
+                        case R.id.search:
+                            openFragment(ItemsListingFragment.newInstance("", ""));
+                            return true;
+                        case R.id.account:
+                            openFragment(AccountFragment.newInstance("", ""));
+                            return true;
                     }
+                    return false;
                 };
         bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
     }
@@ -64,11 +57,8 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
         dbUserInfo.addValueEventListener(new ValueEventListener() {
-
-
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 try {
                     currUser = snapshot.child(currAuthUser.getUid()).getValue(User.class);
                 }catch (NullPointerException e){
@@ -76,7 +66,6 @@ public class MainActivity extends AppCompatActivity {
                     startActivity(new Intent(MainActivity.this, LandingActivity.class));
                 }
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -90,12 +79,22 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-    public void openFragment(Fragment fragment) {
+    /**
+     * Helper method to open different fragments in the main activity.
+     * @param fragment a Fragment, the different pages in our app (home, search or account
+     *                 fragments)
+     */
+    private void openFragment(Fragment fragment) {
         FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
+
+    /**
+     * Click listener for the sign out image button.
+     * @param v a View, the sign out image button
+     */
     public void signOut(View v){
         FirebaseAuth.getInstance().signOut();
         startActivity(new Intent(this, LandingActivity.class));

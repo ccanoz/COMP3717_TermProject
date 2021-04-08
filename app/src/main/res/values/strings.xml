@@ -33,4 +33,8 @@
     <string name="cancel">Cancel</string>
     <string name="gpa">GPA</string>
     <string name="account_details">Account Details</string>
+    <string name="scholarmate_logo">Scholarmate logo</string>
+    <string name="login">Login</string>
+    <string name="_01_01_2000">01/01/2000</string>
+    <string name="calendar_image">calendar image</string>
 </resources>

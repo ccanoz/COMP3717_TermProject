@@ -16,7 +16,8 @@
         android:layout_gravity="center"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/scholarmate_icon" />
+        app:srcCompat="@drawable/scholarmate_icon"
+        android:contentDescription="@string/scholarmate_logo" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -30,7 +31,7 @@
             android:layout_height="65dp"
             android:layout_margin="5dp"
             android:onClick="goToLogin"
-            android:text="Login"
+            android:text="@string/login"
             android:textColor="@color/white"
             android:backgroundTint="@color/primary_colour_blue"
             android:textSize="18sp"
@@ -47,7 +48,7 @@
             android:layout_height="65dp"
             android:layout_margin="5dp"
             android:onClick="goToSignup"
-            android:text="Sign up"
+            android:text="@string/sign_up"
             android:textColor="@color/white"
             android:backgroundTint="@color/primary_colour_blue"
             android:textSize="18sp"

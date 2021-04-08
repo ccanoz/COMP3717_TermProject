@@ -41,9 +41,7 @@ public class AccountActivity extends AppCompatActivity {
     User currUser;
     TextView userName;
     String employStatus;
-
     MaterialDatePicker<?> datePicker;
-
     RecyclerView rvAccDetails;
 
     private HashMap<String, String> accDetailMap = new HashMap<>();
