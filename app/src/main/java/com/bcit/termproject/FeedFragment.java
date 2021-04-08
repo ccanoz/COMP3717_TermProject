@@ -53,6 +53,8 @@ public class FeedFragment extends Fragment {
     Button btnLowIncome;
     Button btnCanadians;
 
+    TextView emptyText;
+
 
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -101,6 +103,7 @@ public class FeedFragment extends Fragment {
 
         rvListings = view.findViewById(R.id.rv_bookmarks);
         listings = new ArrayList<Listing>();
+        emptyText = view.findViewById(R.id.tv_no_data);
 
         btnWomen = view.findViewById(R.id.button_women);
         btnWomen.setOnClickListener(new View.OnClickListener() {
@@ -150,6 +153,17 @@ public class FeedFragment extends Fragment {
                                 listings.add(new Listing(name, desc, key, tags, img_url));
                             }
                         }
+
+                        if (!listings.isEmpty()) {
+                            //if data is available, don't show the empty text
+//                            emptyText.setVisibility(View.INVISIBLE);
+                            emptyText.setVisibility(View.GONE);
+
+
+
+                        } else
+                            emptyText.setVisibility(View.VISIBLE);
+
 //                rvListings = view.findViewById(R.id.rvListings);
                         ListingAdapter adapter = new ListingAdapter(listings);
                         adapter.notifyDataSetChanged();
