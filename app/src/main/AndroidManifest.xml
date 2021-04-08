@@ -14,16 +14,8 @@
         <activity android:name=".LoginActivity">
 
         </activity>
-        <activity android:name=".AccountActivity" >
-
-        </activity>
         <activity android:name=".ScholarshipInfoActivity" />
-        <activity android:name=".ItemsListingActivity" >
 
-        </activity>
-        <activity android:name=".FeedActivity" >
-
-        </activity>
         <activity android:name=".SignUpActivity" >
 
         </activity>

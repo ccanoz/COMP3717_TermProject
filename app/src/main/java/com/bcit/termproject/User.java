@@ -1,11 +1,13 @@
 package com.bcit.termproject;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.ArrayList;
 
 public class User {
     ArrayList<String> bookmarked = new ArrayList<>();
     String name;
-    String DOB; //change to Date?
+    String DOB;
     String gender;
     String yearlyIncome;
     String GPA;
@@ -28,6 +30,7 @@ public class User {
         this.employed = employed;
     }
 
+    // setters
     public void setBookmarked(ArrayList<String> bookmarked) {this.bookmarked = bookmarked;}
     public void setName(String name){this.name = name;}
     public void setDOB(String DOB){this.DOB = DOB;}
@@ -37,6 +40,7 @@ public class User {
     public void setNationality(String nationality){this.nationality = nationality;}
     public void setEmployed(boolean employed){this.employed = employed;}
 
+    // getters
     public ArrayList<String> getBookmarked() { return bookmarked; }
     public String getName(){ return name; }
     public String getDOB(){ return DOB; }
@@ -48,7 +52,7 @@ public class User {
 
     /**
      * Checks if the scholarship passed in exists in the user's bookmarks.
-     * @param scholId
+     * @param scholId the scholarship
      */
     public boolean checkScholBookmarked(String scholId) {
         return this.bookmarked.contains(scholId);
@@ -56,7 +60,7 @@ public class User {
 
     /**
      * Add a scholarship to a User's bookmarked list.
-     * @param scholId
+     * @param scholId the scholarship id
      */
     public void addToBookmarked(String scholId) {
         if(!this.bookmarked.contains(scholId))
@@ -65,13 +69,14 @@ public class User {
 
     /**
      * Remove a scholarship from a User's bookmarked list.
-     * @param scholId
+     * @param scholId the scholarship id
      */
     public void unBookmark(String scholId) {
         if(this.bookmarked.contains(scholId))
             this.bookmarked.remove(scholId);
     }
 
+    @NotNull
     public String toString(){
         return "name: " + name + ", DOB: " + DOB + ", gender: " + gender + ", yearlyIncome: " +
                 "" + yearlyIncome + ", nationality: " + nationality + ", employed: " + employed;
