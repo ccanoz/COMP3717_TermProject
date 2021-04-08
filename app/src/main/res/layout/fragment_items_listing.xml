@@ -30,6 +30,7 @@
 
         <TextView
             android:id="@+id/textView_tags"
+            android:layout_marginTop="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/filter_by" />
@@ -39,7 +40,6 @@
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:text="women" />
 
         <com.google.android.material.chip.Chip
@@ -47,7 +47,6 @@
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:text="canadians" />
 
         <com.google.android.material.chip.Chip
@@ -55,7 +54,6 @@
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:checked="true"
             android:text="lowIncome" />
 
 

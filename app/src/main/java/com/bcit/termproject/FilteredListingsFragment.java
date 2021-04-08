@@ -5,6 +5,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -17,6 +18,7 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.gms.tasks.Tasks;
+import com.google.android.material.chip.Chip;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -41,6 +43,7 @@ public class FilteredListingsFragment extends Fragment {
     String scholId;
     RecyclerView rvListings;
     Boolean isBookmarked = false;
+    Chip chipTag;
 
     User currUser;
 
@@ -92,6 +95,11 @@ public class FilteredListingsFragment extends Fragment {
         currUser = MainActivity.currUser;
 
         rvListings = view.findViewById(R.id.rvListings);
+        chipTag = view.findViewById(R.id.chip_tag);
+        chipTag.setText(tagName);
+        chipTag.setOnClickListener(v -> {
+            openFragment(ItemsListingFragment.newInstance("", ""));
+        });
 
         listings = new ArrayList<Listing>();
 
@@ -244,5 +252,12 @@ public class FilteredListingsFragment extends Fragment {
         }
         setBookmarkIcon();
         updateBookmarks();
+    }
+
+    public void openFragment(Fragment fragment) {
+        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        transaction.replace(R.id.container, fragment);
+        transaction.addToBackStack(null);
+        transaction.commit();
     }
 }
