@@ -251,13 +251,13 @@ public class ItemsListingFragment extends Fragment {
     public void filterScholarships(View v) {
         switch (v.getId()) {
             case R.id.chip_women:
-                openFragment(FilteredListingsFragment.newInstance("women", ""));
+                openFragment(FilteredListingsFragment.newInstance("Women", ""));
                 break;
             case R.id.chip_canadians:
-                openFragment(FilteredListingsFragment.newInstance("canadians", ""));
+                openFragment(FilteredListingsFragment.newInstance("Canadians", ""));
                 break;
             default:
-                openFragment(FilteredListingsFragment.newInstance("lowIncome", ""));
+                openFragment(FilteredListingsFragment.newInstance("Low Income", ""));
                 break;
         }
     }
