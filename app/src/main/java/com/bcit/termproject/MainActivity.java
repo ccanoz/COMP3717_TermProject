@@ -2,6 +2,7 @@ package com.bcit.termproject;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 
@@ -62,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     currUser = snapshot.child(currAuthUser.getUid()).getValue(User.class);
                 }catch (NullPointerException e){
-
+                    Log.d("AUTHBUG", "going to landing1");
                     startActivity(new Intent(MainActivity.this, LandingActivity.class));
                 }
             }
@@ -71,9 +72,10 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        if (currUser != null) {
+        if (currAuthUser != null) {
             openFragment(FeedFragment.newInstance("", ""));
         } else{
+            Log.d("AUTHBUG", "going to landing2");
             startActivity(new Intent(MainActivity.this, LandingActivity.class));
         }
 
@@ -97,6 +99,7 @@ public class MainActivity extends AppCompatActivity {
      */
     public void signOut(View v){
         FirebaseAuth.getInstance().signOut();
+        Log.d("AUTHBUG", "going to landing3");
         startActivity(new Intent(this, LandingActivity.class));
     }
 }
