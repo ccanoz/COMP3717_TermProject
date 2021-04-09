@@ -21,7 +21,7 @@
     <com.google.android.material.chip.ChipGroup
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:padding="10dp"
+        android:padding="6dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/rvListings"
@@ -41,21 +41,21 @@
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="women" />
+            android:text="Women" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_canadians"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="canadians" />
+            android:text="Canadians" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_lowIncome"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="lowIncome" />
+            android:text="Low Income" />
 
 
     </com.google.android.material.chip.ChipGroup>

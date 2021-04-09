@@ -21,9 +21,9 @@
         <TextView
             android:id="@+id/textView_listing_name"
             android:layout_width="250dp"
-            android:layout_height="37dp"
+            android:layout_height="34dp"
             android:text="Scholarship Name"
-            android:textSize="25sp" />
+            android:textSize="29sp" />
 
         <TextView
             android:id="@+id/textView_listing_description"
