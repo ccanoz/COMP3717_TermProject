@@ -9,7 +9,7 @@ public class User {
     String name;
     String DOB;
     String gender;
-    String yearlyIncome;
+    String income;
     String GPA;
     String nationality;
     boolean employed;
@@ -24,7 +24,7 @@ public class User {
         this.name = name;
         this.DOB = DOB;
         this.gender = gender;
-        this.yearlyIncome = yearlyIncome;
+        this.income = yearlyIncome;
         this.GPA = GPA;
         this.nationality = nationality;
         this.employed = employed;
@@ -35,7 +35,7 @@ public class User {
     public void setName(String name){this.name = name;}
     public void setDOB(String DOB){this.DOB = DOB;}
     public void setGender(String gender){this.gender = gender;}
-    public void setYearlyIncome(String yearlyIncome){this.yearlyIncome = yearlyIncome;}
+    public void setIncome(String income){this.income = income;}
     public void setGPA(String GPA){this.GPA = GPA;}
     public void setNationality(String nationality){this.nationality = nationality;}
     public void setEmployed(boolean employed){this.employed = employed;}
@@ -45,7 +45,7 @@ public class User {
     public String getName(){ return name; }
     public String getDOB(){ return DOB; }
     public String getGender(){ return gender; }
-    public String getYearlyIncome(){ return yearlyIncome; }
+    public String getIncome(){ return income; }
     public String getGPA(){ return GPA; }
     public String getNationality(){ return nationality; }
     public boolean getEmployed(){ return employed; }
@@ -79,6 +79,6 @@ public class User {
     @NotNull
     public String toString(){
         return "name: " + name + ", DOB: " + DOB + ", gender: " + gender + ", yearlyIncome: " +
-                "" + yearlyIncome + ", nationality: " + nationality + ", employed: " + employed;
+                "" + income + ", nationality: " + nationality + ", employed: " + employed;
     }
 }

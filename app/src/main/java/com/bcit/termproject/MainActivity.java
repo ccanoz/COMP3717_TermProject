@@ -72,7 +72,7 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        if (currAuthUser != null) {
+        if (currAuthUser != null || currUser != null) {
             openFragment(FeedFragment.newInstance("", ""));
         } else{
             Log.d("AUTHBUG", "going to landing2");
@@ -98,6 +98,7 @@ public class MainActivity extends AppCompatActivity {
      * @param v a View, the sign out image button
      */
     public void signOut(View v){
+        currUser = null;
         FirebaseAuth.getInstance().signOut();
         Log.d("AUTHBUG", "going to landing3");
         startActivity(new Intent(this, LandingActivity.class));

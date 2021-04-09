@@ -1,6 +1,5 @@
 package com.bcit.termproject;
 
-import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -9,7 +8,6 @@ import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -26,12 +24,10 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.datepicker.MaterialDatePicker;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
@@ -175,14 +171,14 @@ public class AccountFragment extends Fragment {
         accDetailList.add("DOB");
         accDetailList.add("gender");
         accDetailList.add("gpa");
-        accDetailList.add("yearlyIncome");
+        accDetailList.add("income");
         accDetailList.add("nationality");
         accDetailList.add("employed");
         accDetailMap.put("name", currUser.getName());
         accDetailMap.put("DOB", currUser.getDOB());
         accDetailMap.put("gender", currUser.getGender());
         accDetailMap.put("gpa", currUser.getGPA());
-        accDetailMap.put("yearlyIncome", currUser.getYearlyIncome());
+        accDetailMap.put("income", currUser.getIncome());
         accDetailMap.put("nationality", currUser.getNationality());
 
         employStatus = currUser.getEmployed() ? "Employed" : "Unemployed";
@@ -202,8 +198,8 @@ public class AccountFragment extends Fragment {
                     case "name":
                         showFormDialog(label, currUser.getName());
                         return;
-                    case "yearlyIncome":
-                        showFormDialog(label, currUser.getYearlyIncome());
+                    case "income":
+                        showFormDialog(label, currUser.getIncome());
                         return;
                     case "gpa":
                         showFormDialog(label, currUser.getGPA());

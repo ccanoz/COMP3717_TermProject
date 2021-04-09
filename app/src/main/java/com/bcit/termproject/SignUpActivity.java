@@ -150,6 +150,7 @@ public class SignUpActivity extends AppCompatActivity {
     private void extractFieldStrings(){
         RadioGroup genderRadioGroup = findViewById(R.id.gender_radiogroup_signup);
         int selectedGender = genderRadioGroup.getCheckedRadioButtonId();
+        String selectedNationality = dropdown.getSelectedItem().toString();
 
         // get the values of all the fields
         name = ((EditText)findViewById(R.id.name_ET_signup)).getText().toString();
@@ -157,7 +158,7 @@ public class SignUpActivity extends AppCompatActivity {
         gender = ((RadioButton)findViewById(selectedGender)).getText().toString();
         yearlyIncome = ((EditText)findViewById(R.id.yearlyincome_ET_signup)).getText().toString();
         gpa = ((EditText)findViewById(R.id.gpa_ET_signup)).getText().toString();
-        nationality = ((TextView)findViewById(R.id.nationality_TV_signup)).getText().toString();
+        nationality = selectedNationality;
         employed = ((CheckBox)findViewById(R.id.employed_checkBox)).isChecked();
 
         bookmarks = new ArrayList<>();
@@ -172,7 +173,7 @@ public class SignUpActivity extends AppCompatActivity {
         user.setName(name);
         user.setDOB(DOB);
         user.setGender(gender);
-        user.setYearlyIncome(yearlyIncome);
+        user.setIncome(yearlyIncome);
         user.setGPA(gpa);
         user.setNationality(nationality);
         user.setEmployed(employed);

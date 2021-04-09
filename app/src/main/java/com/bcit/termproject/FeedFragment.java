@@ -153,6 +153,7 @@ public class FeedFragment extends Fragment {
                                 intent.putExtra("SCHOLARSHIP_ITEM", listing.getKey());
                                 startActivity(intent);
                             }
+
                             @Override
                             public void OnMarkClick(Listing listing) {
                                 Log.v("mark", "Bookmark clicked");
@@ -178,9 +179,12 @@ public class FeedFragment extends Fragment {
 
                     @Override
                     public void onDataChange(@NonNull DataSnapshot snapshot) {
+
                         currUser = MainActivity.currUser;
-                        String userNameString = getString(R.string.welcome, currUser.getName());
-                        currUserName.setText(userNameString);
+                        if (currUser != null) {
+                            String userNameString = getString(R.string.welcome, currUser.getName());
+                            currUserName.setText(userNameString);
+                        }
                     }
 
                     @Override
@@ -204,6 +208,8 @@ public class FeedFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+
+
     }
 
 
