@@ -102,4 +102,14 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingViewHolder> {
         return listings.size();
     }
 
+    @Override
+    public long getItemId(int position) {
+        return position;
+    }
+
+    @Override
+    public int getItemViewType(int position) {
+        return position;
+    }
+
 }
