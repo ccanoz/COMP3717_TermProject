@@ -135,7 +135,7 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/rv_requirements"
             android:layout_width="329dp"
-            android:layout_height="match_parent">
+            android:layout_height="150dp">
 
         </androidx.recyclerview.widget.RecyclerView>
         <Button
