@@ -63,6 +63,7 @@ public class ListingAdapter extends RecyclerView.Adapter<ListingViewHolder> {
 
         setBookmarkIcon(imageBookmarkView, listing);
 
+        tagChipGroup.removeAllViews();
         for (String tag: listing.getTags()) {
             Chip tagChip = new Chip(parentContext);
             tagChip.setText(tag);
