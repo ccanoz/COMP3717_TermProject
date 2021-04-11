@@ -5,8 +5,6 @@ import java.util.ArrayList;
 public class Listing {
     private String name;
     private String about;
-    private String tag1;
-    private String tag2;
     private String key;
     private ArrayList<String> tags = new ArrayList<>();
     private String pictureUrl;

@@ -35,9 +35,8 @@ import java.util.HashMap;
 import java.util.List;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link AccountFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Fragment that holds the current logged in user's account details. Contains methods
+ * that allow the user to update their information in the database.
  */
 public class AccountFragment extends Fragment {
 
@@ -55,37 +54,19 @@ public class AccountFragment extends Fragment {
 
     DatabaseReference dbUserInfo;
 
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public AccountFragment() {
         // Required empty public constructor
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Factory method that creates a new instance of
+     * this fragment.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment AccountFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static AccountFragment newInstance(String param1, String param2) {
-        AccountFragment fragment = new AccountFragment();
-        Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
-        fragment.setArguments(args);
-        return fragment;
+    public static AccountFragment newInstance() {
+        return new AccountFragment();
     }
-
 
 
     @Override
@@ -104,14 +85,12 @@ public class AccountFragment extends Fragment {
         return view;
     }
 
-
-
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-
-    }
-
+    /**
+     * Update a user for the field and corresponding value passed in.
+     *
+     * @param field       a String, indicates the field to update
+     * @param updateValue a String, the value to update to
+     */
     public void updateUser(String field, String updateValue) {
 
         Task<Void> setValueTask;
@@ -160,13 +139,12 @@ public class AccountFragment extends Fragment {
         });
     }
 
-    /**
-     *  Set the RecyclerView to display user account details.
-     */
-    private void setAccountDetails() {
-        accDetailList.clear();
-        accDetailMap.clear();
 
+    /**
+     * Populates an ArrayList with the names of each field for a user.
+     */
+    private void setAccDetailList() {
+        accDetailList.clear();
         accDetailList.add("name");
         accDetailList.add("DOB");
         accDetailList.add("gender");
@@ -174,15 +152,32 @@ public class AccountFragment extends Fragment {
         accDetailList.add("income");
         accDetailList.add("nationality");
         accDetailList.add("employed");
+
+    }
+
+    /**
+     * Populates a HashMap with the field name as the key, and corresponding values
+     * for the current user.
+     */
+    private void setAccDetailMap() {
+        accDetailMap.clear();
         accDetailMap.put("name", currUser.getName());
         accDetailMap.put("DOB", currUser.getDOB());
         accDetailMap.put("gender", currUser.getGender());
         accDetailMap.put("gpa", currUser.getGPA());
         accDetailMap.put("income", currUser.getIncome());
         accDetailMap.put("nationality", currUser.getNationality());
-
         employStatus = currUser.getEmployed() ? "Employed" : "Unemployed";
         accDetailMap.put("employed", employStatus);
+    }
+
+    /**
+     * Set the RecyclerView to display user account details.
+     */
+    private void setAccountDetails() {
+
+        setAccDetailList();
+        setAccDetailMap();
 
         AccountAdapter adapter = new AccountAdapter(accDetailMap, accDetailList);
 
@@ -191,7 +186,7 @@ public class AccountFragment extends Fragment {
             public void OnClick(String label) {
 
                 // Show the corresponding layout for the label passed in
-                switch(label) {
+                switch (label) {
                     case "DOB":
                         showDOBDialog();
                         return;
@@ -259,11 +254,11 @@ public class AccountFragment extends Fragment {
      * for editing account details.
      *
      * @param formId: an int, the id of the form layout
-     * @param label: String label for the user field
-     * @param value: String value for the user field
+     * @param label:  String label for the user field
+     * @param value:  String value for the user field
      * @return dialogView as a DialogView
      */
-    private View setDialogView(int formId, String label, String value){
+    private View setDialogView(int formId, String label, String value) {
         LayoutInflater inflater = getLayoutInflater();
         View dialogView = inflater.inflate(formId, null);
 
@@ -277,6 +272,7 @@ public class AccountFragment extends Fragment {
 
     /**
      * Display a spinner dialog if the user chooses to edit nationality or gender.
+     *
      * @param label: String label for the user field
      * @param value: String value for the user field
      */
@@ -323,6 +319,7 @@ public class AccountFragment extends Fragment {
 
     /**
      * Display a dialog with radio buttons if the user chooses to edit their employment status.
+     *
      * @param label: String label for the user field
      * @param value: String value for the user field
      */
@@ -336,7 +333,7 @@ public class AccountFragment extends Fragment {
         Button saveAccount = dialogView.findViewById(R.id.button_saveAccount);
 
         RadioGroup radioGroup = dialogView.findViewById(R.id.radioGroup_employment);
-        int currChecked = currUser.getEmployed()? R.id.radioButton_employed: R.id.radioButton_unemployed;
+        int currChecked = currUser.getEmployed() ? R.id.radioButton_employed : R.id.radioButton_unemployed;
         radioGroup.check(currChecked);
 
         AlertDialog alertDialog = dialogBuilder.create();

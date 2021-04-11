@@ -84,7 +84,7 @@ public class MainActivity extends AppCompatActivity {
                             openFragment(ItemsListingFragment.newInstance("", ""));
                             return true;
                         case R.id.account:
-                            openFragment(AccountFragment.newInstance("", ""));
+                            openFragment(AccountFragment.newInstance());
                             return true;
                     }
                     return false;
