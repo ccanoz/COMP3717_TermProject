@@ -1,6 +1,5 @@
 package com.bcit.termproject;
 
-import android.media.Image;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,9 +22,9 @@ public class ListingViewHolder extends RecyclerView.ViewHolder {
 
         nameTextView = itemView.findViewById(R.id.textView_listing_name);
         descTextView = itemView.findViewById(R.id.textView_listing_description);
-        imageBookmark = itemView.findViewById(R.id.imageView_scholBookmark2);
-        tagChipGroup = itemView.findViewById(R.id.chipGroup_tags);
-        imgPicture = itemView.findViewById(R.id.imageView_scholarship);
+        imageBookmark = itemView.findViewById(R.id.imageView_listing_bookmark);
+        tagChipGroup = itemView.findViewById(R.id.chipGroup_listing_tags);
+        imgPicture = itemView.findViewById(R.id.imageView_listing_scholarship);
 
     }
 }

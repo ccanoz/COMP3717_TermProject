@@ -14,7 +14,8 @@
         <activity android:name=".LoginActivity">
 
         </activity>
-        <activity android:name=".ScholarshipInfoActivity" />
+        <activity android:name=".ScholarshipInfoActivity"
+            android:parentActivityName=".MainActivity"/>
 
         <activity android:name=".SignUpActivity" >
 

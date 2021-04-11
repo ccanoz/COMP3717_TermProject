@@ -38,4 +38,11 @@
     <string name="_01_01_2000">01/01/2000</string>
     <string name="calendar_image">calendar image</string>
     <string name="filter_by">Filter By:</string>
+    <string name="schol_organization_logo">The organization logo</string>
+    <string name="schol_alert">Alert</string>
+    <string name="schol_bookmark">Bookmark</string>
+    <string name="schol_apply">Apply</string>
+    <string name="schol_requirements">Requirements</string>
+    <string name="schol_about">About</string>
+    <string name="scholarship_name">Scholarship Name</string>
 </resources>
