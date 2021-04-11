@@ -6,10 +6,11 @@
     android:layout_height="wrap_content">
 
     <ImageView
-        android:id="@+id/imageView_scholarship"
+        android:id="@+id/imageView_listing_scholarship"
         android:layout_width="75dp"
         android:layout_height="75dp"
         android:layout_weight="1"
+        android:contentDescription="@string/schol_organization_logo"
         tools:srcCompat="@tools:sample/avatars" />
 
     <LinearLayout
@@ -23,14 +24,14 @@
             android:id="@+id/textView_listing_name"
             android:layout_width="250dp"
             android:layout_height="35dp"
-            android:text="Scholarship Name"
+            android:contentDescription="@string/scholarship_name"
+            android:text="@string/scholarship_name"
             android:textSize="29sp" />
 
         <TextView
             android:id="@+id/textView_listing_description"
             android:layout_width="250dp"
-            android:layout_height="52dp"
-            android:text="Listing description!" />
+            android:layout_height="52dp" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -38,25 +39,22 @@
             android:orientation="horizontal">
 
             <com.google.android.material.chip.ChipGroup
-                android:id="@+id/chipGroup_tags"
-                android:layout_width="wrap_content"
+                android:id="@+id/chipGroup_listing_tags"
+                android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1" />
         </LinearLayout>
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/imageView_scholBookmark2"
+        android:id="@+id/imageView_listing_bookmark"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="1dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="3dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView_scholAbout"
-        app:layout_constraintEnd_toStartOf="@+id/imageView_scholAlert"
+        android:contentDescription="@string/schol_bookmark"
         app:layout_constraintHorizontal_bias="1.0"
-        app:layout_constraintStart_toStartOf="@+id/imageView_logo"
-        app:layout_constraintTop_toBottomOf="@+id/imageView_logo"
         app:layout_constraintVertical_bias="0.0"
         app:srcCompat="@drawable/baseline_bookmark_border_black_18dp" />
 

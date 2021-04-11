@@ -118,13 +118,13 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
      * Store all of the views in ScholarshipInfoActivity into variables.
      */
     private void getViews() {
-        scholBookmark = findViewById(R.id.fab_scholBookmark);
-        scholName = findViewById(R.id.textView_scholName);
-        scholAbout = findViewById(R.id.textView_scholAboutTxt);
+        scholBookmark = findViewById(R.id.fab_schol_bookmark);
+        scholName = findViewById(R.id.textView_schol_name);
+        scholAbout = findViewById(R.id.textView_schol_aboutTxt);
         scholAmount = findViewById(R.id.textView_schol_amount);
         scholOrg = findViewById(R.id.textView_schol_orgName);
-        applyButton = findViewById(R.id.button_scholApply);
-        rvRequirements = findViewById(R.id.rv_requirements);
+        applyButton = findViewById(R.id.button_schol_apply);
+        rvRequirements = findViewById(R.id.rv_schol_requirements);
     }
 
     /**
@@ -150,7 +150,7 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
         scholOrg.setText(organization);
         setApplyButton(url);
 
-        ImageView logoImage = findViewById(R.id.imageView_logo);
+        ImageView logoImage = findViewById(R.id.imageView_schol_orgLogo);
 
         new ImageDownloaderTask(logoImage).execute(logoUrl);
     }
