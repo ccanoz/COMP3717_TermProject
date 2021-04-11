@@ -95,7 +95,6 @@ public class ItemsListingFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-
         // Inflate the layout for this fragment
         View view =  inflater.inflate(R.layout.fragment_items_listing, container, false);
         currUserName = view.findViewById(R.id.textView_feed_user);
@@ -116,33 +115,18 @@ public class ItemsListingFragment extends Fragment {
 
     /**
      * Set up the filter chips and onClick handlers for the different tag types.
-     * @param view
+     * @param view View for this fragment
      */
     public void setFilterChips(View view){
         chipWomen = view.findViewById(R.id.chip_women);
         chipCanadians = view.findViewById(R.id.chip_canadians);
         chipLowIncome = view.findViewById(R.id.chip_lowIncome);
 
-        chipWomen.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                filterScholarships(v);
-            }
-        });
+        chipWomen.setOnClickListener(this::filterScholarships);
 
-        chipCanadians.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                filterScholarships(v);
-            }
-        });
+        chipCanadians.setOnClickListener(this::filterScholarships);
 
-        chipLowIncome.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                filterScholarships(v);
-            }
-        });
+        chipLowIncome.setOnClickListener(this::filterScholarships);
     }
 
 
@@ -251,13 +235,13 @@ public class ItemsListingFragment extends Fragment {
     public void filterScholarships(View v) {
         switch (v.getId()) {
             case R.id.chip_women:
-                openFragment(FilteredListingsFragment.newInstance("Women", ""));
+                openFragment(FilteredListingsFragment.newInstance("Women"));
                 break;
             case R.id.chip_canadians:
-                openFragment(FilteredListingsFragment.newInstance("Canadians", ""));
+                openFragment(FilteredListingsFragment.newInstance("Canadians"));
                 break;
             default:
-                openFragment(FilteredListingsFragment.newInstance("Low Income", ""));
+                openFragment(FilteredListingsFragment.newInstance("Low Income"));
                 break;
         }
     }
