@@ -54,6 +54,7 @@ public class FeedFragment extends Fragment {
     Button btnCanadians;
 
     TextView emptyText;
+    ListingAdapter adapter;
 
 
     // TODO: Rename parameter arguments, choose names that match
@@ -141,8 +142,7 @@ public class FeedFragment extends Fragment {
                         } else
                             emptyText.setVisibility(View.VISIBLE);
 
-                        ListingAdapter adapter = new ListingAdapter(listings);
-                        adapter.notifyDataSetChanged();
+                        adapter = new ListingAdapter(listings);
 
                         adapter.setOnAdapterItemListener(new OnAdapterItemListener() {
                             @Override
@@ -164,9 +164,9 @@ public class FeedFragment extends Fragment {
                                 bookmarkScholarship(listing);
                             }
                         });
-
                         rvListings.setAdapter(adapter);
                         rvListings.setLayoutManager(new LinearLayoutManager(getContext()));
+                        adapter.notifyDataSetChanged();
                     }
 
                     @Override

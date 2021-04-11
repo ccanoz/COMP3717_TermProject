@@ -25,6 +25,7 @@ public class MainActivity extends AppCompatActivity {
     public static FirebaseUser currAuthUser;
     public static User currUser;
     public static DatabaseReference dbUserInfo;
+    BottomNavigationView bottomNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,34 +35,22 @@ public class MainActivity extends AppCompatActivity {
 
         currAuthUser = FirebaseAuth.getInstance().getCurrentUser();
         dbUserInfo = FirebaseDatabase.getInstance().getReference("user");
-
-        BottomNavigationView bottomNavigation = findViewById(R.id.bottomNavigationView);
-        BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
-                item -> {
-                    switch (item.getItemId()) {
-                        case R.id.home:
-                            openFragment(FeedFragment.newInstance("", ""));
-                            return true;
-                        case R.id.search:
-                            openFragment(ItemsListingFragment.newInstance("", ""));
-                            return true;
-                        case R.id.account:
-                            openFragment(AccountFragment.newInstance("", ""));
-                            return true;
-                    }
-                    return false;
-                };
-        bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
+        currUser = null;
+        bottomNavigation = findViewById(R.id.bottomNavigationView);
     }
 
     @Override
     protected void onStart() {
+        Log.d("AUTHBUG", "in start of main onstart");
         super.onStart();
         dbUserInfo.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
+                Log.d("AUTHBUG", "IN ONDATACHANGE");
                 try {
                     currUser = snapshot.child(currAuthUser.getUid()).getValue(User.class);
+                    Log.d("AUTHBUG", currUser.getName());
+                    setFragments();
                 }catch (NullPointerException e){
                     Log.d("AUTHBUG", "going to landing1");
                     startActivity(new Intent(MainActivity.this, LandingActivity.class));
@@ -79,6 +68,28 @@ public class MainActivity extends AppCompatActivity {
             startActivity(new Intent(MainActivity.this, LandingActivity.class));
         }
 
+
+        Log.d("AUTHBUG", "in end of main onstart");
+    }
+
+    private void setFragments(){
+
+        BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
+                item -> {
+                    switch (item.getItemId()) {
+                        case R.id.home:
+                            openFragment(FeedFragment.newInstance("", ""));
+                            return true;
+                        case R.id.search:
+                            openFragment(ItemsListingFragment.newInstance("", ""));
+                            return true;
+                        case R.id.account:
+                            openFragment(AccountFragment.newInstance("", ""));
+                            return true;
+                    }
+                    return false;
+                };
+        bottomNavigation.setOnNavigationItemSelectedListener(navigationItemSelectedListener);
     }
 
     /**
