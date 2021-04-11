@@ -5,11 +5,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
-import android.graphics.drawable.Drawable;
 import android.net.Uri;
-import android.os.AsyncTask;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
@@ -22,7 +18,6 @@ import android.widget.Toast;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
-import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -30,21 +25,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.io.IOException;
-import java.io.InputStream;
-import java.lang.ref.WeakReference;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.NumberFormat;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * Activity that holds information for a Scholarship Listing. Holds methods that construct the view
+ * from Firebase data and toggle addition to the current user's bookmarks.
+ */
 public class ScholarshipInfoActivity extends AppCompatActivity {
 
-    HashMap<String, String> requirementsDesc = new HashMap<String, String>();
-    List<String> requirements = new ArrayList<String>();
+    HashMap<String, String> requirementsDesc = new HashMap<>();
+    List<String> requirements = new ArrayList<>();
     RecyclerView rvRequirements;
     TextView scholName;
     TextView scholAbout;
@@ -70,16 +63,9 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         scholId = intent.getStringExtra("SCHOLARSHIP_ITEM");
-        Log.v("key2", scholId);
 
-        scholBookmark = findViewById(R.id.fab_scholBookmark);
-        scholName = findViewById(R.id.textView_scholName);
-        scholAbout = findViewById(R.id.textView_scholAboutTxt);
-        scholAmount = findViewById(R.id.textView_schol_amount);
-        scholOrg = findViewById(R.id.textView_schol_orgName);
-        applyButton = findViewById(R.id.button_scholApply);
+        getViews();
 
-        rvRequirements = findViewById(R.id.rv_requirements);
         currAuthUser = MainActivity.currAuthUser;
 
         dbScholarships = FirebaseDatabase.getInstance().getReference("scholarship").child(scholId);
@@ -124,9 +110,22 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
 
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
+                Log.e("DatabaseError", error.getMessage());
             }
         });
+    }
+
+    /**
+     * Store all of the views in ScholarshipInfoActivity into variables.
+     */
+    private void getViews() {
+        scholBookmark = findViewById(R.id.fab_scholBookmark);
+        scholName = findViewById(R.id.textView_scholName);
+        scholAbout = findViewById(R.id.textView_scholAboutTxt);
+        scholAmount = findViewById(R.id.textView_schol_amount);
+        scholOrg = findViewById(R.id.textView_schol_orgName);
+        applyButton = findViewById(R.id.button_scholApply);
+        rvRequirements = findViewById(R.id.rv_requirements);
     }
 
     /**
@@ -160,16 +159,14 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
     /**
      * Sets the click listener to the apply button. The click listener redirects the user to the
      * scholarship url.
+     *
      * @param url the url of the scholarship application page
      */
     private void setApplyButton(String url){
-        applyButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Intent.ACTION_VIEW);
-                i.setData(Uri.parse(url));
-                startActivity(i);
-            }
+        applyButton.setOnClickListener(view -> {
+            Intent i = new Intent(Intent.ACTION_VIEW);
+            i.setData(Uri.parse(url));
+            startActivity(i);
         });
     }
 
@@ -223,7 +220,7 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
     /**
      * Toggles between bookmarking/un-bookmarking a scholarship.
      *
-     * @param v View
+     * @param v View, the button bound to this function
      */
     public void bookmarkScholarship(View v) {
         if (isBookmarked) {
@@ -240,7 +237,7 @@ public class ScholarshipInfoActivity extends AppCompatActivity {
     /**
      * Set an alarm for this scholarship to notify the user of any news regarding it.
      *
-     * @param v View
+     * @param v View, the button bound to this function
      */
     public void addAlarm(View v) {
         Toast.makeText(ScholarshipInfoActivity.this, "Alarm: Not Yet Implemented.", Toast.LENGTH_SHORT).show();
