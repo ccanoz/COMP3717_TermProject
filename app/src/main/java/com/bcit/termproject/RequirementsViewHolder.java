@@ -6,6 +6,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+/**
+ * ViewHolder for a Scholarship's requirements. Holds TextViews representing
+ * the title and description of a requirement.
+ */
 public class RequirementsViewHolder extends RecyclerView.ViewHolder {
 
     public TextView reqTitle;
