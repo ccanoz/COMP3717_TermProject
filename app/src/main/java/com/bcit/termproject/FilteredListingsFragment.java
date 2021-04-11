@@ -29,9 +29,9 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link FilteredListingsFragment#newInstance} factory method to
- * create an instance of this fragment.
+ * Fragment that displays a filtered view of the scholarship Listings. The listings displayed
+ * are based on the filter tag name that is passed in as a parameter on initialization of
+ * this fragment.
  */
 public class FilteredListingsFragment extends Fragment {
 
@@ -51,33 +51,27 @@ public class FilteredListingsFragment extends Fragment {
     Boolean isBookmarked = false;
     Chip chipTag;
 
-    // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
 
-    // TODO: Rename and change types of parameters
     private String tagName;
-    private String mParam2;
 
     public FilteredListingsFragment() {
         // Required empty public constructor
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Factory that returns a new FilteredListingsFragment.
+     * Parameter passed in represents the filter tag used to toggled
+     * the scholarship Listings displayed in this fragment.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
+     * @param tagName, String representing what to filter by
      * @return A new instance of fragment FilteredListingsFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static FilteredListingsFragment newInstance(String param1, String param2) {
+    public static FilteredListingsFragment newInstance(String tagName) {
         FilteredListingsFragment fragment = new FilteredListingsFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
+        args.putString(ARG_PARAM1, tagName);
         fragment.setArguments(args);
         return fragment;
     }
@@ -87,7 +81,6 @@ public class FilteredListingsFragment extends Fragment {
         super.onCreate(savedInstanceState);
         if (getArguments() != null) {
             tagName = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
         }
     }
 
@@ -101,12 +94,9 @@ public class FilteredListingsFragment extends Fragment {
         rvListings = view.findViewById(R.id.rvListings);
         chipTag = view.findViewById(R.id.chip_tag);
         chipTag.setText(tagName);
-        chipTag.setOnClickListener(v -> {
-            openFragment(ItemsListingFragment.newInstance("", ""));
-        });
+        chipTag.setOnClickListener(v -> openFragment(ItemsListingFragment.newInstance("", "")));
 
-        listings = new ArrayList<Listing>();
-
+        listings = new ArrayList<>();
         scholIds = new ArrayList<>();
 
         dbUserInfo = MainActivity.dbUserInfo;
@@ -117,75 +107,25 @@ public class FilteredListingsFragment extends Fragment {
         currAuthUser = MainActivity.currAuthUser;
         currUser = MainActivity.currUser;
 
+        setDbRefTagListener();
+        return view;
+    }
+
+    /**
+     * Listen to values for the tags in the database.
+     */
+    public void setDbRefTagListener() {
         dbRefTags.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d("FILTERED", "in onDataChange of tags");
                 scholIds.clear();
 
                 for(DataSnapshot dataSnapshot: snapshot.getChildren()) {
                     String scholId = dataSnapshot.getValue(String.class);
                     scholIds.add(scholId);
                 }
-                dbRefScholarship.addValueEventListener(
-                        new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                listings.clear();
 
-                                for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
-                                    ArrayList<String> tags = new ArrayList<>();
-                                    if (scholIds.contains(scholSnapshot.getKey())) {
-                                        String key = scholSnapshot.getKey();
-                                        String name = scholSnapshot.child("name").getValue(String.class);
-                                        String desc = scholSnapshot.child("about").getValue(String.class);
-
-                                        for (DataSnapshot tagSnap : scholSnapshot.child("tags").getChildren()) {
-                                            tags.add(tagSnap.getValue(String.class));
-                                        }
-                                        String img_url = scholSnapshot.child("logo").getValue(String.class);
-
-                                        Listing newListing = new Listing(name, desc, key, tags, img_url);
-
-                                        if (currUser.checkScholBookmarked(newListing.getKey())){
-                                            newListing.setIsBookmarked(true);
-                                        }
-
-                                        listings.add(newListing);
-
-                                    }
-                                }
-
-                                ListingAdapter adapter = new ListingAdapter(listings);
-
-                                adapter.setOnAdapterItemListener(new OnAdapterItemListener() {
-                                    @Override
-                                    public void OnLongClick(Listing listing) {
-                                        Intent intent = new Intent(getContext(), ScholarshipInfoActivity.class);
-                                        intent.putExtra("SCHOLARSHIP_ITEM", listing.getKey());
-                                        startActivity(intent);
-                                    }
-
-                                    @Override
-                                    public void OnMarkClick(Listing listing) {
-                                        scholId = listing.getKey();
-                                        currUser = MainActivity.currUser;
-                                        isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
-                                        listing.setIsBookmarked(isBookmarked);
-                                        bookmarkScholarship(listing);
-                                    }
-                                });
-
-                                rvListings.setAdapter(adapter);
-                                rvListings.setLayoutManager(new LinearLayoutManager(getContext()));
-                            }
-
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-
-                            }
-                        }
-                );
+                setDbRefScholarshipListener();
 
             }
 
@@ -194,23 +134,88 @@ public class FilteredListingsFragment extends Fragment {
 
             }
 
-
-
         });
 
-        return view;
     }
 
-    @Override
-    public void onStart() {
-        Log.d("FILTERED", "in onStart");
-        super.onStart();
+    /**
+     * Get scholarship listing details from the database, and use to create Listing objects.
+     * Add the Listing objects created to an ArrayList.
+     * @param snapshot DataSnapshot of scholarship details
+     */
+    public void setListings(DataSnapshot snapshot) {
 
+        listings.clear();
 
+        // Loop through each scholarship in the database
+        for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
 
+            ArrayList<String> tags = new ArrayList<>();
 
+            if (scholIds.contains(scholSnapshot.getKey())) {
+                String key = scholSnapshot.getKey();
+                String name = scholSnapshot.child("name").getValue(String.class);
+                String desc = scholSnapshot.child("about").getValue(String.class);
+
+                for (DataSnapshot tagSnap : scholSnapshot.child("tags").getChildren()) {
+                    tags.add(tagSnap.getValue(String.class));
+                }
+                String img_url = scholSnapshot.child("logo").getValue(String.class);
+
+                Listing newListing = new Listing(name, desc, key, tags, img_url);
+
+                if (currUser.checkScholBookmarked(newListing.getKey())){
+                    newListing.setIsBookmarked(true);
+                }
+
+                listings.add(newListing);
+
+            }
+        }
     }
 
+    /**
+     * Listen to values for scholarships in the database.
+     */
+    public void setDbRefScholarshipListener(){
+        dbRefScholarship.addValueEventListener(
+                new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                        setListings(snapshot);
+
+                        ListingAdapter adapter = new ListingAdapter(listings);
+
+                        adapter.setOnAdapterItemListener(new OnAdapterItemListener() {
+                            @Override
+                            public void OnLongClick(Listing listing) {
+                                Intent intent = new Intent(getContext(), ScholarshipInfoActivity.class);
+                                intent.putExtra("SCHOLARSHIP_ITEM", listing.getKey());
+                                startActivity(intent);
+                            }
+
+                            @Override
+                            public void OnMarkClick(Listing listing) {
+                                scholId = listing.getKey();
+                                currUser = MainActivity.currUser;
+                                isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
+                                listing.setIsBookmarked(isBookmarked);
+                                bookmarkScholarship(listing);
+                            }
+                        });
+
+                        rvListings.setAdapter(adapter);
+                        rvListings.setLayoutManager(new LinearLayoutManager(getContext()));
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                }
+        );
+    }
 
     /**
      * Update the current user's bookmark list to reflect whether the current scholarship is bookmarked or not.
@@ -230,15 +235,6 @@ public class FilteredListingsFragment extends Fragment {
     }
 
     /**
-     * Sets the bookmark icon depending on if the current scholarship
-     * is bookmarked or not.
-     */
-    public void setBookmarkIcon() {
-        int iconId = isBookmarked? R.drawable.ic_bookmark_added: R.drawable.ic_bookmark_add;
-//        scholBookmark.setImageResource(iconId);
-    }
-
-    /**
      * Toggles between bookmarking/un-bookmarking a scholarship.
      */
     public void bookmarkScholarship(Listing listing) {
@@ -252,6 +248,10 @@ public class FilteredListingsFragment extends Fragment {
         updateBookmarks(listing);
     }
 
+    /**
+     * Opens the specified fragment passed in.
+     * @param fragment a Fragment.
+     */
     public void openFragment(Fragment fragment) {
         FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
