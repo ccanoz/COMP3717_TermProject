@@ -10,18 +10,29 @@ import android.view.View;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 
+import java.util.Objects;
+
 public class LandingActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
 
+    /**
+     * Calls the parent's onCreate and initializes the FirebaseAuth instance mAuth to check if the
+     * user is logged in or not.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_landing);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
         mAuth = FirebaseAuth.getInstance();
     }
 
+    /**
+     * Calls the parent's method onStart and checks if there is a Use that is logged in.
+     * If there is, this method redirects the authenticated user to the MainActivity.
+     */
     @Override
     public void onStart() {
         super.onStart();

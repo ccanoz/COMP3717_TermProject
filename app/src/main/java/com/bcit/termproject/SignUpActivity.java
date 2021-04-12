@@ -45,7 +45,10 @@ public class SignUpActivity extends AppCompatActivity {
     private boolean employed;
     private ArrayList<String> bookmarks;
 
-
+    /**
+     * Calls the parent's onCreate method and initialize the Firebase variables and layout views.
+     * @param savedInstanceState a Bundle
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -53,6 +56,7 @@ public class SignUpActivity extends AppCompatActivity {
         Objects.requireNonNull(getSupportActionBar()).hide();
         getSupportActionBar().hide();
 
+        // gets important variables from firebase and layouts
         mAuth = FirebaseAuth.getInstance();
         database = FirebaseDatabase.getInstance();
         email = findViewById(R.id.email_ET_signup);
@@ -61,13 +65,16 @@ public class SignUpActivity extends AppCompatActivity {
         dobButton = findViewById(R.id.dob_button);
         dropdown = findViewById(R.id.nationality_spinner_signup);
 
-
+        // set layout views DatePicker and Spinner
         setupDatePicker();
         setupSpinner();
 
 
     }
 
+    /**
+     * Calls the parent's method onStart and initializes the Firebase User currentUser.
+     */
     @Override
     public void onStart() {
         super.onStart();

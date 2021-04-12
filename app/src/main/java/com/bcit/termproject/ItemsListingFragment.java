@@ -1,5 +1,6 @@
 package com.bcit.termproject;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -27,13 +28,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link ItemsListingFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ItemsListingFragment extends Fragment {
+public class ItemsListingFragment extends Fragment implements OnAdapterItemListener {
 
     FirebaseUser currAuthUser;
     User currUser;
@@ -66,16 +68,12 @@ public class ItemsListingFragment extends Fragment {
      * Use this factory method to create a new instance of
      * this fragment using the provided parameters.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment ItemsListingFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ItemsListingFragment newInstance(String param1, String param2) {
+    public static ItemsListingFragment newInstance() {
         ItemsListingFragment fragment = new ItemsListingFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -83,10 +81,7 @@ public class ItemsListingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        if (getArguments() != null) {
-            mParam1 = getArguments().getString(ARG_PARAM1);
-            mParam2 = getArguments().getString(ARG_PARAM2);
-        }
+
 
 
     }
@@ -106,7 +101,7 @@ public class ItemsListingFragment extends Fragment {
         currUser = MainActivity.currUser;
 
         rvListings = view.findViewById(R.id.rvListings);
-        listings = new ArrayList<Listing>();
+        listings = new ArrayList<>();
 
         databaseSchol = FirebaseDatabase.getInstance().getReference("scholarship");
         dbUserInfo = MainActivity.dbUserInfo;
@@ -162,24 +157,7 @@ public class ItemsListingFragment extends Fragment {
 
                 ListingAdapter adapter = new ListingAdapter(listings);
 
-                adapter.setOnAdapterItemListener(new OnAdapterItemListener() {
-                    @Override
-                    public void OnLongClick(Listing listing) {
-                        Log.v("key", listing.getKey());
-                        Intent intent = new Intent(getContext(), ScholarshipInfoActivity.class);
-                        intent.putExtra("SCHOLARSHIP_ITEM", listing.getKey());
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void OnMarkClick(Listing listing) {
-                        Log.v("mark", "Bookmark clicked");
-                        scholId = listing.getKey();
-                        isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
-                        listing.setIsBookmarked(isBookmarked);
-                        bookmarkScholarship(listing);
-                    }
-                });
+                adapter.setOnAdapterItemListener(ItemsListingFragment.this);
 
                 rvListings.setAdapter(adapter);
                 rvListings.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -226,12 +204,13 @@ public class ItemsListingFragment extends Fragment {
     }
 
     public void openFragment(Fragment fragment) {
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
     }
 
+    @SuppressLint("NonConstantResourceId")
     public void filterScholarships(View v) {
         switch (v.getId()) {
             case R.id.chip_women:
@@ -246,4 +225,20 @@ public class ItemsListingFragment extends Fragment {
         }
     }
 
+    @Override
+    public void OnLongClick(Listing listing) {
+        Log.v("key", listing.getKey());
+        Intent intent = new Intent(getContext(), ScholarshipInfoActivity.class);
+        intent.putExtra("SCHOLARSHIP_ITEM", listing.getKey());
+        startActivity(intent);
+    }
+
+    @Override
+    public void OnMarkClick(Listing listing) {
+        Log.v("mark", "Bookmark clicked");
+        scholId = listing.getKey();
+        isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
+        listing.setIsBookmarked(isBookmarked);
+        bookmarkScholarship(listing);
+    }
 }

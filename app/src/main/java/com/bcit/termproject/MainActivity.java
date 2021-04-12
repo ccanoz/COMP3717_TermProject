@@ -1,9 +1,9 @@
 package com.bcit.termproject;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
 
 import androidx.annotation.NonNull;
@@ -20,68 +20,50 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-public class MainActivity extends AppCompatActivity {
+import java.util.Objects;
+
+public class MainActivity extends AppCompatActivity implements ValueEventListener {
 
     public static FirebaseUser currAuthUser;
     public static User currUser;
     public static DatabaseReference dbUserInfo;
-    BottomNavigationView bottomNavigation;
+    private BottomNavigationView bottomNavigation;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        getSupportActionBar().hide();
+        Objects.requireNonNull(getSupportActionBar()).hide();
 
         currAuthUser = FirebaseAuth.getInstance().getCurrentUser();
         dbUserInfo = FirebaseDatabase.getInstance().getReference("user");
-        currUser = null;
+        currUser = null; // reset user
         bottomNavigation = findViewById(R.id.bottomNavigationView);
     }
 
     @Override
     protected void onStart() {
-        Log.d("AUTHBUG", "in start of main onstart");
         super.onStart();
-        dbUserInfo.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                Log.d("AUTHBUG", "IN ONDATACHANGE");
-                try {
-                    currUser = snapshot.child(currAuthUser.getUid()).getValue(User.class);
-                    Log.d("AUTHBUG", currUser.getName());
-                    setFragments();
-                }catch (NullPointerException e){
-                    Log.d("AUTHBUG", "going to landing1");
-                    startActivity(new Intent(MainActivity.this, LandingActivity.class));
-                }
-            }
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-
-            }
-        });
+        dbUserInfo.addValueEventListener(this);
         if (currAuthUser != null || currUser != null) {
             openFragment(FeedFragment.newInstance("", ""));
-        } else{
-            Log.d("AUTHBUG", "going to landing2");
+        } else {
             startActivity(new Intent(MainActivity.this, LandingActivity.class));
         }
-
-
-        Log.d("AUTHBUG", "in end of main onstart");
     }
 
-    private void setFragments(){
-
-        BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
+    /**
+     * Sets the fragments that each item in the bottom navigation should be linked to.
+     */
+    private void setFragments() {
+        @SuppressLint("NonConstantResourceId") BottomNavigationView.OnNavigationItemSelectedListener navigationItemSelectedListener =
                 item -> {
                     switch (item.getItemId()) {
                         case R.id.home:
                             openFragment(FeedFragment.newInstance("", ""));
                             return true;
                         case R.id.search:
-                            openFragment(ItemsListingFragment.newInstance("", ""));
+                            openFragment(ItemsListingFragment.newInstance());
                             return true;
                         case R.id.account:
                             openFragment(AccountFragment.newInstance());
@@ -94,6 +76,7 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Helper method to open different fragments in the main activity.
+     *
      * @param fragment a Fragment, the different pages in our app (home, search or account
      *                 fragments)
      */
@@ -106,12 +89,37 @@ public class MainActivity extends AppCompatActivity {
 
     /**
      * Click listener for the sign out image button.
+     *
      * @param v a View, the sign out image button
      */
-    public void signOut(View v){
+    public void signOut(View v) {
         currUser = null;
         FirebaseAuth.getInstance().signOut();
-        Log.d("AUTHBUG", "going to landing3");
         startActivity(new Intent(this, LandingActivity.class));
+    }
+
+    /**
+     * ValueEventListener method that listens to changes in the dbUserInfo variable (that represents
+     * the Firebase database)
+     * @param snapshot a DataSnapshot
+     */
+    @Override
+    public void onDataChange(@NonNull DataSnapshot snapshot) {
+        try {
+            currUser = snapshot.child(currAuthUser.getUid()).getValue(User.class);
+            setFragments();
+        } catch (NullPointerException e) {
+            startActivity(new Intent(MainActivity.this, LandingActivity.class));
+        }
+    }
+
+    /**
+     * Triggered if this listener either failed at the server, or is removed. Logs the error message
+     * to the Logcat.
+     * @param error the error description that we get from Firebase.
+     */
+    @Override
+    public void onCancelled(@NonNull DatabaseError error) {
+        Log.d("error", error.getMessage());
     }
 }

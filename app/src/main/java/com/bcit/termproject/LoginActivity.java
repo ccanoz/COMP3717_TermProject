@@ -18,6 +18,11 @@ public class LoginActivity extends AppCompatActivity {
     private EditText emailET;
     private EditText passwordET;
 
+    /**
+     * Initializes the email and password views, as well as the instance of FirebaseAuth in order
+     * to perform the authentication of the User.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,12 +45,9 @@ public class LoginActivity extends AppCompatActivity {
         mAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, task -> {
                     if (task.isSuccessful()) {
-                        // Sign in success, update UI with the signed-in user's information
-                        Log.d("LOGIN", "signInWithEmail:success");
                         startActivity(new Intent(LoginActivity.this, MainActivity.class));
                     } else {
                         // If sign in fails, display a message to the user.
-                        Log.w("LOGIN", "signInWithEmail:failure", task.getException());
                         Toast.makeText(LoginActivity.this, "Authentication failed.",
                                 Toast.LENGTH_SHORT).show();
                     }

@@ -1,6 +1,5 @@
 package com.bcit.termproject;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -16,12 +15,17 @@ public class RequirementsAdapter extends RecyclerView.Adapter<RequirementsViewHo
 
     private HashMap<String, String> requirementsDesc;
     private List<String> requirementsList;
-
     public RequirementsAdapter(HashMap<String, String> requirementsDesc, List<String> requirements) {
         this.requirementsList = requirements;
         this.requirementsDesc = requirementsDesc;
     }
 
+    /**
+     * Inflates the layout and returns a RequirementsViewHolder view holder.
+     * @param parent a ViewGroup
+     * @param viewType an int
+     * @return a RequirementsViewHolder
+     */
     @NonNull
     @Override
     public RequirementsViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
@@ -31,6 +35,11 @@ public class RequirementsAdapter extends RecyclerView.Adapter<RequirementsViewHo
         return new RequirementsViewHolder(requirementsView);
     }
 
+    /**
+     * Sets each requirement's title and description text views.
+     * @param holder the RequirementsViewHolder object
+     * @param position an int
+     */
     @Override
     public void onBindViewHolder(@NonNull RequirementsViewHolder holder, int position) {
         TextView reqTitle = holder.reqTitle;
@@ -41,6 +50,10 @@ public class RequirementsAdapter extends RecyclerView.Adapter<RequirementsViewHo
         reqDesc.setText(requirementsDesc.get(requirement));
     }
 
+    /**
+     * Get the size of the list of requirements stored in this adapter.
+     * @return an int
+     */
     @Override
     public int getItemCount() {
         return requirementsList.size();

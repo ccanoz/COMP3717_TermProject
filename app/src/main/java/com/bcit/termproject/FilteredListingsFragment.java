@@ -92,7 +92,7 @@ public class FilteredListingsFragment extends Fragment {
         rvListings = view.findViewById(R.id.rvListings);
         chipTag = view.findViewById(R.id.chip_tag);
         chipTag.setText(tagName);
-        chipTag.setOnClickListener(v -> openFragment(ItemsListingFragment.newInstance("", "")));
+        chipTag.setOnClickListener(v -> openFragment(ItemsListingFragment.newInstance()));
 
         listings = new ArrayList<>();
         scholIds = new ArrayList<>();
