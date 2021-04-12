@@ -5,11 +5,9 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -28,10 +26,7 @@ import com.google.firebase.database.ValueEventListener;
 import java.util.ArrayList;
 
 /**
- * A simple {@link Fragment} subclass.
- * Use the {@link FeedFragment#newInstance} factory method to
- * create an instance of this fragment.
- * Shows user welcome page, as well as their bookmarks
+ * Fragment that displays the feed seen on the main page after log-in.
  */
 public class FeedFragment extends Fragment {
 
@@ -49,34 +44,18 @@ public class FeedFragment extends Fragment {
     TextView emptyText;
     ListingAdapter adapter;
 
-
-    // TODO: Rename parameter arguments, choose names that match
-    // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
-    private static final String ARG_PARAM1 = "param1";
-    private static final String ARG_PARAM2 = "param2";
-
-    // TODO: Rename and change types of parameters
-    private String mParam1;
-    private String mParam2;
-
     public FeedFragment() {
         // Required empty public constructor
     }
 
     /**
-     * Use this factory method to create a new instance of
-     * this fragment using the provided parameters.
+     * Factory that returns a new FeedFragment.
      *
-     * @param param1 Parameter 1.
-     * @param param2 Parameter 2.
      * @return A new instance of fragment FeedFragment.
      */
-    // TODO: Rename and change types and number of parameters
-    public static FeedFragment newInstance(String param1, String param2) {
+    public static FeedFragment newInstance() {
         FeedFragment fragment = new FeedFragment();
         Bundle args = new Bundle();
-        args.putString(ARG_PARAM1, param1);
-        args.putString(ARG_PARAM2, param2);
         fragment.setArguments(args);
         return fragment;
     }
@@ -93,7 +72,6 @@ public class FeedFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_feed, container, false);
         currUserName = view.findViewById(R.id.textView_feed_user);
         currAuthUser = MainActivity.currAuthUser;
-        currUser = MainActivity.currUser;
 
         rvListings = view.findViewById(R.id.rv_bookmarks);
         listings = new ArrayList<Listing>();
@@ -102,28 +80,31 @@ public class FeedFragment extends Fragment {
         dbRefSchol = FirebaseDatabase.getInstance().getReference("scholarship");
         dbUserInfo = MainActivity.dbUserInfo;
 
+        // Listen to data in the database for the current user
         setDbUserInfoListener();
 
         return view;
     }
 
     /**
-     * Lists user's name, pulled from database
+     * Adds a value event listener to the database reference for the current user.
+     * Sets the welcome message for the current user and sets up the user's
+     * Bookmark list.
      */
     public void setDbUserInfoListener() {
         dbUserInfo.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-
                 currUser = MainActivity.currUser;
                 if (currUser != null) {
                     String userNameString = getString(R.string.welcome, currUser.getName());
                     currUserName.setText(userNameString);
                 }
 
+                // Listen to the data for the scholarships
                 setDbRefScholListener();
-
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -132,66 +113,95 @@ public class FeedFragment extends Fragment {
     }
 
     /**
-     * Pulls scholarship info from user's bookmarked scholarships for recyclerview
+     * Get scholarship listing details from the database, and use to create Listing objects.
+     * Add the Listing objects created to an ArrayList.
+     * @param snapshot DataSnapshot of scholarship details
+     */
+    public void setListings(DataSnapshot snapshot) {
+        listings.clear();
+        for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
+            ArrayList<String> tags = new ArrayList<>();
+
+            // Check if scholarship id exists in the user's bookmark list before creating a Listing
+            if (currUser != null && currUser.checkScholBookmarked(scholSnapshot.getKey())) {
+                String key = scholSnapshot.getKey();
+                String name = scholSnapshot.child("name").getValue(String.class);
+                String desc = scholSnapshot.child("about").getValue(String.class);
+
+                for (DataSnapshot tagSnap : scholSnapshot.child("tags").getChildren()) {
+                    tags.add(tagSnap.getValue(String.class));
+                }
+                String img_url = scholSnapshot.child("logo").getValue(String.class);
+
+                Listing newListing = new Listing(name, desc, key, tags, img_url);
+                newListing.setIsBookmarked(true);
+                listings.add(newListing);
+            }
+        }
+
+    }
+
+
+    /**
+     * Populate the RecyclerView with the details for each Listing.
+     */
+    public void setRvListings() {
+
+        // If no Bookmarked Listings, display a message
+        checkBookmarkedEmpty();
+
+        adapter = new ListingAdapter(listings);
+
+        adapter.setOnAdapterItemListener(new OnAdapterItemListener() {
+
+            // Launches the scholarship clicked
+            @Override
+            //Not actually a long click
+            public void OnLongClick(Listing listing) {
+                //On click, go to intent with clicked listing key passed with intent
+                Intent intent = new Intent(getContext(), ScholarshipInfoActivity.class);
+                intent.putExtra("SCHOLARSHIP_ITEM", listing.getKey());
+                startActivity(intent);
+            }
+
+            // Toggles the bookmark icon
+            @Override
+            public void OnMarkClick(Listing listing) {
+                //On click, bookmark listing
+                scholId = listing.getKey();
+                isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
+                listing.setIsBookmarked(isBookmarked);
+                bookmarkScholarship(listing);
+            }
+        });
+
+        rvListings.setAdapter(adapter);
+        rvListings.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter.notifyDataSetChanged();
+    }
+
+    /**
+     * Check if the user has no bookmarked listings and display a message
+     * that there are no bookmarked listings.
+     */
+    public void checkBookmarkedEmpty() {
+        if (!listings.isEmpty()) {
+            //if data is available, don't show the empty text
+            emptyText.setVisibility(View.GONE);
+        } else
+            emptyText.setVisibility(View.VISIBLE);
+    }
+
+    /**
+     * Add a listener to values from the database and use the data to populate
+     * the RecyclerView.
      */
     public void setDbRefScholListener() {
         dbRefSchol.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                listings.clear();
-                for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
-                    //Listener to fill recycler with values from scholarship database
-                    ArrayList<String> tags = new ArrayList<>();
-
-                    if (currUser != null && currUser.checkScholBookmarked(scholSnapshot.getKey())) {
-                        String key = scholSnapshot.getKey();
-                        String name = scholSnapshot.child("name").getValue(String.class);
-                        String desc = scholSnapshot.child("about").getValue(String.class);
-
-                        for (DataSnapshot tagSnap : scholSnapshot.child("tags").getChildren()) {
-                            tags.add(tagSnap.getValue(String.class));
-                        }
-                        String img_url = scholSnapshot.child("logo").getValue(String.class);
-
-                        Listing newListing = new Listing(name, desc, key, tags, img_url);
-                        newListing.setIsBookmarked(true);
-                        listings.add(newListing);
-                    }
-                }
-
-                if (!listings.isEmpty()) {
-                    //if data is available, don't show the empty text
-                    emptyText.setVisibility(View.GONE);
-                } else
-                    emptyText.setVisibility(View.VISIBLE);
-
-                adapter = new ListingAdapter(listings);
-
-                adapter.setOnAdapterItemListener(new OnAdapterItemListener() {
-                    @Override
-                    //Not actually a long click
-                    public void OnLongClick(Listing listing) {
-                        //On click, go to intent with clicked listing key passed with intent
-                        Log.v("key", listing.getKey());
-                        Intent intent = new Intent(getContext(), ScholarshipInfoActivity.class);
-                        intent.putExtra("SCHOLARSHIP_ITEM", listing.getKey());
-                        startActivity(intent);
-                    }
-
-                    @Override
-                    public void OnMarkClick(Listing listing) {
-                        //On click, bookmark listing
-                        Log.v("mark", "Bookmark clicked");
-                        scholId = listing.getKey();
-                        currUser = MainActivity.currUser;
-                        isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
-                        listing.setIsBookmarked(isBookmarked);
-                        bookmarkScholarship(listing);
-                    }
-                });
-                rvListings.setAdapter(adapter);
-                rvListings.setLayoutManager(new LinearLayoutManager(getContext()));
-                adapter.notifyDataSetChanged();
+                setListings(snapshot);
+                setRvListings();
             }
 
             @Override
@@ -233,11 +243,5 @@ public class FeedFragment extends Fragment {
         updateBookmarks(listing);
     }
 
-    public void openFragment(Fragment fragment) {
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
-        transaction.replace(R.id.container, fragment);
-        transaction.addToBackStack(null);
-        transaction.commit();
-    }
 
 }

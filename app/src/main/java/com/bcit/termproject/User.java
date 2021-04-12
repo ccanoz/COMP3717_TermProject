@@ -14,10 +14,24 @@ public class User {
     String nationality;
     boolean employed;
 
+    /**
+     * Default constructor for the User class. Required to initialize a User through a Firebase User
+     */
     public User(){
         // Default constructor required
     }
 
+    /**
+     * Initialize a with member variables.
+     * @param bookmarked a Array of Strings, the list of the IDs of the Listings that the User has bookmarked
+     * @param name a String
+     * @param DOB a String
+     * @param gender a String
+     * @param yearlyIncome a String
+     * @param GPA a String
+     * @param nationality a String
+     * @param employed a boolean
+     */
     public User(ArrayList<String> bookmarked, String name, String DOB, String gender, String yearlyIncome, String GPA,
                 String nationality, boolean employed){
         this.bookmarked = bookmarked;
@@ -76,6 +90,11 @@ public class User {
             this.bookmarked.remove(scholId);
     }
 
+    /**
+     * Returns a nicely formatted String that contains information about the User.
+     * For debugging purposes.
+     * @return a String
+     */
     @NotNull
     public String toString(){
         return "name: " + name + ", DOB: " + DOB + ", gender: " + gender + ", yearlyIncome: " +
