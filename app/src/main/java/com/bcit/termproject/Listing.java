@@ -2,6 +2,9 @@ package com.bcit.termproject;
 
 import java.util.ArrayList;
 
+/**
+ * Listing class for all the information in a scholarship listing
+ */
 public class Listing {
     private String name;
     private String about;

@@ -9,6 +9,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.google.android.material.chip.ChipGroup;
 
+/**
+ * Holder class for listing class to recycler
+ */
 public class ListingViewHolder extends RecyclerView.ViewHolder {
 
     public TextView nameTextView;

@@ -134,12 +134,14 @@ public class ItemsListingFragment extends Fragment {
     public void onStart() {
         super.onStart();
 
+        //Listener to fill recycler with values from scholarship database
         databaseSchol.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 listings.clear();
                 for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
                     Log.v("snapshot", scholSnapshot.getKey());
+                    //Set values
                     ArrayList<String> tags = new ArrayList<>();
                     String key = scholSnapshot.getKey();
                     String name = scholSnapshot.child("name").getValue(String.class);
@@ -156,7 +158,7 @@ public class ItemsListingFragment extends Fragment {
                     if (currUser.checkScholBookmarked(newListing.getKey())){
                         newListing.setIsBookmarked(true);
                     }
-
+                    //Add listing to list for recycler view
                     listings.add(newListing);
                 }
 
@@ -165,6 +167,7 @@ public class ItemsListingFragment extends Fragment {
                 adapter.setOnAdapterItemListener(new OnAdapterItemListener() {
                     @Override
                     public void OnLongClick(Listing listing) {
+                        //On click, go to intent with clicked listing key passed with intent
                         Log.v("key", listing.getKey());
                         Intent intent = new Intent(getContext(), ScholarshipInfoActivity.class);
                         intent.putExtra("SCHOLARSHIP_ITEM", listing.getKey());
@@ -173,6 +176,7 @@ public class ItemsListingFragment extends Fragment {
 
                     @Override
                     public void OnMarkClick(Listing listing) {
+                        //On click, bookmark listing
                         Log.v("mark", "Bookmark clicked");
                         scholId = listing.getKey();
                         isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
@@ -232,6 +236,10 @@ public class ItemsListingFragment extends Fragment {
         transaction.commit();
     }
 
+    /**
+     * Open fragment with filters based on selected tag
+     * @param v
+     */
     public void filterScholarships(View v) {
         switch (v.getId()) {
             case R.id.chip_women:

@@ -31,6 +31,7 @@ import java.util.ArrayList;
  * A simple {@link Fragment} subclass.
  * Use the {@link FeedFragment#newInstance} factory method to
  * create an instance of this fragment.
+ * Shows user welcome page, as well as their bookmarks
  */
 public class FeedFragment extends Fragment {
 
@@ -106,6 +107,9 @@ public class FeedFragment extends Fragment {
         return view;
     }
 
+    /**
+     * Lists user's name, pulled from database
+     */
     public void setDbUserInfoListener() {
         dbUserInfo.addValueEventListener(new ValueEventListener() {
             @Override
@@ -127,13 +131,16 @@ public class FeedFragment extends Fragment {
         });
     }
 
+    /**
+     * Pulls scholarship info from user's bookmarked scholarships for recyclerview
+     */
     public void setDbRefScholListener() {
         dbRefSchol.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 listings.clear();
                 for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
-                    Log.v("snapshot", scholSnapshot.getKey());
+                    //Listener to fill recycler with values from scholarship database
                     ArrayList<String> tags = new ArrayList<>();
 
                     if (currUser != null && currUser.checkScholBookmarked(scholSnapshot.getKey())) {
@@ -164,6 +171,7 @@ public class FeedFragment extends Fragment {
                     @Override
                     //Not actually a long click
                     public void OnLongClick(Listing listing) {
+                        //On click, go to intent with clicked listing key passed with intent
                         Log.v("key", listing.getKey());
                         Intent intent = new Intent(getContext(), ScholarshipInfoActivity.class);
                         intent.putExtra("SCHOLARSHIP_ITEM", listing.getKey());
@@ -172,6 +180,7 @@ public class FeedFragment extends Fragment {
 
                     @Override
                     public void OnMarkClick(Listing listing) {
+                        //On click, bookmark listing
                         Log.v("mark", "Bookmark clicked");
                         scholId = listing.getKey();
                         currUser = MainActivity.currUser;
