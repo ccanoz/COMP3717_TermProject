@@ -29,6 +29,10 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
     public static DatabaseReference dbUserInfo;
     private BottomNavigationView bottomNavigation;
 
+    /**
+     * Initialize the FirebaseUser currAuthUser and the reference to the User database dbUserInfo.
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -41,6 +45,10 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
         bottomNavigation = findViewById(R.id.bottomNavigationView);
     }
 
+    /**
+     * Checks if the user is logged in. If it isn't, this method redirects the user to the landing
+     * page.
+     */
     @Override
     protected void onStart() {
         super.onStart();

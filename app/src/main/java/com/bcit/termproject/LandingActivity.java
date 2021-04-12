@@ -19,7 +19,7 @@ public class LandingActivity extends AppCompatActivity {
     /**
      * Calls the parent's onCreate and initializes the FirebaseAuth instance mAuth to check if the
      * user is logged in or not.
-     * @param savedInstanceState
+     * @param savedInstanceState a Bundle
      */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -39,7 +39,6 @@ public class LandingActivity extends AppCompatActivity {
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         if (currentUser != null) {
-            Log.d("AUTHBUG", "going to main");
             startActivity(new Intent(this, MainActivity.class));
         }
     }
