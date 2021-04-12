@@ -60,7 +60,7 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
                 item -> {
                     switch (item.getItemId()) {
                         case R.id.home:
-                            openFragment(FeedFragment.newInstance("", ""));
+                            openFragment(FeedFragment.newInstance());
                             return true;
                         case R.id.search:
                             openFragment(ItemsListingFragment.newInstance());
@@ -76,7 +76,6 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
 
     /**
      * Helper method to open different fragments in the main activity.
-     *
      * @param fragment a Fragment, the different pages in our app (home, search or account
      *                 fragments)
      */
@@ -89,7 +88,6 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
 
     /**
      * Click listener for the sign out image button.
-     *
      * @param v a View, the sign out image button
      */
     public void signOut(View v) {
