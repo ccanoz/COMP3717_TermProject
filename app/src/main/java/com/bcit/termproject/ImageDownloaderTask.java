@@ -12,6 +12,9 @@ import java.lang.ref.WeakReference;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+/**
+ * AsyncTask responsible for downloading images from a url String.
+ */
 public class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
 
     private final WeakReference<ImageView> imageViewReference;
@@ -61,6 +64,11 @@ public class ImageDownloaderTask extends AsyncTask<String, Void, Bitmap> {
         }
     }
 
+    /**
+     * Returns the Bitmap image from the url passed in.
+     * @param url a String
+     * @return Bitmap
+     */
     private Bitmap downloadBitmap(String url) {
         HttpURLConnection urlConnection = null;
         try {
