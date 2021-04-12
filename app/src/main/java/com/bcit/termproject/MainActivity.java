@@ -46,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements ValueEventListene
         super.onStart();
         dbUserInfo.addValueEventListener(this);
         if (currAuthUser != null || currUser != null) {
-            openFragment(FeedFragment.newInstance("", ""));
+            openFragment(FeedFragment.newInstance());
         } else {
             startActivity(new Intent(MainActivity.this, LandingActivity.class));
         }
