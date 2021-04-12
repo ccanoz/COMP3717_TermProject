@@ -9,7 +9,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:padding="5dp"
-        android:text="Requirement"
         android:textColor="#000000"
         android:textStyle="bold" />
 
@@ -17,6 +16,5 @@
         android:id="@+id/textView_reqDescription"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="5dp"
-        android:text="Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor." />
+        android:padding="5dp" />
 </LinearLayout>

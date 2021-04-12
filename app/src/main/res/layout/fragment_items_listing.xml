@@ -42,21 +42,21 @@
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Women" />
+            android:text="@string/women" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_canadians"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Canadians" />
+            android:text="@string/canadians" />
 
         <com.google.android.material.chip.Chip
             android:id="@+id/chip_lowIncome"
             style="@style/Widget.MaterialComponents.Chip.Choice"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Low Income" />
+            android:text="@string/low_income" />
 
 
     </com.google.android.material.chip.ChipGroup>

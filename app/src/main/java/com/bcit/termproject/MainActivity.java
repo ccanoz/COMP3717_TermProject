@@ -81,7 +81,7 @@ public class MainActivity extends AppCompatActivity {
                             openFragment(FeedFragment.newInstance());
                             return true;
                         case R.id.search:
-                            openFragment(ItemsListingFragment.newInstance("", ""));
+                            openFragment(ItemsListingFragment.newInstance());
                             return true;
                         case R.id.account:
                             openFragment(AccountFragment.newInstance());

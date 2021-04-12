@@ -75,7 +75,7 @@ public class ItemsListingFragment extends Fragment {
      * @param inflater a LayoutInflater
      * @param container a ViewGroup
      * @param savedInstanceState a Bundle
-     * @return
+     * @return a View
      */
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

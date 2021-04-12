@@ -45,4 +45,7 @@
     <string name="schol_requirements">Requirements</string>
     <string name="schol_about">About</string>
     <string name="scholarship_name">Scholarship Name</string>
+    <string name="women">Women</string>
+    <string name="canadians">Canadians</string>
+    <string name="low_income">Low Income</string>
 </resources>

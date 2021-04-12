@@ -191,7 +191,7 @@ public class FeedFragment extends Fragment {
 
     /**
      * Add a listener to values from the database and use the data to populate
-     *
+     * the RecyclerView.
      */
     public void setDbRefScholListener() {
         dbRefSchol.addValueEventListener(new ValueEventListener() {
