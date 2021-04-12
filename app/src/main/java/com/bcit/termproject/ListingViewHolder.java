@@ -17,6 +17,10 @@ public class ListingViewHolder extends RecyclerView.ViewHolder {
     public ChipGroup tagChipGroup;
     public ImageView imgPicture;
 
+    /**
+     * Initialize a new ListingViewHolder object with the required layout views, according to an item view.
+     * @param itemView a View
+     */
     public ListingViewHolder(@NonNull View itemView) {
         super(itemView);
 

@@ -1,5 +1,6 @@
 package com.bcit.termproject;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -26,13 +27,14 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Objects;
 
 /**
  * Fragment that displays all of the Scholarship listings. Includes methods
  * to filter the listings, bookmark the listing, and view more details
  * about the scholarship.
  */
-public class ItemsListingFragment extends Fragment {
+public class ItemsListingFragment extends Fragment implements OnAdapterItemListener {
 
     FirebaseUser currAuthUser;
     User currUser;
@@ -67,6 +69,7 @@ public class ItemsListingFragment extends Fragment {
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
     }
 
     /**
@@ -92,7 +95,7 @@ public class ItemsListingFragment extends Fragment {
         currUser = MainActivity.currUser;
 
         rvListings = view.findViewById(R.id.rvListings);
-        listings = new ArrayList<Listing>();
+        listings = new ArrayList<>();
 
         databaseSchol = FirebaseDatabase.getInstance().getReference("scholarship");
         dbUserInfo = MainActivity.dbUserInfo;
@@ -148,22 +151,7 @@ public class ItemsListingFragment extends Fragment {
     public void setRvListings() {
         ListingAdapter adapter = new ListingAdapter(listings);
 
-        adapter.setOnAdapterItemListener(new OnAdapterItemListener() {
-            @Override
-            public void OnLongClick(Listing listing) {
-                Intent intent = new Intent(getContext(), ScholarshipInfoActivity.class);
-                intent.putExtra("SCHOLARSHIP_ITEM", listing.getKey());
-                startActivity(intent);
-            }
-
-            @Override
-            public void OnMarkClick(Listing listing) {
-                scholId = listing.getKey();
-                isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
-                listing.setIsBookmarked(isBookmarked);
-                bookmarkScholarship(listing);
-            }
-        });
+                adapter.setOnAdapterItemListener(ItemsListingFragment.this);
 
         rvListings.setAdapter(adapter);
         rvListings.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -229,7 +217,7 @@ public class ItemsListingFragment extends Fragment {
      * @param fragment a Fragment
      */
     public void openFragment(Fragment fragment) {
-        FragmentTransaction transaction = getActivity().getSupportFragmentManager().beginTransaction();
+        FragmentTransaction transaction = Objects.requireNonNull(getActivity()).getSupportFragmentManager().beginTransaction();
         transaction.replace(R.id.container, fragment);
         transaction.addToBackStack(null);
         transaction.commit();
@@ -240,6 +228,7 @@ public class ItemsListingFragment extends Fragment {
      * FilteredListingsFragment.
      * @param v a View, the chip selected
      */
+    @SuppressLint("NonConstantResourceId")
     public void filterScholarships(View v) {
         switch (v.getId()) {
             case R.id.chip_women:
@@ -254,4 +243,18 @@ public class ItemsListingFragment extends Fragment {
         }
     }
 
+    @Override
+    public void OnLongClick(Listing listing) {
+        Intent intent = new Intent(getContext(), ScholarshipInfoActivity.class);
+        intent.putExtra("SCHOLARSHIP_ITEM", listing.getKey());
+        startActivity(intent);
+    }
+
+    @Override
+    public void OnMarkClick(Listing listing) {
+        scholId = listing.getKey();
+        isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
+        listing.setIsBookmarked(isBookmarked);
+        bookmarkScholarship(listing);
+    }
 }
