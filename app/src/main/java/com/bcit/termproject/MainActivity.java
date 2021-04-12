@@ -62,7 +62,7 @@ public class MainActivity extends AppCompatActivity {
             }
         });
         if (currAuthUser != null || currUser != null) {
-            openFragment(FeedFragment.newInstance("", ""));
+            openFragment(FeedFragment.newInstance());
         } else{
             Log.d("AUTHBUG", "going to landing2");
             startActivity(new Intent(MainActivity.this, LandingActivity.class));
@@ -78,10 +78,10 @@ public class MainActivity extends AppCompatActivity {
                 item -> {
                     switch (item.getItemId()) {
                         case R.id.home:
-                            openFragment(FeedFragment.newInstance("", ""));
+                            openFragment(FeedFragment.newInstance());
                             return true;
                         case R.id.search:
-                            openFragment(ItemsListingFragment.newInstance("", ""));
+                            openFragment(ItemsListingFragment.newInstance());
                             return true;
                         case R.id.account:
                             openFragment(AccountFragment.newInstance());
