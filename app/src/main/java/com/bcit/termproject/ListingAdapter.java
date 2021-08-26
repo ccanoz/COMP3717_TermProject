@@ -15,6 +15,9 @@ import com.google.android.material.chip.ChipGroup;
 
 import java.util.List;
 
+/**
+ * Adapter for Listing class to recycler view, extending from ListingViewHolder
+ */
 public class ListingAdapter extends RecyclerView.Adapter<ListingViewHolder> {
 
     Context parentContext;

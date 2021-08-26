@@ -156,7 +156,9 @@ public class FeedFragment extends Fragment {
 
             // Launches the scholarship clicked
             @Override
+            //Not actually a long click
             public void OnLongClick(Listing listing) {
+                //On click, go to intent with clicked listing key passed with intent
                 Intent intent = new Intent(getContext(), ScholarshipInfoActivity.class);
                 intent.putExtra("SCHOLARSHIP_ITEM", listing.getKey());
                 startActivity(intent);
@@ -165,6 +167,7 @@ public class FeedFragment extends Fragment {
             // Toggles the bookmark icon
             @Override
             public void OnMarkClick(Listing listing) {
+                //On click, bookmark listing
                 scholId = listing.getKey();
                 isBookmarked = currUser.getBookmarked() != null && (currUser.checkScholBookmarked(scholId));
                 listing.setIsBookmarked(isBookmarked);

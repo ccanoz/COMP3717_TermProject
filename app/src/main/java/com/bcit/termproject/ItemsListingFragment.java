@@ -124,6 +124,7 @@ public class ItemsListingFragment extends Fragment implements OnAdapterItemListe
     public void setListings(DataSnapshot snapshot) {
         listings.clear();
         for (DataSnapshot scholSnapshot : snapshot.getChildren()) {
+            //Set values
             ArrayList<String> tags = new ArrayList<>();
             String key = scholSnapshot.getKey();
             String name = scholSnapshot.child("name").getValue(String.class);
@@ -141,6 +142,7 @@ public class ItemsListingFragment extends Fragment implements OnAdapterItemListe
                 newListing.setIsBookmarked(true);
             }
 
+            //Add listing to list for recycler view
             listings.add(newListing);
         }
     }
